@@ -1,4 +1,4 @@
-# Open Data MIUR — Dataset Catalog
+# Open Data MIUR - Dataset Catalog
 
 List of datasets relevant to OhMyUniversity!, including download URLs, update frequency, and notes.
 

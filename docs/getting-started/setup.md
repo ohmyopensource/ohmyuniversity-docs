@@ -4,10 +4,10 @@ This project is organized as a multi-repository ecosystem.
 
 Each repository corresponds to a specific application or service:
 
-- `<project>-web` → Web application
-- `<project>-mobile` → Mobile application
-- `<project>-desktop` → Desktop application
-- `<project>-api` → Backend and data layer
+- `<project>-web` => Web application
+- `<project>-mobile` => Mobile application
+- `<project>-desktop` => Desktop application
+- `<project>-api` => Backend and data layer
 
 ### How to explore the project
 
