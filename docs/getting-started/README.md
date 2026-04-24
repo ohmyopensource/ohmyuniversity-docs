@@ -1,3 +1,27 @@
+---
+title: Getting Started | OhMyUniversity!
+description: Quick start guide to understanding the OhMyUniversity project, including recommended reading order for documentation and core concepts.
+head:
+  - - meta
+    - property: og:title
+      content: Getting Started | OhMyUniversity!
+  - - meta
+    - property: og:description
+      content: Learn how to get started with OhMyUniversity, including documentation structure and recommended reading order.
+  - - meta
+    - property: og:url
+      content: https://docs.university.ohmyopensource.org/getting-started
+  - - meta
+    - name: keywords
+      content: ohmyuniversity getting started, university data platform guide, api documentation intro, open source education project, setup overview, documentation roadmap
+  - - meta
+    - name: twitter:title
+      content: Getting Started | OhMyUniversity!
+  - - meta
+    - name: twitter:description
+      content: Quick introduction to OhMyUniversity and recommended documentation reading order.
+---
+
 # OhMyUniversity! - Getting Started
 
 This section provides a quick introduction to the OhMyUniversity! project.

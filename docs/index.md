@@ -10,10 +10,10 @@ hero:
     alt: OhMyOpenSource! Logo
   actions:
     - theme: brand
-      text: Developer Docs =>
+      text: Developer Docs
       link: /getting-started/overview
     - theme: alt
-      text: Project Docs =>
+      text: Project Docs
       link: /project/
     - theme: alt
       text: API Reference

@@ -1,4 +1,28 @@
-# Open Data MIUR - Endpoints and Downloads
+---
+title: Open Data MIUR Endpoints and Downloads | OhMyUniversity!
+description: Learn how to access and download Open Data MIUR datasets using direct URLs, including file patterns, parameters, and automation strategies.
+head:
+  - - meta
+    - property: og:title
+      content: Open Data MIUR Endpoints and Downloads | OhMyUniversity!
+  - - meta
+    - property: og:description
+      content: Discover how to retrieve Open Data MIUR datasets via direct download URLs, including request examples, file structures, and automation tips.
+  - - meta
+    - property: og:url
+      content: https://docs.university.ohmyopensource.org/api/open-data-miur/endpoints
+  - - meta
+    - name: keywords
+      content: open data miur endpoints, miur dataset download, italian university data api, miur csv download, dataset automation, curl download miur, ohmyuniversity api miur
+  - - meta
+    - name: twitter:title
+      content: Open Data MIUR Endpoints and Downloads | OhMyUniversity!
+  - - meta
+    - name: twitter:description
+      content: Access Open Data MIUR datasets via direct download URLs with examples, parameters, and automation strategies.
+---
+
+# OhMyUniversity! - Open Data MIUR: Endpoints and Downloads
 
 > ⚠️ **Note:** The MIUR portal does not expose a traditional REST API with queryable endpoints. Data is distributed as **static downloadable files** (CSV/ZIP). This page documents file access URLs and catalog navigation endpoints.
 

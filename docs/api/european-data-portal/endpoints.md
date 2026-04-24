@@ -1,1 +1,1 @@
-# European Data Portal - Endpoints and Downloads
+# OhMyUniversity! - European Data Portal: Endpoints and Downloads

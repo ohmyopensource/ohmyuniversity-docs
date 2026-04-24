@@ -1,1 +1,1 @@
-# European Data Portal - Authentication
+# OhMyUniversity! - European Data Portal: Authentication

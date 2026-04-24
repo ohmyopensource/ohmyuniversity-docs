@@ -1,4 +1,28 @@
-# API Documentation Conventions
+---
+title: API Documentation Conventions | OhMyUniversity!
+description: Standardized guidelines for documenting APIs in OhMyUniversity!, including folder structure, naming conventions, request formats, and changelog requirements.
+head:
+  - - meta
+    - property: og:title
+      content: API Documentation Conventions | OhMyUniversity!
+  - - meta
+    - property: og:description
+      content: Learn the official conventions for documenting APIs in OhMyUniversity!, covering structure, naming, request examples, and changelog practices.
+  - - meta
+    - property: og:url
+      content: https://docs.university.ohmyopensource.org/api/conventions
+  - - meta
+    - name: keywords
+      content: api documentation conventions, api guidelines, ohmyuniversity api standards, api structure, curl examples api, api documentation best practices, developer documentation rules
+  - - meta
+    - name: twitter:title
+      content: API Documentation Conventions | OhMyUniversity!
+  - - meta
+    - name: twitter:description
+      content: Official API documentation standards for OhMyUniversity!, including structure, naming, and example formatting.
+---
+
+# OhMyUniversity! - API Documentation Conventions
 
 These rules apply to all folders inside `api/`. They must be followed when adding a new source or updating an existing one.
 

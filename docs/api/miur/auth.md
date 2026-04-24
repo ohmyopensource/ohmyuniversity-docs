@@ -1,4 +1,28 @@
-# Open Data MIUR - Authentication
+---
+title: Open Data MIUR Authentication | OhMyUniversity!
+description: Learn how authentication works for Open Data MIUR APIs, including public access details, usage best practices, and licensing requirements.
+head:
+  - - meta
+    - property: og:title
+      content: Open Data MIUR Authentication | OhMyUniversity!
+  - - meta
+    - property: og:description
+      content: Discover how to access Open Data MIUR datasets without authentication, along with best practices and licensing information.
+  - - meta
+    - property: og:url
+      content: https://docs.university.ohmyopensource.org/api/open-data-miur/auth
+  - - meta
+    - name: keywords
+      content: open data miur api, miur authentication, italian education open data, miur datasets access, iodl 2.0 license, public api italy, ohmyuniversity miur
+  - - meta
+    - name: twitter:title
+      content: Open Data MIUR Authentication | OhMyUniversity!
+  - - meta
+    - name: twitter:description
+      content: Access Open Data MIUR datasets without authentication, with guidelines on usage and licensing.
+---
+
+# OhMyUniversity! - Open Data MIUR: Authentication
 
 ## No authentication required
 

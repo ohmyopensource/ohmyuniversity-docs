@@ -1,4 +1,28 @@
-# Open Data MIUR - Dataset Catalog
+---
+title: Open Data MIUR Dataset Catalog | OhMyUniversity!
+description: Complete catalog of Open Data MIUR datasets, including university enrollments, graduates, and course offerings with download URLs, formats, and update frequency.
+head:
+  - - meta
+    - property: og:title
+      content: Open Data MIUR Dataset Catalog | OhMyUniversity!
+  - - meta
+    - property: og:description
+      content: Explore the Open Data MIUR dataset catalog with detailed information on university data, formats, update schedules, and download examples.
+  - - meta
+    - property: og:url
+      content: https://docs.university.ohmyopensource.org/api/open-data-miur/datasets
+  - - meta
+    - name: keywords
+      content: open data miur datasets, italian university data, miur dataset catalog, university enrollments italy, miur csv data, higher education data italy, ohmyuniversity datasets
+  - - meta
+    - name: twitter:title
+      content: Open Data MIUR Dataset Catalog | OhMyUniversity!
+  - - meta
+    - name: twitter:description
+      content: Detailed catalog of Open Data MIUR datasets including enrollments, graduates, and academic programs.
+---
+
+# OhMyUniversity! - Open Data MIUR: Dataset Catalog
 
 List of datasets relevant to OhMyUniversity!, including download URLs, update frequency, and notes.
 

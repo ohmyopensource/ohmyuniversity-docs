@@ -1,3 +1,27 @@
+---
+title: How to Contribute | OhMyUniversity!
+description: Contribution guidelines for OhMyUniversity, including workflow, coding standards, commit style, and areas where contributors can help improve the project.
+head:
+  - - meta
+    - property: og:title
+      content: How to Contribute | OhMyUniversity!
+  - - meta
+    - property: og:description
+      content: Learn how to contribute to OhMyUniversity, including repository workflow, coding conventions, commit guidelines, and improvement areas.
+  - - meta
+    - property: og:url
+      content: https://docs.university.ohmyopensource.org/contributing
+  - - meta
+    - name: keywords
+      content: ohmyuniversity contribute, open source contribution guide, api documentation contributions, github workflow guide, commit conventions, documentation standards, dataset contributions
+  - - meta
+    - name: twitter:title
+      content: How to Contribute | OhMyUniversity!
+  - - meta
+    - name: twitter:description
+      content: Contribution guide for OhMyUniversity including workflow, guidelines, and commit standards.
+---
+
 # OhMyUniversity! - How to Contribute
 
 Contributions are welcome and follow a simple workflow.

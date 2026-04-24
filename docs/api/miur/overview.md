@@ -1,4 +1,28 @@
-# Open Data MIUR - Overview
+---
+title: Open Data MIUR Overview | OhMyUniversity!
+description: Overview of Open Data MIUR datasets, including data formats, access methods, update frequency, and best practices for integration.
+head:
+  - - meta
+    - property: og:title
+      content: Open Data MIUR Overview | OhMyUniversity!
+  - - meta
+    - property: og:description
+      content: Discover how Open Data MIUR works, including dataset structure, formats, update cycles, and integration best practices.
+  - - meta
+    - property: og:url
+      content: https://docs.university.ohmyopensource.org/api/open-data-miur/overview
+  - - meta
+    - name: keywords
+      content: open data miur overview, italian education data, miur datasets structure, university data italy, miur csv format, iodl 2.0, ohmyuniversity api
+  - - meta
+    - name: twitter:title
+      content: Open Data MIUR Overview | OhMyUniversity!
+  - - meta
+    - name: twitter:description
+      content: Overview of Open Data MIUR datasets, formats, update cycles, and integration practices.
+---
+
+# OhMyUniversity! - Open Data MIUR: Overview
 
 The Italian Ministry of Education and Merit (MIM, formerly MIUR) publishes open datasets on the official Italian education open data portal. The data covers universities, schools, students, faculty, educational offerings, and institutional performance.
 

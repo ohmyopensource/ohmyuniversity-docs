@@ -10,6 +10,9 @@ export default defineConfig({
   outDir: '../dist',
   cleanUrls: true,
 
+  // ================================
+  // SEO & SOCIAL MEDIA META TAGS
+  // ================================
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/omos-logo.png' }],
     ['meta', { name: 'theme-color', content: '#3451b2' }],
@@ -123,7 +126,7 @@ export default defineConfig({
       // ================================
       '/project/rad/': [
         {
-          text: '<= Project Docs',
+          text: '< Project Docs',
           link: '/project/',
         },
         {
@@ -271,7 +274,7 @@ export default defineConfig({
       // ================================
       '/project/sdd/': [
         {
-          text: '<= Project Docs',
+          text: '< Project Docs',
           link: '/project/',
         },
         {
@@ -344,7 +347,7 @@ export default defineConfig({
       // ================================
       '/project/odd/': [
         {
-          text: '<= Project Docs',
+          text: '< Project Docs',
           link: '/project/',
         },
         {
@@ -382,7 +385,7 @@ export default defineConfig({
       // ================================
       '/project/uml/': [
         {
-          text: '<= Project Docs',
+          text: '< Project Docs',
           link: '/project/',
         },
         {
@@ -426,7 +429,7 @@ export default defineConfig({
       // ================================
       '/project/testing/': [
         {
-          text: '<= Project Docs',
+          text: '< Project Docs',
           link: '/project/',
         },
         {
@@ -459,7 +462,7 @@ export default defineConfig({
       // ================================
       '/project/user-manual/': [
         {
-          text: '<= Project Docs',
+          text: '< Project Docs',
           link: '/project/',
         },
         {
@@ -697,8 +700,8 @@ export default defineConfig({
     ],
 
     footer: {
-      message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2024-present OhMyOpenSource Contributors',
+      message: 'Released under the AGPL-3.0 License.',
+      copyright: 'Copyright © 2026 OhMyOpenSource!',
     },
 
     editLink: {
