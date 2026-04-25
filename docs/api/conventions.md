@@ -34,7 +34,6 @@ These rules apply to all folders inside `api/`. They must be followed when addin
 api/<source-name>/
 ├── overview.md     ← required
 ├── auth.md         ← required
-├── endpoints.md    ← required
 ├── changelog.md    ← required
 └── datasets.md     ← only for data catalog–type sources
 ```
