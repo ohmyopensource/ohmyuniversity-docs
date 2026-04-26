@@ -107,8 +107,8 @@ export const nav: DefaultTheme.NavItem[] = [
         text: 'Internal APIs',
         items: [
           {
-            text: 'App Private APIs',
-            link: `${API_DOCS.BASE_URL}/${COMMON_LINKS.OVERVIEW}`,
+            text: 'Overview',
+            link: `${API_DOCS.BASE_URL}/int-private/${COMMON_LINKS.OVERVIEW}`,
           },
         ],
       },
@@ -120,8 +120,12 @@ export const nav: DefaultTheme.NavItem[] = [
             link: `${API_DOCS.BASE_URL}/cineca/${COMMON_LINKS.OVERVIEW}`,
           },
           {
-            text: 'MIUR',
-            link: `${API_DOCS.BASE_URL}/miur/${COMMON_LINKS.OVERVIEW}`,
+            text: "MIM - Ministero dell'Istruzione e del Merito",
+            link: `${API_DOCS.BASE_URL}/mim/${COMMON_LINKS.OVERVIEW}`,
+          },
+          {
+            text: "MUR - Ministero dell'Università e della Ricerca",
+            link: `${API_DOCS.BASE_URL}/mur/${COMMON_LINKS.OVERVIEW}`,
           },
           {
             text: 'European Data Portal',

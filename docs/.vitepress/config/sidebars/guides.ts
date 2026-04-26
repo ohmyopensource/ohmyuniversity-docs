@@ -28,8 +28,8 @@ export const guidesSidebar: DefaultTheme.SidebarMulti = {
           link: `/${COMMON_LINKS.GUIDES}/cineca-data-guide`,
         },
         {
-          text: 'MIUR Data Guide',
-          link: `/${COMMON_LINKS.GUIDES}/miur-data-guide`,
+          text: 'MIM Data Guide',
+          link: `/${COMMON_LINKS.GUIDES}/mim-data-guide`,
         },
         {
           text: 'European Data Portal Guide',

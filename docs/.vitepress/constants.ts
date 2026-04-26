@@ -12,10 +12,16 @@ export const REPOSITORY = {
 
 export const API_DOCS = {
   MAIN_TITLE: 'API Docs',
-  BASE_URL: '/api',
+  BASE_URL: 'api',
   CINECA: 'ESSE3/CINECA',
-  MIUR: 'MIUR',
+  CINECA_URL: 'cineca',
+  MIM: "MIM - Ministero dell'Istruzione e del Merito",
+  MIM_URL: 'mim',
+  MUR: "MUR - Ministero dell'Università e della Ricerca",
+  MUR_URL: 'mur',
   EUROPEAN: 'European Data Portal',
+  EUROPEAN_URL: 'european-data-portal',
+  REFERENCE: 'APIs Reference',
 } as const;
 
 export const PROJECT_DOCS = {
@@ -31,6 +37,7 @@ export const COMMON_TITLES = {
   ARCHITECTURE: 'App Architecture',
   OVERVIEW: 'Overview',
   GUIDES: 'Guides',
+  CHANGELOG: 'Changelog',
 } as const;
 
 export const COMMON_LINKS = {
@@ -38,6 +45,7 @@ export const COMMON_LINKS = {
   ARCHITECTURE: 'architecture',
   OVERVIEW: 'overview',
   GUIDES: 'guides',
+  CHANGELOG: 'changelog',
 } as const;
 
 export const CREDITS = {

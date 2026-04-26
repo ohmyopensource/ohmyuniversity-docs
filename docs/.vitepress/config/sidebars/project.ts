@@ -219,6 +219,10 @@ export const projectSidebar: DefaultTheme.SidebarMulti = {
           text: 'Overview',
           link: `${PROJECT_DOCS.BASE_URL}/sdd/${COMMON_LINKS.OVERVIEW}`,
         },
+        {
+          text: 'Changelog',
+          link: `${PROJECT_DOCS.BASE_URL}/sdd/${COMMON_LINKS.CHANGELOG}`,
+        },
       ],
     },
     {
