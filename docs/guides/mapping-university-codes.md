@@ -4,7 +4,7 @@ This guide explains how university identifiers are mapped across different syste
 
 ### Contents
 
-- Mapping between MIUR and CINECA university codes
+- Mapping between MIM and CINECA university codes
 - Differences between identification systems
 - Conversion tables and reference mappings
 - Edge cases (merged institutions, renamed universities)

@@ -4,4 +4,4 @@
 - Core entities (University, Course, Student, Dataset)
 - Model versioning strategy
 - Cross-system compatibility
-- Data mapping between sources (MIUR, CINECA)
+- Data mapping between sources (MIM, CINECA)

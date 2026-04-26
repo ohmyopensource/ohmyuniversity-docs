@@ -1,6 +1,6 @@
 ---
 title: API Overview | OhMyUniversity!
-description: Overview of the OhMyUniversity! API layer, which aggregates and normalizes data from MIUR, CINECA, and European Data Portal into a unified interface.
+description: Overview of the OhMyUniversity! API layer, which aggregates and normalizes data from MIM, CINECA, and European Data Portal into a unified interface.
 head:
   - - meta
     - property: og:title
@@ -13,18 +13,18 @@ head:
       content: https://docs.university.ohmyopensource.org/api/overview
   - - meta
     - name: keywords
-      content: ohmyuniversity api, university data aggregation api, cineca miur european data portal, unified education api, student data normalization, university api gateway
+      content: ohmyuniversity api, university data aggregation api, cineca mim european data portal, unified education api, student data normalization, university api gateway
   - - meta
     - name: twitter:title
       content: API Overview | OhMyUniversity!
   - - meta
     - name: twitter:description
-      content: Overview of the OhMyUniversity! API layer aggregating MIUR, CINECA, and European Data Portal data.
+      content: Overview of the OhMyUniversity! API layer aggregating MIM, CINECA, and European Data Portal data.
 ---
 
 # OhMyUniversity! - API Overview
 
-The API layer is responsible for aggregating and normalizing data from multiple external sources such as MIUR, CINECA, and the European Data Portal.
+The API layer is responsible for aggregating and normalizing data from multiple external sources such as MIM, CINECA, and the European Data Portal.
 
 ### Key characteristics
 

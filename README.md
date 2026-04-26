@@ -14,7 +14,7 @@ This repository does not contain code: it serves as the central reference point 
 
 **OhMyOpenSource!** is an open source organization that develops free open source for everybody.
 
-**OhMyUniversity!** is an open source tool for students, researchers, and developers working with university data. The project aggregates information from institutional sources (CINECA, MIUR, European Data Portal) and exposes it through unified APIs and accessible interfaces.
+**OhMyUniversity!** is an open source tool for students, researchers, and developers working with university data. The project aggregates information from institutional sources (CINECA, MIM, European Data Portal) and exposes it through unified APIs and accessible interfaces.
 
 ---
 
@@ -37,7 +37,7 @@ ohmyuniversity-docs/
     │   ├── conventions.md
     │   ├── overview.md
     │   ├── cineca/
-    │   ├── miur/
+    │   ├── mim/
     │   └── european-data-portal/
     └── project/               ← project specifications and documentation
         ├── overview.md
@@ -49,7 +49,7 @@ ohmyuniversity-docs/
         └── user-manual/       ← end-user documentation
 ```
 
-In particular, the `OhMyUniversity!` repo contains the api folder as well that contain all the information about data retriving from CINECA, MIUR, European Data Portal.
+In particular, the `OhMyUniversity!` repo contains the api folder as well that contain all the information about data retriving from CINECA, MIM, European Data Portal.
 
 ```
 ohmyuniversity-docs/
@@ -76,7 +76,7 @@ The sources documented in this repository are:
 | Source               | Type                                            | Folder                                                                |
 | -------------------- | ----------------------------------------------- | --------------------------------------------------------------------- |
 | CINECA               | Institutional REST APIs (ANS, ESSE3, etc.)      | [`api/cineca/`](./api/cineca/overview.md)                             |
-| Open Data MIUR       | Public open data from the Ministry of Education | [`api/miur/`](./api/miur/overview.md)                                 |
+| Open Data MIM        | Public open data from the Ministry of Education | [`api/mim/`](./api/mim/overview.md)                                   |
 | European Data Portal | European open data on education and research    | [`api/european-data-portal/`](./api/european-data-portal/overview.md) |
 
 ---

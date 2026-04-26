@@ -46,7 +46,7 @@ features:
       width: 48
       height: 48
     title: External API Docs
-    details: Full API documentation for CINECA, MIUR and European Data Portal with auth, endpoints and changelogs.
+    details: Full API documentation for CINECA, MIM and European Data Portal with auth, endpoints and changelogs.
     link: /api/overview
     linkText: External API Docs
 

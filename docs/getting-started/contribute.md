@@ -47,7 +47,7 @@ Use clear and descriptive commit messages.
 Example:
 
 ```
-add MIUR dataset mapping for enrollments
+add MIM dataset mapping for enrollments
 ```
 
 ### Where to start
