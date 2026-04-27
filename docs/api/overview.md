@@ -13,7 +13,7 @@ head:
       content: https://docs.university.ohmyopensource.org/components/badge
   - - meta
     - name: keywords
-      content: ohmyuniversity api, university api index, cineca ans api, miur open data api, european data portal api, student data api, university integration, api documentation
+      content: ohmyuniversity api, university api index, cineca ans api, mim open data api, european data portal api, student data api, university integration, api documentation
   - - meta
     - name: twitter:title
       content: API Index | OhMyUniversity!
@@ -26,11 +26,12 @@ head:
 
 Overview of all API sources documented in this repository. Update this table whenever a source is add or modified.
 
-| Source               | Base URL                                       | Auth               | Rate limit    | Status         | Last updated |
-| -------------------- | ---------------------------------------------- | ------------------ | ------------- | -------------- | ------------ |
-| CINECA ANS           | `https://api.cineca.it/ans/v1`                 | Bearer token       | Not public    | to be verified | -            |
-| Open Data MIUR       | `https://dati.istruzione.it/opendata/opendata` | None               | None declared | active         | 2024-01      |
-| European Data Portal | `https://data.europa.eu/api/hub/search`        | API Key (optional) | 100 req/min   | active         | 2024-03      |
+| Source                                | Base URL                                                  | Auth               | Rate limit  | Status | Last updated |
+| ------------------------------------- | --------------------------------------------------------- | ------------------ | ----------- | ------ | ------------ |
+| CINECA ANS                            | `https://<university>.esse3.cineca.it/e3rest/docs`        | Bearer token       | Public      | active | -            |
+| MIM (Ministero Istruzione) / OpenData | `https://dati.istruzione.it/opendata/esploraidati/`       | N/A                | N/A         | active | -            |
+| MUR (Università - dati pubblici)      | `https://dati-ustat.mur.gov.it/api/3/action/package_list` | CKAN API standard  | N/A         | active | -            |
+| European Data Portal                  | `https://data.europa.eu/en`                               | API Key (optional) | 100 req/min | active | 2024-03      |
 
 ### Status legend
 

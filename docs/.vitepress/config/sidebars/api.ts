@@ -39,7 +39,7 @@ const apiRootSidebar: DefaultTheme.SidebarItem[] = [
     text: 'External APIs',
     items: [
       {
-        text: 'ESSE3/CINECA',
+        text: API_DOCS.CINECA,
         link: `/${API_DOCS.BASE_URL}/${API_DOCS.CINECA_URL}/${COMMON_LINKS.OVERVIEW}`,
       },
       {
@@ -51,8 +51,8 @@ const apiRootSidebar: DefaultTheme.SidebarItem[] = [
         link: `/${API_DOCS.BASE_URL}/${API_DOCS.MUR_URL}/${COMMON_LINKS.OVERVIEW}`,
       },
       {
-        text: 'European Data Portal',
-        link: `/${API_DOCS.BASE_URL}/${API_DOCS.EUROPEAN_URL}/${COMMON_LINKS.OVERVIEW}`,
+        text: API_DOCS.EDP,
+        link: `/${API_DOCS.BASE_URL}/${API_DOCS.EDP_URL}/${COMMON_LINKS.OVERVIEW}`,
       },
     ],
   },
@@ -219,7 +219,7 @@ const cinecaSidebar: DefaultTheme.SidebarItem[] = [
 ];
 
 // ================================
-// MIM
+// MIM - MINISTERO DELL'ISTRUZIONE E DEL MERITO
 // ================================
 const mimSidebar: DefaultTheme.SidebarItem[] = [
   backToApiDocs,
@@ -257,7 +257,7 @@ const mimSidebar: DefaultTheme.SidebarItem[] = [
 ];
 
 // ================================
-// MUR
+// MUR - MINISTERO DELL'UNIVERSITÀ E DELLA RICERCA
 // ================================
 const murSidebar: DefaultTheme.SidebarItem[] = [
   backToApiDocs,
@@ -315,24 +315,24 @@ const murSidebar: DefaultTheme.SidebarItem[] = [
 ];
 
 // ================================
-// EUROPEAN DATA PORTAL
+// EDP - EUROPEAN DATA PORTAL
 // ================================
 const europeanDataPortalSidebar: DefaultTheme.SidebarItem[] = [
   backToApiDocs,
   {
-    text: 'European Data Portal',
+    text: API_DOCS.EDP,
     items: [
       {
         text: COMMON_TITLES.OVERVIEW,
-        link: `/${API_DOCS.BASE_URL}/${API_DOCS.EUROPEAN_URL}/${COMMON_LINKS.OVERVIEW}`,
+        link: `/${API_DOCS.BASE_URL}/${API_DOCS.EDP_URL}/${COMMON_LINKS.OVERVIEW}`,
       },
       {
         text: 'Authentication',
-        link: `/${API_DOCS.BASE_URL}/${API_DOCS.EUROPEAN_URL}/auth`,
+        link: `/${API_DOCS.BASE_URL}/${API_DOCS.EDP_URL}/auth`,
       },
       {
         text: COMMON_TITLES.CHANGELOG,
-        link: `/${API_DOCS.BASE_URL}/${API_DOCS.EUROPEAN_URL}/${COMMON_LINKS.CHANGELOG}`,
+        link: `/${API_DOCS.BASE_URL}/${API_DOCS.EDP_URL}/${COMMON_LINKS.CHANGELOG}`,
       },
     ],
   },
@@ -341,8 +341,20 @@ const europeanDataPortalSidebar: DefaultTheme.SidebarItem[] = [
     collapsed: true,
     items: [
       {
-        text: 'Endpoints',
-        link: `/${API_DOCS.BASE_URL}/${API_DOCS.EUROPEAN_URL}/endpoints`,
+        text: '???',
+        link: `/${API_DOCS.BASE_URL}/${API_DOCS.EDP_URL}/${API_DOCS.BASE_URL}/mqa-api`,
+      },
+      {
+        text: 'Registry',
+        link: `/${API_DOCS.BASE_URL}/${API_DOCS.EDP_URL}/${API_DOCS.BASE_URL}/registry-api`,
+      },
+      {
+        text: 'Search',
+        link: `/${API_DOCS.BASE_URL}/${API_DOCS.EDP_URL}/${API_DOCS.BASE_URL}/search-api`,
+      },
+      {
+        text: '???',
+        link: `/${API_DOCS.BASE_URL}/${API_DOCS.EDP_URL}/${API_DOCS.BASE_URL}/sparql-api`,
       },
     ],
   },
@@ -377,7 +389,7 @@ export const apiSidebar: DefaultTheme.SidebarMulti = {
   '/api/cineca/': cinecaSidebar,
   '/api/mim/': mimSidebar,
   '/api/mur/': murSidebar,
-  '/api/european-data-portal/': europeanDataPortalSidebar,
+  '/api/edp/': europeanDataPortalSidebar,
   '/api/int-private/': privateApiSidebar,
   '/api/': apiRootSidebar,
 };

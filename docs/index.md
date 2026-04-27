@@ -18,6 +18,9 @@ hero:
     - theme: alt
       text: API Docs
       link: /api/overview
+    - theme: alt
+      text: Team
+      link: /team
 
 features:
   - icon:

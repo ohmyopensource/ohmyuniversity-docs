@@ -116,25 +116,30 @@ export const nav: DefaultTheme.NavItem[] = [
         text: 'External APIs',
         items: [
           {
-            text: 'ESSE3/CINECA',
-            link: `${API_DOCS.BASE_URL}/cineca/${COMMON_LINKS.OVERVIEW}`,
+            text: API_DOCS.CINECA,
+            link: `${API_DOCS.BASE_URL}/${API_DOCS.CINECA_URL}/${COMMON_LINKS.OVERVIEW}`,
           },
           {
-            text: "MIM - Ministero dell'Istruzione e del Merito",
-            link: `${API_DOCS.BASE_URL}/mim/${COMMON_LINKS.OVERVIEW}`,
+            text: API_DOCS.MIM,
+            link: `${API_DOCS.BASE_URL}/${API_DOCS.MIM_URL}/${COMMON_LINKS.OVERVIEW}`,
           },
           {
-            text: "MUR - Ministero dell'Università e della Ricerca",
-            link: `${API_DOCS.BASE_URL}/mur/${COMMON_LINKS.OVERVIEW}`,
+            text: API_DOCS.MUR,
+            link: `${API_DOCS.BASE_URL}/${API_DOCS.MUR_URL}/${COMMON_LINKS.OVERVIEW}`,
           },
           {
-            text: 'European Data Portal',
-            link: `${API_DOCS.BASE_URL}/european-data-portal/${COMMON_LINKS.OVERVIEW}`,
+            text: API_DOCS.EDP,
+            link: `${API_DOCS.BASE_URL}/${API_DOCS.EDP_URL}/${COMMON_LINKS.OVERVIEW}`,
           },
         ],
       },
     ],
   },
+
+  // ================================
+  // Team
+  // ================================
+  { text: 'Team', link: '/team' },
 
   // ================================
   // GitHub

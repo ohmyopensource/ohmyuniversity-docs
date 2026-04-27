@@ -104,7 +104,7 @@ df = pd.read_csv(
 
 ---
 
-## Useful links
+## References
 
 - [https://dati.istruzione.it/opendata/opendata](https://dati.istruzione.it/opendata/opendata)
 - [https://dati.istruzione.it/opendata/opendata/catalogo/note-metodologiche](https://dati.istruzione.it/opendata/opendata/catalogo/note-metodologiche)

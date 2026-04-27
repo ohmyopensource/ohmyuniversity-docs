@@ -22,6 +22,10 @@ export default defineConfig({
   outDir: '../dist',
   cleanUrls: true,
 
+  sitemap: {
+    hostname: 'https://docs.university.ohmyopensource.org',
+  },
+
   head,
 
   themeConfig: {

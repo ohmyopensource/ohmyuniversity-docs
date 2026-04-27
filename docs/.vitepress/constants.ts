@@ -19,8 +19,8 @@ export const API_DOCS = {
   MIM_URL: 'mim',
   MUR: "MUR - Ministero dell'Università e della Ricerca",
   MUR_URL: 'mur',
-  EUROPEAN: 'European Data Portal',
-  EUROPEAN_URL: 'european-data-portal',
+  EDP: 'EDP - European Data Portal',
+  EDP_URL: 'edp',
   REFERENCE: 'APIs Reference',
 } as const;
 

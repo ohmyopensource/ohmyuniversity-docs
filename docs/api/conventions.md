@@ -42,7 +42,7 @@ api/<source-name>/
 
 - Folder names must be in **lowercase kebab-case**: `european-data-portal`, not `EuropeanDataPortal`.
 - File names must always be lowercase and contain no spaces.
-- Do not use abbreviations in folder names: `miur` is acceptable because it is an official acronym, `edp` is not - use `european-data-portal`.
+- Do not use abbreviations in folder names: `mim` is acceptable because it is an official acronym, `edp` is not - use `european-data-portal`.
 
 ## Request example format
 
