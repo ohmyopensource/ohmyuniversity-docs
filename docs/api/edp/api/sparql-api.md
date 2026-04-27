@@ -30,9 +30,9 @@ The SPARQL API exposes a **SPARQL 1.1 query endpoint** over the full RDF triple 
 
 ::: info When to use SPARQL vs the other APIs
 
-- **Search API** → discover datasets by keyword or filter; best for interactive search
-- **Registry API** → retrieve the complete DCAT-AP record of one known dataset
-- **SPARQL API** → query relationships across datasets, aggregate counts, filter by multiple linked-data properties simultaneously
+- **Search API** > discover datasets by keyword or filter; best for interactive search
+- **Registry API** > retrieve the complete DCAT-AP record of one known dataset
+- **SPARQL API** > query relationships across datasets, aggregate counts, filter by multiple linked-data properties simultaneously
   :::
 
 ::: warning Read-only for anonymous users

@@ -103,7 +103,7 @@ GET https://data.europa.eu/api/hub/search/search?page=2&limit=10
         "resource": "http://data.europa.eu/88u/dataset/medarbejdere-ved-via-university-college",
         //           ^ canonical RDF URI - stable linked-data identifier for this dataset
 
-        // --- Multilingual fields (language map: ISO 639-1 key → string value) ---
+        // --- Multilingual fields (language map: ISO 639-1 key > string value) ---
         "title": {
           "en": "Staff at VIA University College",
           "da": "Medarbejdere ved VIA University College",
