@@ -565,6 +565,178 @@ GET /addebiti-persona/{persId}
 
 <br>
 
+### `GET /addebiti-studente` - Get charges by student
+
+```java
+/**
+ * Returns all charges for a student, including student fees, admission fees,
+ * and service fees linked to the person. Student can be identified via stuId
+ * or extStuCod.
+ *
+ * @param stuId        long   (query, optional) - unique student ID
+ * @param extStuCod    string (query, optional) - student code from external archive
+ * @param aaId         long   (query, optional) - academic year ID
+ * @param fattId       long   (query, optional) - invoice ID
+ * @param scadFattura  string (query, optional) - invoice due date
+ * @param rataId       long   (query, optional) - installment ID
+ * @param tipoTaxCod   string (query, optional) - fee type code
+ * @param tassaCod     string (query, optional) - fee code
+ * @param scadutoFlg   int    (query, optional) - expiry status filter;
+ *                                                1=expired only, 0=not expired,
+ *                                                null=all
+ * @param pagatoFlg    int    (query, optional) - payment status filter;
+ *                                                1=paid only, 0=unpaid only,
+ *                                                null=all
+ * @param annullataFlg int    (query, optional) - cancellation status filter;
+ *                                                1=cancelled only, 0=not cancelled
+ *                                                (default: 0)
+ * @param optionalFields string (query, optional) - comma-separated list of optional
+ *                                                   fields to include; use ALL for
+ *                                                   all fields; supports Ant Glob
+ *                                                   Patterns (e.g. childObj.prop1,
+ *                                                   childObj.*, childObj.**)
+ * @param start        int    (query, optional) - index of the first record to load,
+ *                                                defaults to 0
+ * @param limit        int    (query, optional) - number of records to retrieve
+ *                                                starting from start, defaults
+ *                                                to 50, allowed range: 0–100
+ * @param order        string (query, optional) - sort order; prefix + (ASC) or -
+ *                                                (DESC) followed by field name;
+ *                                                multiple fields comma-separated
+ *                                                (e.g. +aaId,-scadenzaAddebito)
+ * @return List<AddebitoStudente> paginated list of charges for the student,
+ *         or an empty array if none match
+ */
+GET /addebiti-studente
+```
+
+**Auth:** `UserTecnicoMassivo` · `STUDENTE` · `IMMATRICOLATI_IN_IPOTESI` (at least one required) · Supported: `Basic`, `JWT`
+
+**Cache:** `configuration` — configuration resource, very slow-changing, HTTP cache and server cache enabled
+
+#### Response
+
+**`200 OK`**
+
+```json
+[
+  {
+    // Student info
+    "stuId": 1235, // Student career ID
+    "matricola": "string", // Student ID number
+    "persId": 5321, // Person ID
+    "nome": "Antonio", // First name
+    "cognome": "Rossi", // Last name
+    "codFis": "string", // Fiscal code
+    "emailAte": "string", // Institutional email
+    "semaforo": "ROSSO", // Fee traffic light status
+    "dovuto": 100, // Total amount due
+
+    // Charge info
+    "aaId": 2019, // Academic year ID
+    "tipoAd": "STU", // Charge type
+    "tassaId": 65874, // Fee ID
+    "tipoTaxCod": "ISCR", // Fee type code
+    "tassaCod": "CONC", // Fee code
+    "tassaDes": "string", // Fee description
+
+    // Combination and voice
+    "combId": 74, // Combination ID
+    "combCod": "string", // Combination code
+    "combDes": "string", // Combination description
+    "tipoVoceCod": "string", // Voice type code
+    "voceId": 9874, // Voice ID
+    "voceCod": "string", // Voice code
+    "voceDes": "string", // Voice description
+
+    // Installment
+    "rataId": 2468, // Installment ID
+    "rataDes": "string", // Installment description
+    "importoVoce": 100.2, // Charge amount
+    "scadenzaAddebito": "string", // Charge due date (dd/MM/yyyy)
+    "scadutoFlg": 0, // Expired flag (1=yes, 0=no)
+
+    // Invoice
+    "fattId": 125478, // Invoice ID
+    "fattCod": "string", // Invoice code
+    "fattContab": 1, // Accounting invoice flag (optional field)
+    "fattConguaglioId": 123456, // Adjustment invoice ID
+    "scadFattura": "string", // Invoice due date (dd/MM/yyyy)
+    "fattScadutaFlg": 0, // Invoice expired flag (1=yes, 0=no)
+    "importoFattura": "string", // Invoice amount
+    "dataEmissione": "string", // Issue date (dd/MM/yyyy)
+    "dataElab": "string", // Processing date (dd/MM/yyyy)
+    "fattErrataId": 895623, // Erroneous invoice ID
+    "fattAnnullata": 0, // Invoice cancelled flag (1=yes, 0=no)
+    "fattMoraId": 123456, // Late fee invoice ID
+    "moraAddFlg": 0, // Late fee added flag (1=yes, 0=no)
+    "moraCount": 1, // Late fee count
+    "desMav1": "string", // MAV description line 1
+    "desMav2": "string", // MAV description line 2
+    "numeroMav": "string", // MAV number
+    "visWebFlg": 0, // Visible on web flag (1=yes, 0=no)
+
+    // Payment
+    "pagId": 85213, // Payment ID
+    "importoPag": "string", // Payment amount
+    "pagatoFlg": 0, // Paid flag (1=yes, 0=no)
+    "dataPagamento": "string", // Payment date (dd/MM/yyyy)
+    "dataNotifica": "string", // Notification date (dd/MM/yyyy)
+    "dataAccredito": "string", // Credit date (dd/MM/yyyy)
+    "incassatoDa": "MAV", // Collected via (e.g. MAV)
+    "iuv": "string", // Unique payment identifier (IUV)
+    "codiceAvviso": "string", // PagoPA notice code
+    "iur": "string", // Unique collection identifier (IUR)
+    "nBollettino": "string", // Bulletin number
+    "rendicontoId": 456987123, // Accounting report ID
+    "regManFlg": 0, // Manual registration flag (1=yes, 0=no)
+    "paDtVersamento": "string", // PA payment load date (dd/MM/yyyy)
+
+    // Cancellation and refund
+    "annullataFlg": 0, // Cancelled flag (1=yes, 0=no)
+    "tipoRimbPagCod": "MAV", // Refund/payment type code
+    "rimborsatoFlg": 0, // Refunded flag (1=yes, 0=no)
+    "notaRimb": "string", // Refund note
+    "codElabRimb": "string", // Refund processing code
+    "numMandatoRimb": "string", // Refund mandate number
+    "cauRimbCod": "string", // Refund reason code
+
+    // No further charges
+    "noAddebMoreFlg": 0, // No further charges flag (1=yes, 0=no)
+    "noAddebMoreData": "string", // No further charges date (dd/MM/yyyy)
+    "noAddebMoreNota": "string", // No further charges note
+    "noAddebMoreUsrId": "string", // No further charges set by user
+
+    // Notes
+    "note": "string", // Note
+    "notaCalcolo": "string" // Calculation note
+  }
+]
+```
+
+**`422 Unprocessable Entity`** — invalid parameters
+
+```json
+{
+  "statusCode": 200,
+  "retCode": -1,
+  "retErrMsg": "Parametri non corretti",
+  "errDetails": [
+    {
+      "errorType": "stackTrace", // Error type
+      "value": "string", // Error message
+      "rawValue": "string" // Raw error (JSON)
+    }
+  ]
+}
+```
+
+<br>
+
+---
+
+<br>
+
 ## Endpoints - Attachments (Allegati)
 
 ## Endpoints - Invoices (Fatture)
