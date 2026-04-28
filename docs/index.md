@@ -100,7 +100,7 @@ features:
       height: 48
     title: UML Diagrams
     details: Centralized UML diagram library. Use case, class, sequence, activity, component and deployment diagrams.
-    link: /project/uml/index
+    link: /project/uml/overview
     linkText: Browse Diagrams
 
   - icon:
@@ -110,7 +110,7 @@ features:
       height: 48
     title: Test Plan
     details: Test strategy, unit, integration, end-to-end and performance test specifications. Execution reports.
-    link: /project/testing/test-plan
+    link: /project/testing/overview
     linkText: Open Test Plan
 
   - icon:
@@ -120,6 +120,6 @@ features:
       height: 48
     title: User Manual
     details: End-user documentation. Onboarding guide, web and mobile app walkthroughs, FAQ and troubleshooting.
-    link: /project/user-manual/getting-started
+    link: /project/user-manual/overview
     linkText: Open Manual
 ---
