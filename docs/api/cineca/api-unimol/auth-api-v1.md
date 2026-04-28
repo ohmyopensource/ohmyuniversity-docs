@@ -1,13 +1,13 @@
 ---
 title: Auth API V1 | OhMyUniversity!
-description: REST API documentation for the Common Auth service (frk-authApiV1) — authentication and session management in CINECA ESSE3.
+description: REST API documentation for the Common Auth service (frk-authApiV1) - authentication and session management in CINECA ESSE3.
 head:
   - - meta
     - property: og:title
       content: Auth API V1 | OhMyUniversity!
   - - meta
     - property: og:description
-      content: REST API documentation for the Common Auth service (frk-authApiV1) — authentication and session management in CINECA ESSE3.
+      content: REST API documentation for the Common Auth service (frk-authApiV1) - authentication and session management in CINECA ESSE3.
   - - meta
     - property: og:url
       content: https://docs.university.ohmyopensource.org/api/cineca/api-unimol/auth-api-v1
@@ -19,7 +19,7 @@ head:
       content: Auth API V1 | OhMyUniversity!
   - - meta
     - name: twitter:description
-      content: REST API documentation for the Common Auth service (frk-authApiV1) — authentication and session management in CINECA ESSE3.
+      content: REST API documentation for the Common Auth service (frk-authApiV1) - authentication and session management in CINECA ESSE3.
 ---
 
 # OhMyUniversity! - Unimol: Auth API V1
@@ -36,9 +36,9 @@ Common authentication service for ESSE3 REST APIs. Manages login, logout, sessio
 
 All authenticated endpoints require an `Authorization` header. Three methods are supported:
 
-- **Basic** — standard HTTP Basic Auth as per RFC2617
-- **OAuth2** — compatible with RFC6749; supports `IMPLICIT` and `AUTHORIZATION_CODE` flows
-- **ApiKey** — additional validation via `X-api-key` header, enabled by configuration (`REST_API_KEY_STRICT_MODE`); always used in combination with Basic or OAuth2, never alone
+- **Basic** - standard HTTP Basic Auth as per RFC2617
+- **OAuth2** - compatible with RFC6749; supports `IMPLICIT` and `AUTHORIZATION_CODE` flows
+- **ApiKey** - additional validation via `X-api-key` header, enabled by configuration (`REST_API_KEY_STRICT_MODE`); always used in combination with Basic or OAuth2, never alone
 
 ---
 
@@ -62,12 +62,12 @@ If multiple valid sessions exist for the same user and no jsessionid is provided
 
 Sessions expire after a maximum of **6 hours** from creation regardless of activity.
 
-**Implicit login** — the session is removed automatically when:
+**Implicit login** - the session is removed automatically when:
 
 - idle longer than the timeout configured on the user's group (`p18_grp.http_session_timeout`)
 - alive longer than `REST_MAX_SESSION_TIME` (default: 5h 45m)
 
-**Explicit login** — sessions are NOT removed automatically on timeout. The client is responsible for tracking session lifetime and calling `/login` again when needed. Sessions sharing the same `Authorization` header are grouped for timeout calculation — the group expires based on the most recent activity across all sessions in the group.
+**Explicit login** - sessions are NOT removed automatically on timeout. The client is responsible for tracking session lifetime and calling `/login` again when needed. Sessions sharing the same `Authorization` header are grouped for timeout calculation - the group expires based on the most recent activity across all sessions in the group.
 
 ---
 
@@ -107,7 +107,7 @@ Login is available even for users not enabled for REST API management. In this c
 
 ## Endpoints - Authentication (Autenticazione)
 
-### `PUT /changeUserPassword` — Change user password
+### `PUT /changeUserPassword` - Change user password
 
 ```java
 /**
@@ -153,7 +153,7 @@ Access requires a technical user (`UTENTE_TECNICO`) with REST client access enab
 }
 ```
 
-**`401 Unauthorized`** — `Authorization` header is missing, invalid, or contains wrong credentials.
+**`401 Unauthorized`** - `Authorization` header is missing, invalid, or contains wrong credentials.
 
 <br>
 
@@ -161,14 +161,14 @@ Access requires a technical user (`UTENTE_TECNICO`) with REST client access enab
 
 <br>
 
-### `GET /checkLogon` — Verify user credentials
+### `GET /checkLogon` - Verify user credentials
 
 ```java
 /**
  * Verifies the credentials provided via the Authorization: Basic header.
  * Returns whether the credentials are valid and whether the user is
  * required to change their password (e.g. if it has expired).
- * This is a public endpoint — no prior authentication required.
+ * This is a public endpoint - no prior authentication required.
  *
  * @param none
  * @return credential check result including password change requirement
@@ -176,7 +176,7 @@ Access requires a technical user (`UTENTE_TECNICO`) with REST client access enab
 GET /checkLogon
 ```
 
-**Auth:** `ALL` — public endpoint · Supported: `Basic`
+**Auth:** `ALL` - public endpoint · Supported: `Basic`
 **Cache:** none
 
 #### Response
@@ -190,7 +190,7 @@ GET /checkLogon
 }
 ```
 
-**`401 Unauthorized`** — `Authorization` header is missing or contains invalid data.
+**`401 Unauthorized`** - `Authorization` header is missing or contains invalid data.
 
 <br>
 
@@ -198,7 +198,7 @@ GET /checkLogon
 
 <br>
 
-### `GET /login` — Login
+### `GET /login` - Login
 
 ```java
 /**
@@ -206,7 +206,7 @@ GET /checkLogon
  * passed via the Authorization header. An optional profile can be specified
  * via the X-Esse3-User-Profile HTTP header (STUDENTE, DOCENTE, USER_TECNICO).
  * If the user has multiple profiles and authenticates via tax code,
- * returns HTTP 300 without creating a session — retry with the
+ * returns HTTP 300 without creating a session - retry with the
  * X-Esse3-User-Profile header set to one of the available profiles.
  *
  * @param sessionLinguaCod string (query, optional) - ISO 639-2 language code
@@ -222,7 +222,7 @@ GET /checkLogon
 GET /login
 ```
 
-**Auth:** `ALL` — public endpoint · Supported: `Basic`, `JWT`, `ApiKey`
+**Auth:** `ALL` - public endpoint · Supported: `Basic`, `JWT`, `ApiKey`
 
 **Cache:** none
 
@@ -230,14 +230,14 @@ GET /login
 
 #### Response
 
-**`200 OK`** — Login successful.
+**`200 OK`** - Login successful.
 
 ```json
 {
   "authToken": "XDddlw213123ws233", // Session token (jsessionid) for explicit login
   "internalAuthToken": "ASDFKLASJKdk12kl341s", // Internal session token
   "expPwd": false, // true=password is expired
-  "jwt": "string", // JWT token (optional — use optionalFields=jwt)
+  "jwt": "string", // JWT token (optional - use optionalFields=jwt)
   "credentials": {
     "kind": "BASIC", // Authentication method used
     "profile": "GUEST", // Active profile
@@ -328,9 +328,9 @@ GET /login
 }
 ```
 
-**`300 Multiple Choices`** — Multiple profiles available. Login not performed. Retry with `X-Esse3-User-Profile` header set to `STUDENTE`, `DOCENTE`, or `USER_TECNICO`. The `profili` array in the response lists the available options.
+**`300 Multiple Choices`** - Multiple profiles available. Login not performed. Retry with `X-Esse3-User-Profile` header set to `STUDENTE`, `DOCENTE`, or `USER_TECNICO`. The `profili` array in the response lists the available options.
 
-**`401 Unauthorized`** — Login failed.
+**`401 Unauthorized`** - Login failed.
 
 <br>
 
@@ -338,7 +338,7 @@ GET /login
 
 <br>
 
-### `GET /login/cache` — Get session cache parameters
+### `GET /login/cache` - Get session cache parameters
 
 ```java
 /**
@@ -372,7 +372,7 @@ GET /login/cache
 
 <br>
 
-### `PUT /login/cache` — Set session cache parameters
+### `PUT /login/cache` - Set session cache parameters
 
 ```java
 /**
@@ -412,7 +412,7 @@ PUT /login/cache
 }
 ```
 
-**`422 Unprocessable Entity`** — Update failed.
+**`422 Unprocessable Entity`** - Update failed.
 
 ```json
 {
@@ -435,7 +435,7 @@ PUT /login/cache
 
 <br>
 
-### `GET /login/jwt/new` — Generate new JWT token
+### `GET /login/jwt/new` - Generate new JWT token
 
 ```java
 /**
@@ -478,7 +478,7 @@ GET /login/jwt/new
 
 <br>
 
-### `GET /login/lingua` — Get session language
+### `GET /login/lingua` - Get session language
 
 ```java
 /**
@@ -512,7 +512,7 @@ GET /login/lingua
 
 <br>
 
-### `PUT /login/lingua` — Set session language
+### `PUT /login/lingua` - Set session language
 
 ```java
 /**
@@ -549,7 +549,7 @@ PUT /login/lingua
 
 <br>
 
-### `GET /logout` — Logout
+### `GET /logout` - Logout
 
 ```java
 /**
@@ -569,7 +569,7 @@ GET /logout
 
 #### Response
 
-**`200 OK`** — Session successfully terminated.
+**`200 OK`** - Session successfully terminated.
 
 <br>
 
@@ -577,7 +577,7 @@ GET /logout
 
 <br>
 
-### `GET /sessions/current-session` — Check current session
+### `GET /sessions/current-session` - Check current session
 
 ```java
 /**
@@ -601,14 +601,14 @@ GET /sessions/current-session
 
 #### Response
 
-**`200 OK`** — Session is valid. Response structure is identical to [`GET /login`](#get-login----login).
+**`200 OK`** - Session is valid. Response structure is identical to [`GET /login`](#get-login----login).
 
 ```json
 {
   "authToken": "string", // Session token
   "internalAuthToken": "string", // Internal session token
   "expPwd": false, // true=password is expired
-  "jwt": "string", // JWT token (optional — use optionalFields=jwt)
+  "jwt": "string", // JWT token (optional - use optionalFields=jwt)
   "credentials": {
     /* ... */
   }, // Authentication credentials info
@@ -623,11 +623,11 @@ GET /sessions/current-session
 
 > See [`GET /login`](#get-login----login) for the full response field list and descriptions.
 
-**`300 Multiple Choices`** — Multiple profiles available. Retry with `X-Esse3-User-Profile` header.
+**`300 Multiple Choices`** - Multiple profiles available. Retry with `X-Esse3-User-Profile` header.
 
-**`401 Unauthorized`** — Login failed.
+**`401 Unauthorized`** - Login failed.
 
-**`404 Not Found`** — Session is invalid or has expired.
+**`404 Not Found`** - Session is invalid or has expired.
 
 <br>
 
@@ -635,7 +635,7 @@ GET /sessions/current-session
 
 <br>
 
-### `GET /sessions/{sessionId}/check` — Check session validity by ID
+### `GET /sessions/{sessionId}/check` - Check session validity by ID
 
 ```java
 /**
@@ -656,9 +656,9 @@ GET /sessions/{sessionId}/check
 
 #### Response
 
-**`200 OK`** — Session is valid.
+**`200 OK`** - Session is valid.
 
-**`404 Not Found`** — Session ID is invalid or has expired.
+**`404 Not Found`** - Session ID is invalid or has expired.
 
 <br>
 
@@ -668,14 +668,14 @@ GET /sessions/{sessionId}/check
 
 ## Endpoints - JWT (JWT)
 
-### `GET /jwt/jwk` — Get JWT public keys (JWKS)
+### `GET /jwt/jwk` - Get JWT public keys (JWKS)
 
 ```java
 /**
  * Returns the JSON Web Key Set (JWKS) containing the public keys used by
  * ESSE3 to sign JWT tokens. Use these keys to validate tokens issued via
  * GET /login (with jwt field) or GET /login/jwt/new.
- * This is a public endpoint — no authentication required.
+ * This is a public endpoint - no authentication required.
  *
  * @param none
  * @return JWKS object containing the public key(s) for JWT validation
@@ -683,7 +683,7 @@ GET /sessions/{sessionId}/check
 GET /jwt/jwk
 ```
 
-**Auth:** `ALL` — public endpoint
+**Auth:** `ALL` - public endpoint
 
 **Cache:** none
 
@@ -711,13 +711,13 @@ GET /jwt/jwk
 
 <br>
 
-### `GET /jwt/refresh` — Refresh JWT token
+### `GET /jwt/refresh` - Refresh JWT token
 
 ```java
 /**
  * Refreshes a JWT token previously issued by ESSE3 via GET /login
  * or GET /login/jwt/new. Returns a new token with a refreshed expiry.
- * This is a public endpoint — no session authentication required,
+ * This is a public endpoint - no session authentication required,
  * only a valid ESSE3-issued JWT must be provided.
  *
  * @param jwt string (query, optional) - JWT token to refresh; must have
@@ -727,7 +727,7 @@ GET /jwt/jwk
 GET /jwt/refresh
 ```
 
-**Auth:** `ALL` — public endpoint
+**Auth:** `ALL` - public endpoint
 
 **Cache:** none
 
@@ -741,7 +741,7 @@ GET /jwt/refresh
 }
 ```
 
-**`422 Unprocessable Entity`** — Invalid parameters.
+**`422 Unprocessable Entity`** - Invalid parameters.
 
 ```json
 {
@@ -762,6 +762,6 @@ GET /jwt/refresh
 
 ## References
 
-- **Swagger UI:** [Auth Api V1 — ESSE3 REST Docs](<https://unimol.esse3.cineca.it/e3rest/docs/?urls.primaryName=Auth%20Api%20V1%20(https%3A%2F%2Funimol.esse3.cineca.it%2Fe3rest%2Fapi)>)
+- **Swagger UI:** [Auth Api V1 - ESSE3 REST Docs](<https://unimol.esse3.cineca.it/e3rest/docs/?urls.primaryName=Auth%20Api%20V1%20(https%3A%2F%2Funimol.esse3.cineca.it%2Fe3rest%2Fapi)>)
 - **Spec YAML:** [frk-authApiV1.yaml](https://unimol.esse3.cineca.it/e3rest/api/swagger-service-v1/swagger/specs/frk-authApiV1.yaml)
 - **ESSE3 REST API General Documentation:** [wiki.u-gov.it](https://wiki.u-gov.it/confluence/display/ESSE3/Servizi+REST+su+ESSE3)
