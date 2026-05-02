@@ -73,12 +73,11 @@ Multiversity does not currently publish a public REST API specification. The API
 
 The table below lists the universities and higher education institutions operating under the Multiversity Group. Three are MUR-accredited telematic universities delivering fully online degree programmes recognised under Italian law; the fourth is Pegaso International, the group's international arm, accredited in Malta by the MFHEA.
 
-| Institution                             | Type                  | Short name   | Founded | Accreditation | Portal                                                    | LMS                                                                     |
-| --------------------------------------- | --------------------- | ------------ | ------- | ------------- | --------------------------------------------------------- | ----------------------------------------------------------------------- |
-| Università Telematica Pegaso            | Telematic university  | Pegaso       | 2006    | MUR (Italy)   | [unipegaso.it](https://www.unipegaso.it/)                 | [pegaso.multiversity.click](https://pegaso.multiversity.click/)         |
-| Universitas Mercatorum                  | Telematic university  | Mercatorum   | 2003    | MUR (Italy)   | [unimercatorum.it](https://www.unimercatorum.it/)         | [mercatorum.multiversity.click](https://mercatorum.multiversity.click/) |
-| Università Telematica San Raffaele Roma | Telematic university  | San Raffaele | 1998    | MUR (Italy)   | [uniroma5.it](https://www.uniroma5.it/)                   | [utsr.multiversity.click](https://lms.utsr.multiversity.click/)         |
-| Pegaso International                    | Lifelong learning HEI | -            | 2015    | MFHEA (Malta) | [pegasointernational.eu](https://pegasointernational.eu/) | -                                                                       |
+| Institution                             | Type                 | Short name   | Founded | Accreditation | Portal                                            | LMS                                                                     |
+| --------------------------------------- | -------------------- | ------------ | ------- | ------------- | ------------------------------------------------- | ----------------------------------------------------------------------- |
+| Università Telematica Pegaso            | Telematic university | Pegaso       | 2006    | MUR (Italy)   | [unipegaso.it](https://www.unipegaso.it/)         | [pegaso.multiversity.click](https://pegaso.multiversity.click/)         |
+| Universitas Mercatorum                  | Telematic university | Mercatorum   | 2003    | MUR (Italy)   | [unimercatorum.it](https://www.unimercatorum.it/) | [mercatorum.multiversity.click](https://mercatorum.multiversity.click/) |
+| Università Telematica San Raffaele Roma | Telematic university | San Raffaele | 1998    | MUR (Italy)   | [uniroma5.it](https://www.uniroma5.it/)           | [utsr.multiversity.click](https://lms.utsr.multiversity.click/)         |
 
 ---
 
