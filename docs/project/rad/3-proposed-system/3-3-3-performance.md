@@ -1,10 +1,10 @@
 ---
-title: RAD - 3-3-3 Performance | OhMyUniversity!
+title: RAD - 3.3.3 Performance | OhMyUniversity!
 description: Performance requirements of OhMyUniversity - defining response time thresholds and resource efficiency targets for optimized mobile and web usage.
 head:
   - - meta
     - property: og:title
-      content: RAD - 3-3-3 Performance | OhMyUniversity!
+      content: RAD - 3.3.3 Performance | OhMyUniversity!
   - - meta
     - property: og:description
       content: Performance requirements of OhMyUniversity - defining response time thresholds and resource efficiency targets for optimized mobile and web usage.
@@ -16,13 +16,13 @@ head:
       content: ohmyuniversity, rad, performance, nonfunctional requirements, response time, latency, resource efficiency, battery consumption, cineca, mobile app, university app, middleware
   - - meta
     - name: twitter:title
-      content: RAD - 3-3-3 Performance | OhMyUniversity!
+      content: RAD - 3.3.3 Performance | OhMyUniversity!
   - - meta
     - name: twitter:description
       content: Performance requirements of OhMyUniversity - defining response time thresholds and resource efficiency targets for optimized mobile and web usage.
 ---
 
-# 3.3.3 Performance
+# OhMyUniversity! - RAD: 3.3.3 Performance
 
 The performance requirements define the expected speed and resource efficiency of **OhMyUniversity!** during normal usage. Since the system is designed for frequent access from mobile and web devices, it must provide fast response times while limiting the consumption of device resources.
 

@@ -1,10 +1,10 @@
 ---
-title: RAD - 3-3-6 Interface | OhMyUniversity!
+title: RAD - 3.3.6 Interface | OhMyUniversity!
 description: Interface requirements of OhMyUniversity - defining external API integration, secure communication, and digital identity authentication standards.
 head:
   - - meta
     - property: og:title
-      content: RAD - 3-3-6 Interface | OhMyUniversity!
+      content: RAD - 3.3.6 Interface | OhMyUniversity!
   - - meta
     - property: og:description
       content: Interface requirements of OhMyUniversity - defining external API integration, secure communication, and digital identity authentication standards.
@@ -16,13 +16,13 @@ head:
       content: ohmyuniversity, rad, interface, nonfunctional requirements, external integration, api, cineca, esse3, moodle, tls, security, authentication, spid, cie, oidc, saml, university app
   - - meta
     - name: twitter:title
-      content: RAD - 3-3-6 Interface | OhMyUniversity!
+      content: RAD - 3.3.6 Interface | OhMyUniversity!
   - - meta
     - name: twitter:description
       content: Interface requirements of OhMyUniversity - defining external API integration, secure communication, and digital identity authentication standards.
 ---
 
-# 3.3.6 Interface
+# OhMyUniversity! - RAD: 3.3.6 Interface
 
 The interface requirements define how **OhMyUniversity!** must communicate with external systems and authentication providers. Since the platform acts as a middleware between the user and university services, external integrations must be controlled, secure, and compliant with institutional standards.
 

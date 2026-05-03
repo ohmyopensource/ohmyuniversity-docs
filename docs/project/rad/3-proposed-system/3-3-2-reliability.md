@@ -1,10 +1,10 @@
 ---
-title: RAD - 3-3-2 Reliability | OhMyUniversity!
+title: RAD - 3.3.2 Reliability | OhMyUniversity!
 description: Reliability requirements of OhMyUniversity - defining fault tolerance, data integrity, and availability constraints for a stable and dependable system.
 head:
   - - meta
     - property: og:title
-      content: RAD - 3-3-2 Reliability | OhMyUniversity!
+      content: RAD - 3.3.2 Reliability | OhMyUniversity!
   - - meta
     - property: og:description
       content: Reliability requirements of OhMyUniversity - defining fault tolerance, data integrity, and availability constraints for a stable and dependable system.
@@ -16,13 +16,13 @@ head:
       content: ohmyuniversity, rad, reliability, nonfunctional requirements, fault tolerance, data integrity, availability, uptime, cache, cineca, moodle, university app, middleware
   - - meta
     - name: twitter:title
-      content: RAD - 3-3-2 Reliability | OhMyUniversity!
+      content: RAD - 3.3.2 Reliability | OhMyUniversity!
   - - meta
     - name: twitter:description
       content: Reliability requirements of OhMyUniversity - defining fault tolerance, data integrity, and availability constraints for a stable and dependable system.
 ---
 
-# 3.3.2 Reliability
+# OhMyUniversity! - RAD: 3.3.2 Reliability
 
 The reliability requirements define how **OhMyUniversity!** must behave to guarantee continuity of service, correctness of information, and operational stability. Since the system depends on external university services, it must be able to manage temporary failures while preserving data accuracy and user trust.
 
