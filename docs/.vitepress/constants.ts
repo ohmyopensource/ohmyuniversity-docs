@@ -17,6 +17,8 @@ export const API_DOCS = {
   CINECA_URL: 'cineca',
   MULTIVERSITY: 'Multiversity',
   MULTIVERSITY_URL: 'multiversity',
+  MOODLE: 'Moodle',
+  MOODLE_URL: 'moodle',
   MIM: "MIM - Ministero dell'Istruzione e del Merito",
   MIM_URL: 'mim',
   MUR: "MUR - Ministero dell'Università e della Ricerca",

@@ -47,6 +47,10 @@ const apiRootSidebar: DefaultTheme.SidebarItem[] = [
         link: `/${API_DOCS.BASE_URL}/${API_DOCS.MULTIVERSITY_URL}/${COMMON_LINKS.OVERVIEW}`,
       },
       {
+        text: API_DOCS.MOODLE,
+        link: `/${API_DOCS.BASE_URL}/${API_DOCS.MOODLE_URL}/${COMMON_LINKS.OVERVIEW}`,
+      },
+      {
         text: API_DOCS.MIM,
         link: `/${API_DOCS.BASE_URL}/${API_DOCS.MIM_URL}/${COMMON_LINKS.OVERVIEW}`,
       },
@@ -256,6 +260,35 @@ const multiversitySidebar: DefaultTheme.SidebarItem[] = [
 ];
 
 // ================================
+// MOODLE
+// ================================
+const moodleSidebar: DefaultTheme.SidebarItem[] = [
+  backToApiDocs,
+  {
+    text: API_DOCS.MOODLE,
+    items: [
+      {
+        text: 'Overview',
+        link: `/${API_DOCS.BASE_URL}/${API_DOCS.MOODLE_URL}/${COMMON_LINKS.OVERVIEW}`,
+      },
+      {
+        text: 'Authentication',
+        link: `/${API_DOCS.BASE_URL}/${API_DOCS.MOODLE_URL}/auth`,
+      },
+      {
+        text: COMMON_TITLES.CHANGELOG,
+        link: `/${API_DOCS.BASE_URL}/${API_DOCS.MOODLE_URL}/${COMMON_LINKS.CHANGELOG}`,
+      },
+    ],
+  },
+  {
+    text: API_DOCS.REFERENCE,
+    collapsed: true,
+    items: [],
+  },
+];
+
+// ================================
 // MIM - MINISTERO DELL'ISTRUZIONE E DEL MERITO
 // ================================
 const mimSidebar: DefaultTheme.SidebarItem[] = [
@@ -424,6 +457,7 @@ export const apiSidebar: DefaultTheme.SidebarMulti = {
   '/api/cineca/api-unimol/': cinecaSidebar,
   '/api/cineca/api-common/': cinecaSidebar,
   '/api/cineca/': cinecaSidebar,
+  '/api/moodle/': moodleSidebar,
   '/api/multiversity/': multiversitySidebar,
   '/api/mim/': mimSidebar,
   '/api/mur/': murSidebar,
