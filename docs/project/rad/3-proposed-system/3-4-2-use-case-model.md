@@ -1,3 +1,27 @@
+---
+title: RAD - 3.4.2 Use Case Model | OhMyUniversity!
+description: Use Case Model of OhMyUniversity - defining actors, system goals, use cases, traceability, and the UML functional view of the system.
+head:
+  - - meta
+    - property: og:title
+      content: RAD - 3.4.2 Use Case Model | OhMyUniversity!
+  - - meta
+    - property: og:description
+      content: Use Case Model of OhMyUniversity - defining actors, system goals, use cases, traceability, and the UML functional view of the system.
+  - - meta
+    - property: og:url
+      content: https://docs.university.ohmyopensource.org/project/rad/3-proposed-system/3-4-2-use-case-model
+  - - meta
+    - name: keywords
+      content: ohmyuniversity, rad, use case model, use cases, uml, actors, functional model, traceability matrix, system boundaries, requirements analysis, student portal, middleware
+  - - meta
+    - name: twitter:title
+      content: RAD - 3.4.2 Use Case Model | OhMyUniversity!
+  - - meta
+    - name: twitter:description
+      content: Use Case Model of OhMyUniversity - defining actors, system goals, use cases, traceability, and the UML functional view of the system.
+---
+
 # OhMyUniversity! - RAD: 3.4.2 Use Case Model
 
 ## 3.4.2.1 Overview
