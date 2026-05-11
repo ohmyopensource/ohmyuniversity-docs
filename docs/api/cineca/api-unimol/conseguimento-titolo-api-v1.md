@@ -10,7 +10,7 @@ head:
       content: REST API documentation for the ConseguimentoTitolo service (ConseguimentoTitolo-service-v1) - CINECA ESSE3.
   - - meta
     - property: og:url
-      content: https://docs.university.ohmyopensource.org/api/cineca/api-unimol/conseguimentoTitolo-api-v1
+      content: https://docs.university.ohmyopensource.org/api/cineca/api-unimol/conseguimento-titolo-api-v1
   - - meta
     - name: keywords
       content: conseguimentoTitolo v1 api, esse3 rest api, cineca api, ohmyuniversity api, ConseguimentoTitolo-service-v1
@@ -22,19 +22,13 @@ head:
       content: REST API documentation for the ConseguimentoTitolo service (ConseguimentoTitolo-service-v1) - CINECA ESSE3.
 ---
 
-# OhMyUniversity! - Unimol: ConseguimentoTitolo API V1
+## OhMyUniversity! - Unimol: Conseguimento Titolo API V1
 
-**ENG:** `Thesis and Graduation`
+**ENG:** `Degree Completion`
 
-**Version:** `1.2.0` · **Base URL:** `/ConseguimentoTitolo-service-v1`
+**Version:** `1.2.0` · **Base URL:** `/consTit-service-v1`
 
-The services allow retrieving information on the graduation process of the Esse3 system, including:
-- graduation exam dates and related information
-- the list of professors who can be selected as thesis advisors
-- the list of external subjects who can be selected as thesis advisors
-- the summary of all data entered and options chosen during the presentation of the graduation application
-- the types of thesis configured based on the graduation rules related to the student
-- the thesis data and information related to the exam and session
+Service for accessing the degree completion process in ESSE3. Covers graduation sessions and exam calls, graduation applications, thesis data, thesis supervisors (internal and external), thesis types, and graduation committees.
 
 ---
 
@@ -173,7 +167,7 @@ PUT /allegati/tesi/antiplagio
 
 <br>
 
-## Endpoints - Graduation Exams (Appelli Laurea)
+## Endpoints - Graduation Exam Sessions List (Appelli laurea)
 
 ### `GET /appelliCt` - Retrieve graduation exams list
 
@@ -258,7 +252,7 @@ GET /appelliCt
 
 <br>
 
-## Endpoints - Graduation Exam (Appello Di Laurea)
+## Endpoints - Graduation Exam Session (Appello di laurea)
 
 ### `GET /appelliCt/{appCtId}` - Retrieve graduation exam information
 
@@ -1170,7 +1164,7 @@ GET /domandeCt/{domCtId}/tesi
 
 <br>
 
-## Endpoints - Thesis Consultation Modality (Modalità Di Consultazione Tesi)
+## Endpoints - Thesis Access Modes (Modalità di consultazione tesi)
 
 ### `GET /modConsTesi` - Retrieve list of thesis consultation modalities
 
@@ -1281,7 +1275,7 @@ PUT /tesi/{tesiId}/modConsTesi
 
 <br>
 
-## Endpoints - Thesis Advisor Professors (Docenti Relatori Di Tesi)
+## Endpoints - Thesis Supervisors — Teaching Staff (Docenti relatori di tesi)
 
 ### `GET /relatori/docenti` - Retrieve list of available thesis advisor professors for the student
 
@@ -1353,7 +1347,7 @@ GET /relatori/docenti
 
 <br>
 
-## Endpoints - External Subject Thesis Advisor (Soggetto Esterno Relatore Di Tesi)
+## Endpoints - Thesis Supervisors — External Subjects (Soggetto esterno relatore di tesi)
 
 ### `GET /relatori/soggEst/` - Retrieve list of available external subjects for the student
 
@@ -1418,7 +1412,7 @@ GET /relatori/soggEst/
 
 <br>
 
-## Endpoints - Thesis Advisor Report (Report Tesi Relatori)
+## Endpoints - Thesis Supervisors Report (Report tesi relatori)
 
 ### `GET /report/tesi/relatori/{dipCod}` - Retrieve statistics on thesis advisors
 
@@ -1492,7 +1486,7 @@ GET /report/tesi/relatori/{dipCod}
 
 <br>
 
-## Endpoints - Graduation Sessions and Commissions (Sedute E Commissioni Di Laurea)
+## Endpoints - Graduation Committees and Sessions (Sedute e commissioni di laurea)
 
 ### `GET /sedAppCt` - Retrieve information on sessions and respective graduation commissions
 
@@ -1690,7 +1684,7 @@ GET /tesi/{tesiId}
 
 <br>
 
-## Endpoints - Thesis Advisor Insertion (Inserimento Relatori Di Tesi)
+## Endpoints - Thesis Supervisor Assignment (Inserimento relatori di tesi)
 
 ### `PUT /tesi/{tesiId}/relatori` - Insert an advisor for a thesis
 
@@ -1765,7 +1759,7 @@ PUT /tesi/{tesiId}/relatori
 
 <br>
 
-## Endpoints - Thesis Advisor Types (Tipologie Relatori Tesi)
+## Endpoints - Thesis Supervisor Types (Tipologie relatori tesi)
 
 ### `GET /tipiRelTesi/{stuId}` - Retrieve thesis advisor types
 
@@ -1878,12 +1872,6 @@ GET /tipiTesiStu
   ] // ErrDetails
 }
 ```
-
-<br>
-
----
-
-<br>
 
 ---
 

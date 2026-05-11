@@ -24,15 +24,15 @@ head:
 
 # OhMyUniversity! - Unimol: Docenti API V1
 
-**ENG:** `Professors`
+**ENG:** `Teaching Staff`
 
 **Version:** `1.0.0` · **Base URL:** `/docenti-service-v1`
 
-These services allow retrieving information about professors and performing operations on them.
+Service for retrieving teaching staff information and performing operations on them. Covers staff registry, roles, and office hours.
 
 ---
 
-## Endpoints - Professors (Docenti)
+## Endpoints - Teaching Staff (Docenti)
 
 ### `GET /docenti` - Retrieve professors
 
@@ -872,7 +872,7 @@ GET /docenti/ruoli
 
 <br>
 
-## Endpoints - Schedules (Orari)
+## Endpoints - Office Hours (Orari)
 
 ### `GET /docenti/{docenteId}/orario` - Retrieve schedules associated with a professor
 
@@ -1119,16 +1119,10 @@ DELETE /docenti/{docenteId}/orario
 }
 ```
 
-<br>
-
----
-
-<br>
-
 ---
 
 ## References
 
 - **Swagger UI:** [Docenti Api V1 - ESSE3 REST Docs](<https://unimol.esse3.cineca.it/e3rest/docs/?urls.primaryName=Docenti%20Api%20V1%20(https%3A%2F%2Funimol.esse3.cineca.it%2Fe3rest%2Fapi%2Fdocenti-service-v1)>)
-- **Spec YAML:** [anag-docentiApiV1.yaml](https://unimol.esse3.cineca.it/e3rest/docs/?urls.primaryName=Docenti%20Api%20V1%20(https%3A%2F%2Funimol.esse3.cineca.it%2Fe3rest%2Fapi%2Fdocenti-service-v1))
+- **Spec YAML:** [anag-docentiApiV1.yaml](<https://unimol.esse3.cineca.it/e3rest/docs/?urls.primaryName=Docenti%20Api%20V1%20(https%3A%2F%2Funimol.esse3.cineca.it%2Fe3rest%2Fapi%2Fdocenti-service-v1)>)
 - **ESSE3 REST API General Documentation:** [wiki.u-gov.it](https://wiki.u-gov.it/confluence/display/ESSE3/Servizi+REST+su+ESSE3)

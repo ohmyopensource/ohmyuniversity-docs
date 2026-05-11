@@ -24,79 +24,13 @@ head:
 
 # OhMyUniversity! - Unimol: Piani API V1
 
-**ENG:** `Student Study Plans`
+**ENG:** `Study Plans`
 
 **Version:** `1.0.0` · **Base URL:** `/piani-service-v1`
 
-REST API for accessing and managing student study plans in ESSE3. Provides endpoints for querying career segments with active plans, retrieving plan headers and full details, inserting new individual plans, and updating plan state and approval notes.
+## Service for accessing and managing student study plans in ESSE3. Covers plan headers, individual plan rows, and student registration data associated with a plan.
 
----
-
-## Covered entities
-
-| Entity                     | Description                                              | Tag         |
-| -------------------------- | -------------------------------------------------------- | ----------- |
-| `TrattoCarriera`           | Career segment (enrollment record) linked to study plans | `matricola` |
-| `TestataPianoDiStudio`     | Study plan header with status, schema, and path info     | `piano`     |
-| `PianoDiStudioConDettagli` | Full study plan with rules and teaching activities       | `piano`     |
-| `PianiDiStudioStatistics`  | Aggregated statistics on study plans                     | `piano`     |
-
----
-
-## Plan states
-
-| Code | Description  |
-| ---- | ------------ |
-| `B`  | Draft        |
-| `P`  | Proposed     |
-| `V`  | Under review |
-| `A`  | Approved     |
-| `R`  | Rejected     |
-| `X`  | Cancelled    |
-
----
-
-## Plan insertion (POST) return codes
-
-The `POST /piani/{stuId}` endpoint returns specific negative `retCode` values on failure. Only individual plans (`tipo = I`) are supported.
-
-| Code   | Description                                                                                                                            |
-| ------ | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `-1`   | Invalid input parameters                                                                                                               |
-| `-2`   | Error cancelling the current valid plan                                                                                                |
-| `-3`   | Error setting the requested plan state                                                                                                 |
-| `-101` | Duplicate `ordNum` value in rules                                                                                                      |
-| `-102` | Duplicate `scePianoId` in rules                                                                                                        |
-| `-103` | Invalid `tipUnt` for rule with `ordNum` XX - must be `CFU`, `BLK`, or `ANN`                                                            |
-| `-104` | Invalid `tipSce` for rule with `ordNum` XX                                                                                             |
-| `-105` | Invalid `tipoAfCod` for rule with `ordNum` XX                                                                                          |
-| `-106` | `maxUnt` must be ≥ `minUnt` for rule with `ordNum` XX                                                                                  |
-| `-107` | `annoCorso` ≥ `annoCorsoAnticipo` for rule with `ordNum` XX                                                                            |
-| `-200` | Duplicate `itmId` in activities                                                                                                        |
-| `-201` | `itmPadreId` for `itmId` XX points to no activity                                                                                      |
-| `-202` | `itmPadreId` for `itmId` XX points to multiple activities                                                                              |
-| `-203` | `ordNum` for `itmId` XX points to no rule                                                                                              |
-| `-204` | `ordNum` for `itmId` XX points to multiple rules                                                                                       |
-| `-205` | `annoCorso` ≥ `annoCorsoAnticipo` for activity with `itmId` XX                                                                         |
-| `-206` | Invalid `tipoAfCod` for activity with `itmId` XX                                                                                       |
-| `-207` | Error retrieving offer data for activity with `itmId` XX (is the offer active?)                                                        |
-| `-209` | `adsceId` value for activity with `itmId` XX does not exist                                                                            |
-| `-210` | `adsceId` for activity with `itmId` XX does not belong to the student's `matId`                                                        |
-| `-211` | Invalid `tipoInsCodPadreDottorati` for activity with `itmId` XX                                                                        |
-| `-212` | Activity with `itmId` XX has doctoral fields but the linked rule is not a doctoral type                                                |
-| `-213` | Invalid `tipoInsCod` for activity with `itmId` XX                                                                                      |
-| `-214` | Error calculating weight from offer for `itmId` XX                                                                                     |
-| `-215` | Error calculating weight from booklet for `itmId` XX                                                                                   |
-| `-216` | Error retrieving parent grouping info for `itmId` XX                                                                                   |
-| `-217` | Invalid `nazioneCod` for activity with `itmId` XX                                                                                      |
-| `-218` | Error calculating weight from booklet for `itmId` XX (neither `adsceId` nor offer key set)                                             |
-| `-219` | Activity with `itmId` XX has no linked rule and no `annoCorso` set                                                                     |
-| `-220` | Activity with `itmId` XX has doctoral fields but the linked rule is not a doctoral type                                                |
-| `-221` | Activity with `itmId` XX has doctoral fields but is the parent of the grouping - doctoral attributes are reserved for child activities |
-
----
-
-## Endpoints - Career Segments (Matricola)
+## Endpoints - Registration Number (Matricola)
 
 ### `GET /piani` - Get career segments with study plans
 

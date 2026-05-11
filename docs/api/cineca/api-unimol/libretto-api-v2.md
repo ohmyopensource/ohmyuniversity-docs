@@ -24,13 +24,15 @@ head:
 
 # OhMyUniversity! - Unimol: Libretto API V2
 
+**ENG:** `Student Academic Transcript`
+
 **Version:** `2.7.0` · **Base URL:** `/libretto-service-v2`
 
-ESSE3 REST APIs for accessing the student booklet, the services allow operating on students' booklets retrieving the following entities
+Service for accessing and managing the student academic transcript (_libretto_). Covers career segments, transcript rows (individual teaching activities), grades, exam sessions, attendance, syllabi, partitions, segments, and recognition/validation of credits. Both read and write operations are available; write operations generally require `UTENTE_TECNICO` or `DOCENTE`.
 
 ---
 
-## Endpoints - Matricola
+## Endpoints - Registration Number (Matricola)
 
 ### `GET /libretti` - Career segments containing the booklets
 
@@ -110,7 +112,7 @@ GET /libretti
   "retErrMsg": "Parametri non corretti", // Error description
   "errDetails": [
     {
-      "errorType": "stackTrace", // Descrizione del tipo di errore aggiuntivo
+      "errorType": "stackTrace", // Additional error type description
       "value": "SocketTimeoutException....", // Error description
       "rawValue": "SocketTimeoutException...." // Error description
     }
@@ -186,1083 +188,7 @@ GET /libretti/{matId}
 
 <br>
 
-## Endpoints - Massive
-
-### `GET /libretti/classe-studenti` - Retrieves students connected to an offered Activity
-
-```java
-/**
- * WARNING this method could retrieve part of a wider logistics
- * sharing since only one offered AD among those comprising the partition is selected.
- * If the partition is composed of a single AD, then the two methods coincide.
- * Otherwise, the restrictions described in the endpoint '/libretti/classe-studenti/{adLogId}' apply.
- *
- * @param logAaOffId           integer (query, required)           - ID of the offering year of the logistics sharing
- * @param logAdCod             string (query, required)            - Educational activity code of the logistics sharing
- * @param logCdsCod            string (query, required)            - Code of the course providing the educational activity in the logistics sharing
- * @param logAaOrdId           integer (query, required)           - ID of the regulation year of the course providing the logistics sharing
- * @param logPdsCod            string (query, required)            - Code of the path providing the educational activity in the logistics sharing
- * @param libUdCod             string (query, optional)            - Code of the teaching unit (UD) present in the student's booklet
- * @param staStuCod            string (query, optional)            - Career state code
- * @param staMatCod            string (query, optional)            - Matriculation state code
- * @param supFlg               boolean (query, optional)           - If 1 indicates passed activities, otherwise not passed ones
- * @param domPartCod           string (query, optional)            - Student's class
- * @param allAdLog             boolean (query, optional)           - Allows retrieving the entire logistics sharing; if not specified, it's false
- * @param stuId                integer (query, optional)           - Unique identifier of the student
- * @param start                integer (query, optional)           - utilizzato insieme a `limit` per indicare la paginazione sui record
- * @param limit                integer (query, optional)           - utilizzato insieme a `start` per indicare la paginazione sui record, `limit` indica il numero di ...
- * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
- * @param optionalFields       string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
- * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
- * @return List<RigaLibrettoPerAdLog> on success
- */
-GET /libretti/classe-studenti
-```
-
-**Auth:** `DOCENTE_ADLOG`, `UTENTE_TECNICO` required · Supported: `Basic`, `JWT`
-
-**Cache:** midRefreshRateUserIndependent
-
-#### Response
-
-**`200 OK`**
-
-```json
-[
-  {
-    "persId": 1, // Unique ID of the person
-    "codFis": "MRRSSSS55D12F2323G", // Fiscal code of the person
-    "userId": "m.rossi", // User code
-    "cognome": "rossi", // Student's surname
-    "nome": "mario", // Student's name
-    "email": "m.rossi@gmail.com", // Student's personal email (optional)
-    "emailAte": "m.rossi@cineca.it", // Student's university email (optional)
-    "stuId": 1, // Unique identifier of the Student
-    "matId": 1, // Unique ID identifying the student's career segment and its linked booklet
-    "matricola": "AK12343", // Student matriculation
-    "adsceId": 1, // Unique ID of the booklet row linked to the logistics sharing
-    "adPartId": 1, // Unique ID of the booklet partition linked to the logistics sharing
-    "adLogId": 1, // Unique ID of the logistics sharing
-    "logPartCod": "S1", // Semester code linked to the logistics sharing
-    "logFatPartCod": "ALF", // Expected partitioning type for the logistics sharing
-    "logDomPartCod": "A-K", // Partition domain of the single partition
-    "logAaOffId": 2019, // Offering year of the logistics sharing
-    "annoCorso": 1, // Course year of the booklet activity
-    "staSceCod": "S", // State of the educational activity (code)
-    "ricId": 0, // Presence of a recognition or validation. 0 = No Recognition 1 = RF (Attendance Recognition) 2 = RA (Activity Recognition) 3 = CF (Attendance Validation) 4 = CA (Activity Validation)
-    "peso": 10.0, // Weight of the educational activity, calculated as the sum of segment weights; weight allows two optional decimals
-    "durata": 50.0, // Duration in hours of the educational activity
-    "oreMinFreq": 50.0, // Minimum attendance hours required to acquire attendance for the educational activity
-    "freqFlg": 1, // Flag indicating whether the activity has mandatory attendance
-    "aaFreqId": 2016, // Attendance year, valued if the activity state is F or S
-    "dataFreq": "15/10/2015", // Date of attendance acquisition; if valued, indicates the reference date from which attendance is acquired; the required format is DD/MM/YYYY
-    "chiaveAdContestualizzata": {
-      "cdsId": 1, // Chiave del corso di studio di erogazione dell'attività didattica (required)
-      "cdsCod": "CDS_AD_1", // Codice del corso di studio di erogazione dell'attività didattica
-      "cdsDes": "Esempio di CDS AD", // Descrizione del corso di erogazione dell'attività didattica
-      "aaOrdId": 2016, // Anno di ordinamento del corso di studio di erogazione dell'attività didattica (required)
-      "aaOrdCod": "CDS_AD_1", // Code of the regulation providing the educational activity
-      "aaOrdDes": "Esempio di CDS AD", // Description of the regulation providing the educational activity
-      "pdsId": 1, // Chiave del percorso di studio di erogazione dell'attività didattica (required)
-      "pdsCod": "PDS_AD_1", // Codice del percorso di erogazione dell'attività didattica
-      "pdsDes": "Esempio di PDS AD", // Descrizione del percorso di erogazione dell'attività didattica
-      "aaOffId": 1, // Anno di offerta di erogazione dell'attività didattica (required)
-      "adId": 1, // Chiave dell'attività didattica (required)
-      "adCod": "PDS_AD_1", // Codice dell''attività didattica
-      "adDes": "Esempio di PDS AD", // Descrizione dell''attività didattica
-      "afId": 1 // Id della afId proveniente da U-Gov Didattica
-    }, // ChiaveAdContestualizzata
-    "esito": {
-      "modValCod": "V", // Type of evaluation mode for the exam. Can assume values V, G, N; if the value is V, then upon passing the vote field is populated; otherwise, if the value is G, the tipo_giud_cod field is populated (required)
-      "supEsaFlg": 1, // Flag indicating whether the outcome is positive (required)
-      "voto": 1, // Vote, valued if modValCod is V. Final exam outcomes (those involving booklet row loading) are INTEGERS; partial exam outcomes can have 2 decimal digits
-      "lodeFlg": 1, // Flag indicating honors (cum laude), set to 1 only if modValCod is V and honors must be set
-      "tipoGiudCod": "IDO", // Code indicating the type of judgment used, valued only if modValCod is G
-      "tipoGiudDes": "Idoneo", // Description indicating the type of judgment used, valued only if modValCod is G
-      "dataEsa": "15/10/2015", // Date of the exam; the required format is DD/MM/YYYY
-      "aaSupId": 2016 // Year of passing the exam
-    }, // Esito
-    "segmenti": [
-      {}
-    ] // Segmenti (optional)
-  }
-]
-```
-
-<br>
-
----
-
-<br>
-
-### `GET /libretti/classe-studenti/{adLogId}` - Retrieves the class of students connected to a logistics sharing
-
-```java
-/**
- * Retrieves students who have, within their booklet's partition, one of the offered activities (Contextualized AD) present in the selected logistics sharing. In the case of partitioning type ALF and MATR, even if this is not present for various reasons, the system automatically calculates on the fly the correct contextualization for the offered activity linked to the booklet key. To summarize, this service retrieves students who satisfy all indicated points: are ATTENDING (those whose offered educational activity key in the booklet matches one of the ADs of the logistics sharing) have a valid calculated partition (Active state) or students who do not have a valid partition but for whom the expected partitioning is FAT_PART.TIPO_FATT in (ALF,MATR).
- *
- * @param adLogId              integer (path, required)            - Unique ID of the logistics sharing
- * @param adCod                string (query, optional)            - Activity code of the booklet row to search
- * @param cdsStuCod            string (query, optional)            - Code of the student's study course
- * @param staStuCod            string (query, optional)            - Career state code
- * @param staMatCod            string (query, optional)            - Matriculation state code
- * @param supFlg               boolean (query, optional)           - If 1 indicates passed activities, otherwise not passed ones
- * @param domPartCod           string (query, optional)            - Student's class
- * @param stuId                integer (query, optional)           - Unique identifier of the student
- * @param start                integer (query, optional)           - utilizzato insieme a `limit` per indicare la paginazione sui record
- * @param limit                integer (query, optional)           - utilizzato insieme a `start` per indicare la paginazione sui record, `limit` indica il numero di ...
- * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
- * @param optionalFields       string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
- * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
- * @return List<RigaLibrettoPerAdLog> on success
- */
-GET /libretti/classe-studenti/{adLogId}
-```
-
-**Auth:** `DOCENTE_ADLOG`, `UTENTE_TECNICO` required · Supported: `Basic`, `JWT`
-
-**Cache:** midRefreshRateUserIndependent
-
-#### Response
-
-**`200 OK`**
-
-```json
-[
-  {
-    "persId": 1, // Unique ID of the person
-    "codFis": "MRRSSSS55D12F2323G", // Fiscal code of the person
-    "userId": "m.rossi", // User code
-    "cognome": "rossi", // Student's surname
-    "nome": "mario", // Student's name
-    "email": "m.rossi@gmail.com", // Student's personal email (optional)
-    "emailAte": "m.rossi@cineca.it", // Student's university email (optional)
-    "stuId": 1, // Unique identifier of the Student
-    "matId": 1, // Unique ID identifying the student's career segment and its linked booklet
-    "matricola": "AK12343", // Student matriculation
-    "adsceId": 1, // Unique ID of the booklet row linked to the logistics sharing
-    "adPartId": 1, // Unique ID of the booklet partition linked to the logistics sharing
-    "adLogId": 1, // Unique ID of the logistics sharing
-    "logPartCod": "S1", // Semester code linked to the logistics sharing
-    "logFatPartCod": "ALF", // Expected partitioning type for the logistics sharing
-    "logDomPartCod": "A-K", // Partition domain of the single partition
-    "logAaOffId": 2019, // Offering year of the logistics sharing
-    "annoCorso": 1, // Course year of the booklet activity
-    "staSceCod": "S", // State of the educational activity (code)
-    "ricId": 0, // Presence of a recognition or validation. 0 = No Recognition 1 = RF (Attendance Recognition) 2 = RA (Activity Recognition) 3 = CF (Attendance Validation) 4 = CA (Activity Validation)
-    "peso": 10.0, // Weight of the educational activity, calculated as the sum of segment weights; weight allows two optional decimals
-    "durata": 50.0, // Duration in hours of the educational activity
-    "oreMinFreq": 50.0, // Minimum attendance hours required to acquire attendance for the educational activity
-    "freqFlg": 1, // Flag indicating whether the activity has mandatory attendance
-    "aaFreqId": 2016, // Attendance year, valued if the activity state is F or S
-    "dataFreq": "15/10/2015", // Date of attendance acquisition; if valued, indicates the reference date from which attendance is acquired; the required format is DD/MM/YYYY
-    "chiaveAdContestualizzata": {
-      "cdsId": 1, // Chiave del corso di studio di erogazione dell'attività didattica (required)
-      "cdsCod": "CDS_AD_1", // Codice del corso di studio di erogazione dell'attività didattica
-      "cdsDes": "Esempio di CDS AD", // Descrizione del corso di erogazione dell'attività didattica
-      "aaOrdId": 2016, // Anno di ordinamento del corso di studio di erogazione dell'attività didattica (required)
-      "aaOrdCod": "CDS_AD_1", // Code of the regulation providing the educational activity
-      "aaOrdDes": "Esempio di CDS AD", // Description of the regulation providing the educational activity
-      "pdsId": 1, // Chiave del percorso di studio di erogazione dell'attività didattica (required)
-      "pdsCod": "PDS_AD_1", // Codice del percorso di erogazione dell'attività didattica
-      "pdsDes": "Esempio di PDS AD", // Descrizione del percorso di erogazione dell'attività didattica
-      "aaOffId": 1, // Anno di offerta di erogazione dell'attività didattica (required)
-      "adId": 1, // Chiave dell'attività didattica (required)
-      "adCod": "PDS_AD_1", // Codice dell''attività didattica
-      "adDes": "Esempio di PDS AD", // Descrizione dell''attività didattica
-      "afId": 1 // Id della afId proveniente da U-Gov Didattica
-    }, // ChiaveAdContestualizzata
-    "esito": {
-      "modValCod": "V", // Type of evaluation mode for the exam. Can assume values V, G, N; if the value is V, then upon passing the vote field is populated; otherwise, if the value is G, the tipo_giud_cod field is populated (required)
-      "supEsaFlg": 1, // Flag indicating whether the outcome is positive (required)
-      "voto": 1, // Vote, valued if modValCod is V. Final exam outcomes (those involving booklet row loading) are INTEGERS; partial exam outcomes can have 2 decimal digits
-      "lodeFlg": 1, // Flag indicating honors (cum laude), set to 1 only if modValCod is V and honors must be set
-      "tipoGiudCod": "IDO", // Code indicating the type of judgment used, valued only if modValCod is G
-      "tipoGiudDes": "Idoneo", // Description indicating the type of judgment used, valued only if modValCod is G
-      "dataEsa": "15/10/2015", // Date of the exam; the required format is DD/MM/YYYY
-      "aaSupId": 2016 // Year of passing the exam
-    }, // Esito
-    "segmenti": [
-      {}
-    ] // Segmenti (optional)
-  }
-]
-```
-
-<br>
-
----
-
-<br>
-
-### `PUT /libretti/freq` - Sets or removes attendance for a list of students
-
-```java
-/**
- * Allows massively assigning attendance to multiple students. It is possible to also indicate the detail of lesson detections. If passed, the detection details overwrite (by detection year) the present detections.
- *
- * @param body                 ParametriFreqMassiva (body, required) - Object containing the students to assign attendance to
- * @return ResultFreqMassiva on success,
- *         DettaglioErrore on failure
- */
-PUT /libretti/freq
-```
-
-**Auth:** `DOCENTE`, `UTENTE_TECNICO` required · Supported: `Basic`, `JWT`
-
-**Cache:** midRefreshRateUserIndependent
-
-#### Request body
-
-```json
-{
-  "codFisDocenteRilevazione": "MRRRSS70G55H4444T", // Fiscal code of the teacher who carried out the detection
-  "codFisDocenteControllo": "MRRRSS70G55H4444T", // Fiscal code of the teacher for whom to check consistency between activities and assigned ownership (AD code only). To skip the check, pass an empty string
-  "aaRilevazioneId": 2020, // Year of attendance detection; if not valued, DR_CARR is taken
-  "adCod": "AD01", // Educational activity code where to assign attendance (required)
-  "cdsCod": "CDS01", // Study course code where to assign attendance; if not passed, any study course is considered valid
-  "aaOrdId": 2018, // Regulation year of the study course where to assign attendance; if not passed, any regulation year is considered valid
-  "pdsCod": "CDS01", // Study path code where to assign attendance; if not passed, any study path is considered valid
-  "aaOffId": 2020, // Offering year of the activity for which to assign attendance; if not passed, any offering year is considered valid
-  "fatPartCod": "AK-LZ", // Partition factor of the logistics partition; if not passed, any logistics sharing is considered valid
-  "domPartCod": "AK", // Partition domain of the logistics partition; if not passed, any logistics sharing is considered valid
-  "partCod": "S1", // Semester of the logistics partition; if not passed, any logistics sharing is considered valid
-  "adLogId": 12444, // ID of the logistics sharing; if not passed, any logistics sharing is considered valid
-  "totaleRilevazioni": 1, // Total detections
-  "totaleOreRilevazioni": 1, // Total hours of detections
-  "studenti": [
-    {}
-  ] // Studenti
-}
-```
-
-#### Response
-
-**`200 OK`**
-
-```json
-{
-  "retCode": 1, // Return code of the massive attendance loading function
-  "errMsg": "alcune rilevazioni non sono state caricate", // Error message in case errors occurred
-  "scarti": [
-    {}
-  ] // Discards
-}
-```
-
-**`422 Unprocessable Entity` - Insertion failed**
-
-```json
-{
-  "statusCode": 200, // Http Status Code
-  "retCode": -1, // Error code
-  "retErrMsg": "Parametri non corretti", // Error description
-  "errDetails": [
-    {
-      "errorType": "stackTrace", // Descrizione del tipo di errore aggiuntivo
-      "value": "SocketTimeoutException....", // Error description
-      "rawValue": "SocketTimeoutException...." // Error description
-    }
-  ] // ErrDetails
-}
-```
-
-<br>
-
----
-
-<br>
-
-### `PUT /libretti/rilevazioni-freq/` - Management of attendance detections
-
-```java
-/**
- * Allows managing attendance detections. It is also possible to pass attendance detections on the massive attendance assignment method libretti/freq or the punctual one /libretti/{matId}/righe/{adsceId}/freq. Those methods assign attendance and also save the detection detail information.
- *
- * @param body                 ParametriRilPresMassiva (body, required) - Object containing the students to assign attendance to
- * @return ResultFreqMassiva on success,
- *         DettaglioErrore on failure
- */
-PUT /libretti/rilevazioni-freq/
-```
-
-**Auth:** `DOCENTE`, `UTENTE_TECNICO` required · Supported: `Basic`, `JWT`
-
-**Cache:** midRefreshRateUserIndependent
-
-#### Request body
-
-```json
-{
-  "operazione": "CALCOLA_STATS_E_ALLINEA_FREQ", // Type of operation to perform (required)
-  "codFisDocenteRilevazione": "MRRRSS70G55H4444T", // Fiscal code of the teacher who carried out the detection (required)
-  "codFisDocenteControllo": "MRRRSS70G55H4444T", // Fiscal code of the teacher for whom to check consistency between activities and assigned ownership (AD code only). To skip the check, pass an empty string (required)
-  "aaRilevazioneId": 2020, // Year of attendance detection; if not valued, DR_CARR is taken
-  "adCod": "AD01", // Educational activity code where to assign attendance (required)
-  "cdsCod": "CDS01", // Study course code where to assign attendance; if not passed, any study course is considered valid (required)
-  "aaOrdId": 2018, // Regulation year of the study course where to assign attendance; if not passed, any regulation year is considered valid (required)
-  "pdsCod": "CDS01", // Study path code where to assign attendance; if not passed, any study path is considered valid (required)
-  "aaOffId": 2020, // Offering year of the activity for which to assign attendance; if not passed, any offering year is considered valid (required)
-  "fatPartCod": "AK-LZ", // Partition factor of the logistics partition; if not passed, any logistics sharing is considered valid (required)
-  "domPartCod": "AK", // Partition domain of the logistics partition; if not passed, any logistics sharing is considered valid (required)
-  "partCod": "S1", // Semester of the logistics partition; if not passed, any logistics sharing is considered valid (required)
-  "adLogId": 12444, // ID of the logistics sharing; if not passed, any logistics sharing is considered valid
-  "percMinOre": 50, // Minimum percentage of hours for attendance assignment
-  "percMinORil": 50, // Minimum percentage of detections for attendance assignment
-  "assegnaDataFreq": 1, // Flag for assigning the attendance date
-  "studenti": [
-    {
-      "matricola": "AD01", // Student matriculation code, retrieves the active segment of the active student career; in case of ambiguity, the matId field can be used
-      "matId": 1111, // ID of the career segment where to assign attendance; if valued, consistency with the matriculation field is checked
-      "adsceId": 1111, // ID of the booklet row, used if the indicated activity is repeatable
-      "aaFreqId": 2020, // Attendance year to assign to the student; if null, it is calculated with the current year
-      "dataFreq": "10/10/2020", // Date of assignment of student attendance, valid only if aaFreqId is valued
-      "rilevazioni": [
-        {
-          "idRilevazione": "1234", // Unique ID of the detection (required)
-          "dataLezione": "10/10/2020 10:00:00", // Date of the lesson
-          "durata": 1, // Duration in hours of the lesson
-          "codFisDocente": "MRRRSS55HG22G5555K", // Fiscal code of the teacher if different from the logged-in user
-          "statoPresenza": "P", // Student presence state (P present, A absent)
-          "minutiAssenza": 25 // Minutes of absence at a lesson; the data is valid only if the detection state is P - presence
-        }
-      ] // Rilevazioni
-    }
-  ] // Studenti
-}
-```
-
-#### Response
-
-**`200 OK`**
-
-```json
-{
-  "retCode": 1, // Return code of the massive attendance loading function
-  "errMsg": "alcune rilevazioni non sono state caricate", // Error message in case errors occurred
-  "scarti": [
-    {}
-  ] // Discards
-}
-```
-
-**`422 Unprocessable Entity` - Insertion failed**
-
-```json
-{
-  "statusCode": 200, // Http Status Code
-  "retCode": -1, // Error code
-  "retErrMsg": "Parametri non corretti", // Error description
-  "errDetails": [
-    {
-      "errorType": "stackTrace", // Descrizione del tipo di errore aggiuntivo
-      "value": "SocketTimeoutException....", // Error description
-      "rawValue": "SocketTimeoutException...." // Error description
-    }
-  ] // ErrDetails
-}
-```
-
-<br>
-
----
-
-<br>
-
-## Endpoints - Appello
-
-### `GET /libretti/{matId}/appelli` - List of appeals connected to the booklet
-
-```java
-/**
- * The attoreCod query string filter is used in association with the optional config field to retrieve the appeal configuration. Currently, only values required by specific applications are retrieved. For the list of all values, the ConfCalesa API can be used.
- *
- * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
- * @param attoreCod            string (query, optional)            - Type of actor required for data extraction (STU,DOC,SEG), used to filter the configuration...
- * @param q                    string (query, optional)            - The parameter allows filtering fields with specific predefined conditions, consult...
- * @param filter               string (query, optional)            - il parametro consente di applicare dei filtri alla classe di modello utilizzando il linguaggio RS...
- * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
- * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
- * @param optionalFields       string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
- * @return List<AppelloLibretto> on success
- */
-GET /libretti/{matId}/appelli
-```
-
-**Auth:** `STUDENTE`, `DOCENTE_APP`, `DOCENTE_PIANI`, `UTENTE_TECNICO`, `UTENTE_PTA`, `UTENTE_PTA_ADMIN` required · Supported: `Basic`, `JWT`
-
-**Cache:** midRefreshRateUserIndependent
-
-#### Response
-
-**`200 OK`**
-
-```json
-[
-  {}
-]
-```
-
-<br>
-
----
-
-<br>
-
-### `GET /libretti/{matId}/prenotazioni` - Retrieves information on reservations connected by a career segment
-
-```java
-/**
- * Retrieves information on reservations connected by a career segment
- *
- * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
- * @param attoreCod            string (query, optional)            - Type of actor required for data extraction (STU,DOC,SEG), used to filter the configuration...
- * @param dataMinPren          string (query, optional)            - Minimum reservation date
- * @param q                    string (query, optional)            - The parameter allows filtering fields with specific predefined conditions, consult...
- * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
- * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
- * @param optionalFields       string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
- * @param filter               string (query, optional)            - il parametro consente di applicare dei filtri alla classe di modello utilizzando il linguaggio RS...
- * @return List<IscrizioneAppello> on success,
- *         DettaglioErrore on failure
- */
-GET /libretti/{matId}/prenotazioni
-```
-
-**Auth:** `STUDENTE`, `UTENTE_TECNICO`, `UTENTE_PTA`, `UTENTE_PTA_ADMIN` required · Supported: `Basic`, `JWT`
-
-**Cache:** highRefreshRateUserIndependent
-
-#### Response
-
-**`200 OK`**
-
-```json
-[
-  {
-    "applistaId": 102220, // Unique identifier of the reservation
-    "cdsId": 102344, // ID of the study course providing the appeal
-    "adId": 1022, // ID of the educational activity providing the appeal
-    "appId": 1, // Progressive ID of the appeal with respect to the pair (cds_id, ad_id)
-    "appLogId": 1, // Progressive ID of the turn with respect to the triad (cds_id, ad_id, app_id)
-    "stuId": 12, // ID of the career of the student who made the reservation
-    "adregId": 112, // ID of the exam linked to the reservation
-    "adsceId": 112, // ID of the booklet row linked to the reservation
-    "matId": 112, // ID of the matriculation linked to the reservation (optional)
-    "adStuCod": "AD1", // Code of the activity reserved by the student
-    "adStuDes": "Attività di esempio", // Description of the activity reserved by the student (optional)
-    "cdsAdStuCod": "CDS1", // Code of the study course reserved by the student
-    "cdsAdStuDes": "Corso di studio di esempio", // Description of the study course reserved by the student (optional)
-    "cdsAdIdStu": 102344, // ID of the study course reserved by the student (optional)
-    "desAppello": "descrizione appello", // Description of the appeal (optional)
-    "desTurno": "descrizione turno", // Description of the turn to which the student is enrolled (optional)
-    "aulaCod": "codice aula", // Code of the classroom to which the student is enrolled (optional)
-    "aulaDes": "descizione aula", // Description of the classroom to which the student is enrolled (optional)
-    "edificioCod": "codice edificio", // Code of the building to which the student is enrolled (optional)
-    "edificioDes": "descizione edificio", // Description of the building to which the student is enrolled (optional)
-    "sedeId": 123, // ID of the location of the appeal (optional)
-    "sedeDes": "descizione sede", // Description of the location of the appeal (optional)
-    "dataOraTurno": "10/10/2016 12:00:00", // Date/time of the turn to which the student is enrolled (optional)
-    "aaFreqId": 2020, // Attendance year of the activity (optional)
-    "statoAdsce": "S", // Stato dell'attività didattica (codice)
-    "pesoAd": 10.0, // Weight of the educational activity, the weight includes two optional decimals
-    "userId": "m.rossi", // Active UserId of the student
-    "matricola": "124AA-12", // Student matriculation code
-    "nomeStudente": "Mario", // Student's name
-    "nomeAlias": "Giulia", // Student alias name
-    "cognomeStudente": "Rossi", // Student's surname
-    "codFisStudente": "XXXYYY99A12K123H", // Student's fiscal code
-    "dataNascitaStudente": "10/10/1985", // Student birth date (DD/MM/YYYY)
-    "sessoStudente": "M", // Student gender (optional)
-    "comuNascCodIstat": "M200", // ISTAT code of the student's birth municipality (optional)
-    "cittStraNasc": "ENG", // Foreign citizenship code at birth of the student (optional)
-    "cittCod": "ENG", // Student's citizenship code (optional)
-    "cdsStuCod": "CDS1", // Codice corso di studio di iscrizione dello studente
-    "cdsStuDes": "Corso di studio di esempio", // Description of the student's enrolled study course (optional)
-    "cdsIdStu": 102344, // ID of the student's enrolled study course (optional)
-    "aaOrdStuId": 2010, // Regulation year of the student's enrollment (optional)
-    "pdsStuCod": "PDS1", // Code of the student's enrolled study path (optional)
-    "pdsStuDes": "Percorso di studio di esempio", // Description of the student's enrolled study path (optional)
-    "pdsIdStu": 9999, // ID of the student's enrolled study path (optional)
-    "pubblId": 11234, // ID of the outcome publication
-    "presaVisione": "N", // State of acknowledgment of the outcome
-    "userIdPresaVisione": "m.rossi", // User who performed the last state change of the acknowledgment (optional)
-    "userGrpPresaVisione": 7, // Group of the user who performed the last state change of the acknowledgment (optional)
-    "dataRifEsito": "10/12/2017", // Date of last refusal applied to the teacher (DD/MM/YYYY) (optional)
-    "dataRifEsitoStu": "10/12/2017", // Date of last refusal applied to the student (DD/MM/YYYY)
-    "notaPubbl": "nota di pubblicazione", // Note inserted by the teacher during publication
-    "gruppoVotoCod": "30L", // Code of the grading scale of the student's booklet
-    "gruppoVotoMaxPunti": 30, // Maximum grade available for the grading scale
-    "esito": {
-      "modValCod": "V", // Evaluation mode of the exam, must correspond to the entered outcome type. Absent and withdrawn flags are mutually exclusive with the grade
-      "superatoFlg": 1, // Indicates whether the grade/judgment is positive
-      "votoEsa": 22, // Numerical grade of the exam
-      "tipoGiudCod": "IDO", // Judgment grade of the exam
-      "tipoGiudizioDes": "Idoneo", // Description of the judgment grade of the exam
-      "assenteFlg": 1, // Flag indicating absence from the exam
-      "ritiratoFlg": 1 // Flag indicating withdrawal from the exam
-    }, // Esito
-    "manualeFlg": 1, // Flag indicating who made the reservation (e.g., actors SEG, DOC manuale_flg=1; actor STU manuale_flg=0)
-    "dataEsa": "10/10/2016", // Date of taking the exam (DD/MM/YYYY); if not valued, the turn date applies
-    "domandeEsame": "prima domanda esame; seconda domanda esame", // Exam questions asked during the test
-    "notaStudente": "vecchio ordinamento; Studente Lavoratore; Studente fuoricorso etc.", // Note inserted by the student during appeal reservation
-    "tipoSvolgimentoEsameCod": "P", // Code of the exam execution type for the student
-    "tipoSvolgimentoEsameDes": "Presenza", // Description of the exam execution type for the student
-    "tipoSvolgimentoEsameRichiestaFlg": "1", // Indicates whether the exam execution type is a user request, meaning it must be converted into a definitive value (optional)
-    "tagCod": "GRP1", // Tag selected by the student during reservation (optional)
-    "autoTagCod": "99", // Reservation class associated with the student during reservation (optional)
-    "livUscitaCod": "B1", // Language output level if the appeal includes languages, to be valued along with linguaUscitaCod (optional)
-    "linguaUscitaCod": "eng", // ISO6392 code of the language to which the output level refers, to be valued along with livUscitaCod (optional)
-    "dataIns": "10/10/2016", // Reservation date (DD/MM/YYYY HH24:MI:SS)
-    "tipoDefAppCod": "STD", // Code identifying the tipoDefApp of the appeal linked to the reservation (optional)
-    "tipoGestPrenCod": "STD", // Code identifying the tipoGestPren of the appeal linked to the reservation (optional)
-    "tipoGestAppCod": "STD", // Code identifying the tipoGestApp of the appeal linked to the reservation (optional)
-    "tipoAppCod": "PP", // Appeal type (PF=Final Exam, PP=Partial Exam) (optional)
-    "posiz": 12, // Reservation progressive number within the enrolled list (optional)
-    "posizApp": 12, // Reservation progressive number within the enrolled list ordered by data_ins
-    "dataInizioIscr": "10/10/2016", // Enrollment start date (DD/MM/YYYY) (optional)
-    "dataFineIscr": "16/10/2016", // Enrollment end date (DD/MM/YYYY) (optional)
-    "tipoIscrCod": "S", // Enrollment mode defined in the appeal; possible values are (Written=S, Oral=O, Written and Oral=SO) (optional)
-    "tipoEsaCod": "S", // Enrollment mode defined in the appeal; possible values are (Written=S, Oral=O, Written and Oral Separated=SOS, Written and Oral Conjoined=SOC) (optional)
-    "aaCalId": 2020, // Calendar year of the appeal (optional)
-    "aaSesId": 2020, // Year of the session (optional)
-    "sesDes": "Sessione Invernale", // Description of the session (optional)
-    "misureCompensative": [
-      {
-        "applistaId": 102220, // Unique identifier of the reservation
-        "cdsId": 102344, // ID of the study course providing the appeal (optional)
-        "adId": 1022, // ID of the educational activity providing the appeal (optional)
-        "appId": 1, // Progressive ID of the appeal with respect to the pair (cds_id, ad_id) (optional)
-        "appLogId": 1, // Progressive ID of the turn with respect to the triad (cds_id, ad_id, app_id) (optional)
-        "stuId": 12, // ID of the career of the student who made the reservation (optional)
-        "misuraCompensativaCod": "TASSE_W", // Code of the compensatory measure
-        "desLiberaFlg": 1, // Indicates whether the compensatory measure has a free description
-        "visWebFlg": 1, // Indicates whether the compensatory measure is visible from the web
-        "des": "Necessario più tempo", // Description of the compensatory measure
-        "statoMisComp": "A, X, V", // State of the compensatory measure
-        "statoMisCompDes": "CONFERMATA, VERIFICATA, ANNULLATA" // Description of the state of the compensatory measure
-      }
-    ], // MisureCompensative (optional)
-    "warnings": [
-      {
-        "applistaId": 102220, // Unique identifier of the reservation
-        "cdsId": 102344, // ID of the study course providing the appeal (optional)
-        "adId": 1022, // ID of the educational activity providing the appeal (optional)
-        "appId": 1, // Progressive ID of the appeal with respect to the pair (cds_id, ad_id) (optional)
-        "appLogId": 1, // Progressive ID of the turn with respect to the triad (cds_id, ad_id, app_id) (optional)
-        "stuId": 12, // ID of the career of the student who made the reservation (optional)
-        "tipoErrore": "TASSE_W", // Error type
-        "des": "Studente non in regola con le tasse" // Error description
-      }
-    ] // Warnings (optional)
-  }
-]
-```
-
-**`422 Unprocessable Entity` - Update failed**
-
-```json
-{
-  "statusCode": 200, // Http Status Code
-  "retCode": -1, // Error code
-  "retErrMsg": "Parametri non corretti", // Error description
-  "errDetails": [
-    {
-      "errorType": "stackTrace", // Descrizione del tipo di errore aggiuntivo
-      "value": "SocketTimeoutException....", // Error description
-      "rawValue": "SocketTimeoutException...." // Error description
-    }
-  ] // ErrDetails
-}
-```
-
-<br>
-
----
-
-<br>
-
-### `GET /libretti/{matId}/righe/{adsceId}/appelli` - List of appeals connected to the booklet row
-
-```java
-/**
- * The attoreCod query string filter is used in association with the optional config field to retrieve the appeal configuration. Currently, only values required by specific applications are retrieved. For the list of all values, the ConfCalesa API can be used.
- *
- * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
- * @param adsceId              integer (path, required)            - ID of the booklet row
- * @param attoreCod            string (query, optional)            - Type of actor required for data extraction (STU,DOC,SEG), used to filter the configuration...
- * @param q                    string (query, optional)            - The parameter allows filtering fields with specific predefined conditions, consult...
- * @param filter               string (query, optional)            - il parametro consente di applicare dei filtri alla classe di modello utilizzando il linguaggio RS...
- * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
- * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
- * @param optionalFields       string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
- * @return List<AppelloLibretto> on success
- */
-GET /libretti/{matId}/righe/{adsceId}/appelli
-```
-
-**Auth:** `STUDENTE`, `DOCENTE_APP`, `DOCENTE_PIANI`, `UTENTE_TECNICO`, `UTENTE_PTA`, `UTENTE_PTA_ADMIN` required · Supported: `Basic`, `JWT`
-
-**Cache:** midRefreshRateUserIndependent
-
-#### Response
-
-**`200 OK`**
-
-```json
-[
-  {}
-]
-```
-
-<br>
-
----
-
-<br>
-
-### `GET /libretti/{matId}/righe/{adsceId}/prenotazioni` - Retrieves information on reservations connected by a career segment
-
-```java
-/**
- * Retrieves information on reservations connected by a career segment
- *
- * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
- * @param adsceId              integer (path, required)            - ID of the booklet row
- * @param attoreCod            string (query, optional)            - Type of actor required for data extraction (STU,DOC,SEG), used to filter the configuration...
- * @param q                    string (query, optional)            - The parameter allows filtering fields with specific predefined conditions, consult...
- * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
- * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
- * @param optionalFields       string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
- * @param filter               string (query, optional)            - il parametro consente di applicare dei filtri alla classe di modello utilizzando il linguaggio RS...
- * @return List<IscrizioneAppello> on success,
- *         DettaglioErrore on failure
- */
-GET /libretti/{matId}/righe/{adsceId}/prenotazioni
-```
-
-**Auth:** `STUDENTE`, `UTENTE_TECNICO`, `UTENTE_PTA`, `UTENTE_PTA_ADMIN` required · Supported: `Basic`, `JWT`
-
-**Cache:** highRefreshRateUserIndependent
-
-#### Response
-
-**`200 OK`**
-
-```json
-[
-  {
-    "applistaId": 102220, // Unique identifier of the reservation
-    "cdsId": 102344, // ID of the study course providing the appeal
-    "adId": 1022, // ID of the educational activity providing the appeal
-    "appId": 1, // Progressive ID of the appeal with respect to the pair (cds_id, ad_id)
-    "appLogId": 1, // Progressive ID of the turn with respect to the triad (cds_id, ad_id, app_id)
-    "stuId": 12, // ID of the career of the student who made the reservation
-    "adregId": 112, // ID of the exam linked to the reservation
-    "adsceId": 112, // ID of the booklet row linked to the reservation
-    "matId": 112, // ID of the matriculation linked to the reservation (optional)
-    "adStuCod": "AD1", // Code of the activity reserved by the student
-    "adStuDes": "Attività di esempio", // Description of the activity reserved by the student (optional)
-    "cdsAdStuCod": "CDS1", // Code of the study course reserved by the student
-    "cdsAdStuDes": "Corso di studio di esempio", // Description of the study course reserved by the student (optional)
-    "cdsAdIdStu": 102344, // ID of the study course reserved by the student (optional)
-    "desAppello": "descrizione appello", // Description of the appeal (optional)
-    "desTurno": "descrizione turno", // Description of the turn to which the student is enrolled (optional)
-    "aulaCod": "codice aula", // Code of the classroom to which the student is enrolled (optional)
-    "aulaDes": "descizione aula", // Description of the classroom to which the student is enrolled (optional)
-    "edificioCod": "codice edificio", // Code of the building to which the student is enrolled (optional)
-    "edificioDes": "descizione edificio", // Description of the building to which the student is enrolled (optional)
-    "sedeId": 123, // ID of the location of the appeal (optional)
-    "sedeDes": "descizione sede", // Description of the location of the appeal (optional)
-    "dataOraTurno": "10/10/2016 12:00:00", // Date/time of the turn to which the student is enrolled (optional)
-    "aaFreqId": 2020, // Attendance year of the activity (optional)
-    "statoAdsce": "S", // Stato dell'attività didattica (codice)
-    "pesoAd": 10.0, // Weight of the educational activity, the weight includes two optional decimals
-    "userId": "m.rossi", // Active UserId of the student
-    "matricola": "124AA-12", // Student matriculation code
-    "nomeStudente": "Mario", // Student's name
-    "nomeAlias": "Giulia", // Student alias name
-    "cognomeStudente": "Rossi", // Student's surname
-    "codFisStudente": "XXXYYY99A12K123H", // Student's fiscal code
-    "dataNascitaStudente": "10/10/1985", // Student birth date (DD/MM/YYYY)
-    "sessoStudente": "M", // Student gender (optional)
-    "comuNascCodIstat": "M200", // ISTAT code of the student's birth municipality (optional)
-    "cittStraNasc": "ENG", // Foreign citizenship code at birth of the student (optional)
-    "cittCod": "ENG", // Student's citizenship code (optional)
-    "cdsStuCod": "CDS1", // Codice corso di studio di iscrizione dello studente
-    "cdsStuDes": "Corso di studio di esempio", // Description of the student's enrolled study course (optional)
-    "cdsIdStu": 102344, // ID of the student's enrolled study course (optional)
-    "aaOrdStuId": 2010, // Regulation year of the student's enrollment (optional)
-    "pdsStuCod": "PDS1", // Code of the student's enrolled study path (optional)
-    "pdsStuDes": "Percorso di studio di esempio", // Description of the student's enrolled study path (optional)
-    "pdsIdStu": 9999, // ID of the student's enrolled study path (optional)
-    "pubblId": 11234, // ID of the outcome publication
-    "presaVisione": "N", // State of acknowledgment of the outcome
-    "userIdPresaVisione": "m.rossi", // User who performed the last state change of the acknowledgment (optional)
-    "userGrpPresaVisione": 7, // Group of the user who performed the last state change of the acknowledgment (optional)
-    "dataRifEsito": "10/12/2017", // Date of last refusal applied to the teacher (DD/MM/YYYY) (optional)
-    "dataRifEsitoStu": "10/12/2017", // Date of last refusal applied to the student (DD/MM/YYYY)
-    "notaPubbl": "nota di pubblicazione", // Note inserted by the teacher during publication
-    "gruppoVotoCod": "30L", // Code of the grading scale of the student's booklet
-    "gruppoVotoMaxPunti": 30, // Maximum grade available for the grading scale
-    "esito": {
-      "modValCod": "V", // Evaluation mode of the exam, must correspond to the entered outcome type. Absent and withdrawn flags are mutually exclusive with the grade
-      "superatoFlg": 1, // Indicates whether the grade/judgment is positive
-      "votoEsa": 22, // Numerical grade of the exam
-      "tipoGiudCod": "IDO", // Judgment grade of the exam
-      "tipoGiudizioDes": "Idoneo", // Description of the judgment grade of the exam
-      "assenteFlg": 1, // Flag indicating absence from the exam
-      "ritiratoFlg": 1 // Flag indicating withdrawal from the exam
-    }, // Esito
-    "manualeFlg": 1, // Flag indicating who made the reservation (e.g., actors SEG, DOC manuale_flg=1; actor STU manuale_flg=0)
-    "dataEsa": "10/10/2016", // Date of taking the exam (DD/MM/YYYY); if not valued, the turn date applies
-    "domandeEsame": "prima domanda esame; seconda domanda esame", // Exam questions asked during the test
-    "notaStudente": "vecchio ordinamento; Studente Lavoratore; Studente fuoricorso etc.", // Note inserted by the student during appeal reservation
-    "tipoSvolgimentoEsameCod": "P", // Code of the exam execution type for the student
-    "tipoSvolgimentoEsameDes": "Presenza", // Description of the exam execution type for the student
-    "tipoSvolgimentoEsameRichiestaFlg": "1", // Indicates whether the exam execution type is a user request, meaning it must be converted into a definitive value (optional)
-    "tagCod": "GRP1", // Tag selected by the student during reservation (optional)
-    "autoTagCod": "99", // Reservation class associated with the student during reservation (optional)
-    "livUscitaCod": "B1", // Language output level if the appeal includes languages, to be valued along with linguaUscitaCod (optional)
-    "linguaUscitaCod": "eng", // ISO6392 code of the language to which the output level refers, to be valued along with livUscitaCod (optional)
-    "dataIns": "10/10/2016", // Reservation date (DD/MM/YYYY HH24:MI:SS)
-    "tipoDefAppCod": "STD", // Code identifying the tipoDefApp of the appeal linked to the reservation (optional)
-    "tipoGestPrenCod": "STD", // Code identifying the tipoGestPren of the appeal linked to the reservation (optional)
-    "tipoGestAppCod": "STD", // Code identifying the tipoGestApp of the appeal linked to the reservation (optional)
-    "tipoAppCod": "PP", // Appeal type (PF=Final Exam, PP=Partial Exam) (optional)
-    "posiz": 12, // Reservation progressive number within the enrolled list (optional)
-    "posizApp": 12, // Reservation progressive number within the enrolled list ordered by data_ins
-    "dataInizioIscr": "10/10/2016", // Enrollment start date (DD/MM/YYYY) (optional)
-    "dataFineIscr": "16/10/2016", // Enrollment end date (DD/MM/YYYY) (optional)
-    "tipoIscrCod": "S", // Enrollment mode defined in the appeal; possible values are (Written=S, Oral=O, Written and Oral=SO) (optional)
-    "tipoEsaCod": "S", // Enrollment mode defined in the appeal; possible values are (Written=S, Oral=O, Written and Oral Separated=SOS, Written and Oral Conjoined=SOC) (optional)
-    "aaCalId": 2020, // Calendar year of the appeal (optional)
-    "aaSesId": 2020, // Year of the session (optional)
-    "sesDes": "Sessione Invernale", // Description of the session (optional)
-    "misureCompensative": [
-      {
-        "applistaId": 102220, // Unique identifier of the reservation
-        "cdsId": 102344, // ID of the study course providing the appeal (optional)
-        "adId": 1022, // ID of the educational activity providing the appeal (optional)
-        "appId": 1, // Progressive ID of the appeal with respect to the pair (cds_id, ad_id) (optional)
-        "appLogId": 1, // Progressive ID of the turn with respect to the triad (cds_id, ad_id, app_id) (optional)
-        "stuId": 12, // ID of the career of the student who made the reservation (optional)
-        "misuraCompensativaCod": "TASSE_W", // Code of the compensatory measure
-        "desLiberaFlg": 1, // Indicates whether the compensatory measure has a free description
-        "visWebFlg": 1, // Indicates whether the compensatory measure is visible from the web
-        "des": "Necessario più tempo", // Description of the compensatory measure
-        "statoMisComp": "A, X, V", // State of the compensatory measure
-        "statoMisCompDes": "CONFERMATA, VERIFICATA, ANNULLATA" // Description of the state of the compensatory measure
-      }
-    ], // MisureCompensative (optional)
-    "warnings": [
-      {
-        "applistaId": 102220, // Unique identifier of the reservation
-        "cdsId": 102344, // ID of the study course providing the appeal (optional)
-        "adId": 1022, // ID of the educational activity providing the appeal (optional)
-        "appId": 1, // Progressive ID of the appeal with respect to the pair (cds_id, ad_id) (optional)
-        "appLogId": 1, // Progressive ID of the turn with respect to the triad (cds_id, ad_id, app_id) (optional)
-        "stuId": 12, // ID of the career of the student who made the reservation (optional)
-        "tipoErrore": "TASSE_W", // Error type
-        "des": "Studente non in regola con le tasse" // Error description
-      }
-    ] // Warnings (optional)
-  }
-]
-```
-
-**`422 Unprocessable Entity` - Update failed**
-
-```json
-{
-  "statusCode": 200, // Http Status Code
-  "retCode": -1, // Error code
-  "retErrMsg": "Parametri non corretti", // Error description
-  "errDetails": [
-    {
-      "errorType": "stackTrace", // Descrizione del tipo di errore aggiuntivo
-      "value": "SocketTimeoutException....", // Error description
-      "rawValue": "SocketTimeoutException...." // Error description
-    }
-  ] // ErrDetails
-}
-```
-
-<br>
-
----
-
-<br>
-
-### `GET /libretti/{matId}/righe/{adsceId}/prenotazioni/{applistaId}` - Retrieves information on reservations connected by a career segment
-
-```java
-/**
- * Retrieves information on reservations connected by a career segment
- *
- * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
- * @param adsceId              integer (path, required)            - ID of the booklet row
- * @param applistaId           integer (path, required)            - Unique ID of a student's reservation
- * @param attoreCod            string (query, optional)            - Type of actor required for data extraction (STU,DOC,SEG), used to filter the configuration...
- * @param q                    string (query, optional)            - The parameter allows filtering fields with specific predefined conditions, consult...
- * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
- * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
- * @param optionalFields       string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
- * @param filter               string (query, optional)            - il parametro consente di applicare dei filtri alla classe di modello utilizzando il linguaggio RS...
- * @return IscrizioneAppello on success,
- *         DettaglioErrore on failure
- */
-GET /libretti/{matId}/righe/{adsceId}/prenotazioni/{applistaId}
-```
-
-**Auth:** `STUDENTE`, `UTENTE_TECNICO`, `UTENTE_PTA`, `UTENTE_PTA_ADMIN` required · Supported: `Basic`, `JWT`
-
-**Cache:** highRefreshRateUserIndependent
-
-#### Response
-
-**`200 OK`**
-
-```json
-{
-  "applistaId": 102220, // Unique identifier of the reservation
-  "cdsId": 102344, // ID of the study course providing the appeal
-  "adId": 1022, // ID of the educational activity providing the appeal
-  "appId": 1, // Progressive ID of the appeal with respect to the pair (cds_id, ad_id)
-  "appLogId": 1, // Progressive ID of the turn with respect to the triad (cds_id, ad_id, app_id)
-  "stuId": 12, // ID of the career of the student who made the reservation
-  "adregId": 112, // ID of the exam linked to the reservation
-  "adsceId": 112, // ID of the booklet row linked to the reservation
-  "matId": 112, // ID of the matriculation linked to the reservation (optional)
-  "adStuCod": "AD1", // Code of the activity reserved by the student
-  "adStuDes": "Attività di esempio", // Description of the activity reserved by the student (optional)
-  "cdsAdStuCod": "CDS1", // Code of the study course reserved by the student
-  "cdsAdStuDes": "Corso di studio di esempio", // Description of the study course reserved by the student (optional)
-  "cdsAdIdStu": 102344, // ID of the study course reserved by the student (optional)
-  "desAppello": "descrizione appello", // Description of the appeal (optional)
-  "desTurno": "descrizione turno", // Description of the turn to which the student is enrolled (optional)
-  "aulaCod": "codice aula", // Code of the classroom to which the student is enrolled (optional)
-  "aulaDes": "descizione aula", // Description of the classroom to which the student is enrolled (optional)
-  "edificioCod": "codice edificio", // Code of the building to which the student is enrolled (optional)
-  "edificioDes": "descizione edificio", // Description of the building to which the student is enrolled (optional)
-  "sedeId": 123, // ID of the location of the appeal (optional)
-  "sedeDes": "descizione sede", // Description of the location of the appeal (optional)
-  "dataOraTurno": "10/10/2016 12:00:00", // Date/time of the turn to which the student is enrolled (optional)
-  "aaFreqId": 2020, // Attendance year of the activity (optional)
-  "statoAdsce": "S", // Stato dell'attività didattica (codice)
-  "pesoAd": 10.0, // Weight of the educational activity, the weight includes two optional decimals
-  "userId": "m.rossi", // Active UserId of the student
-  "matricola": "124AA-12", // Student matriculation code
-  "nomeStudente": "Mario", // Student's name
-  "nomeAlias": "Giulia", // Student alias name
-  "cognomeStudente": "Rossi", // Student's surname
-  "codFisStudente": "XXXYYY99A12K123H", // Student's fiscal code
-  "dataNascitaStudente": "10/10/1985", // Student birth date (DD/MM/YYYY)
-  "sessoStudente": "M", // Student gender (optional)
-  "comuNascCodIstat": "M200", // ISTAT code of the student's birth municipality (optional)
-  "cittStraNasc": "ENG", // Foreign citizenship code at birth of the student (optional)
-  "cittCod": "ENG", // Student's citizenship code (optional)
-  "cdsStuCod": "CDS1", // Codice corso di studio di iscrizione dello studente
-  "cdsStuDes": "Corso di studio di esempio", // Description of the student's enrolled study course (optional)
-  "cdsIdStu": 102344, // ID of the student's enrolled study course (optional)
-  "aaOrdStuId": 2010, // Regulation year of the student's enrollment (optional)
-  "pdsStuCod": "PDS1", // Code of the student's enrolled study path (optional)
-  "pdsStuDes": "Percorso di studio di esempio", // Description of the student's enrolled study path (optional)
-  "pdsIdStu": 9999, // ID of the student's enrolled study path (optional)
-  "pubblId": 11234, // ID of the outcome publication
-  "presaVisione": "N", // State of acknowledgment of the outcome
-  "userIdPresaVisione": "m.rossi", // User who performed the last state change of the acknowledgment (optional)
-  "userGrpPresaVisione": 7, // Group of the user who performed the last state change of the acknowledgment (optional)
-  "dataRifEsito": "10/12/2017", // Date of last refusal applied to the teacher (DD/MM/YYYY) (optional)
-  "dataRifEsitoStu": "10/12/2017", // Date of last refusal applied to the student (DD/MM/YYYY)
-  "notaPubbl": "nota di pubblicazione", // Note inserted by the teacher during publication
-  "gruppoVotoCod": "30L", // Code of the grading scale of the student's booklet
-  "gruppoVotoMaxPunti": 30, // Maximum grade available for the grading scale
-  "esito": {
-    "modValCod": "V", // Evaluation mode of the exam, must correspond to the entered outcome type. Absent and withdrawn flags are mutually exclusive with the grade
-    "superatoFlg": 1, // Indicates whether the grade/judgment is positive
-    "votoEsa": 22, // Numerical grade of the exam
-    "tipoGiudCod": "IDO", // Judgment grade of the exam
-    "tipoGiudizioDes": "Idoneo", // Description of the judgment grade of the exam
-    "assenteFlg": 1, // Flag indicating absence from the exam
-    "ritiratoFlg": 1 // Flag indicating withdrawal from the exam
-  }, // Esito
-  "manualeFlg": 1, // Flag indicating who made the reservation (e.g., actors SEG, DOC manuale_flg=1; actor STU manuale_flg=0)
-  "dataEsa": "10/10/2016", // Date of taking the exam (DD/MM/YYYY); if not valued, the turn date applies
-  "domandeEsame": "prima domanda esame; seconda domanda esame", // Exam questions asked during the test
-  "notaStudente": "vecchio ordinamento; Studente Lavoratore; Studente fuoricorso etc.", // Note inserted by the student during appeal reservation
-  "tipoSvolgimentoEsameCod": "P", // Code of the exam execution type for the student
-  "tipoSvolgimentoEsameDes": "Presenza", // Description of the exam execution type for the student
-  "tipoSvolgimentoEsameRichiestaFlg": "1", // Indicates whether the exam execution type is a user request, meaning it must be converted into a definitive value (optional)
-  "tagCod": "GRP1", // Tag selected by the student during reservation (optional)
-  "autoTagCod": "99", // Reservation class associated with the student during reservation (optional)
-  "livUscitaCod": "B1", // Language output level if the appeal includes languages, to be valued along with linguaUscitaCod (optional)
-  "linguaUscitaCod": "eng", // ISO6392 code of the language to which the output level refers, to be valued along with livUscitaCod (optional)
-  "dataIns": "10/10/2016", // Reservation date (DD/MM/YYYY HH24:MI:SS)
-  "tipoDefAppCod": "STD", // Code identifying the tipoDefApp of the appeal linked to the reservation (optional)
-  "tipoGestPrenCod": "STD", // Code identifying the tipoGestPren of the appeal linked to the reservation (optional)
-  "tipoGestAppCod": "STD", // Code identifying the tipoGestApp of the appeal linked to the reservation (optional)
-  "tipoAppCod": "PP", // Appeal type (PF=Final Exam, PP=Partial Exam) (optional)
-  "posiz": 12, // Reservation progressive number within the enrolled list (optional)
-  "posizApp": 12, // Reservation progressive number within the enrolled list ordered by data_ins
-  "dataInizioIscr": "10/10/2016", // Enrollment start date (DD/MM/YYYY) (optional)
-  "dataFineIscr": "16/10/2016", // Enrollment end date (DD/MM/YYYY) (optional)
-  "tipoIscrCod": "S", // Enrollment mode defined in the appeal; possible values are (Written=S, Oral=O, Written and Oral=SO) (optional)
-  "tipoEsaCod": "S", // Enrollment mode defined in the appeal; possible values are (Written=S, Oral=O, Written and Oral Separated=SOS, Written and Oral Conjoined=SOC) (optional)
-  "aaCalId": 2020, // Calendar year of the appeal (optional)
-  "aaSesId": 2020, // Year of the session (optional)
-  "sesDes": "Sessione Invernale", // Description of the session (optional)
-  "misureCompensative": [
-    {
-      "applistaId": 102220, // Unique identifier of the reservation
-      "cdsId": 102344, // ID of the study course providing the appeal (optional)
-      "adId": 1022, // ID of the educational activity providing the appeal (optional)
-      "appId": 1, // Progressive ID of the appeal with respect to the pair (cds_id, ad_id) (optional)
-      "appLogId": 1, // Progressive ID of the turn with respect to the triad (cds_id, ad_id, app_id) (optional)
-      "stuId": 12, // ID of the career of the student who made the reservation (optional)
-      "misuraCompensativaCod": "TASSE_W", // Code of the compensatory measure
-      "desLiberaFlg": 1, // Indicates whether the compensatory measure has a free description
-      "visWebFlg": 1, // Indicates whether the compensatory measure is visible from the web
-      "des": "Necessario più tempo", // Description of the compensatory measure
-      "statoMisComp": "A, X, V", // State of the compensatory measure
-      "statoMisCompDes": "CONFERMATA, VERIFICATA, ANNULLATA" // Description of the state of the compensatory measure
-    }
-  ], // MisureCompensative (optional)
-  "warnings": [
-    {
-      "applistaId": 102220, // Unique identifier of the reservation
-      "cdsId": 102344, // ID of the study course providing the appeal (optional)
-      "adId": 1022, // ID of the educational activity providing the appeal (optional)
-      "appId": 1, // Progressive ID of the appeal with respect to the pair (cds_id, ad_id) (optional)
-      "appLogId": 1, // Progressive ID of the turn with respect to the triad (cds_id, ad_id, app_id) (optional)
-      "stuId": 12, // ID of the career of the student who made the reservation (optional)
-      "tipoErrore": "TASSE_W", // Error type
-      "des": "Studente non in regola con le tasse" // Error description
-    }
-  ] // Warnings (optional)
-}
-```
-
-**`422 Unprocessable Entity` - Update failed**
-
-```json
-{
-  "statusCode": 200, // Http Status Code
-  "retCode": -1, // Error code
-  "retErrMsg": "Parametri non corretti", // Error description
-  "errDetails": [
-    {
-      "errorType": "stackTrace", // Descrizione del tipo di errore aggiuntivo
-      "value": "SocketTimeoutException....", // Error description
-      "rawValue": "SocketTimeoutException...." // Error description
-    }
-  ] // ErrDetails
-}
-```
-
-<br>
-
----
-
-<br>
-
-### `GET /libretti/{matId}/righe/{adsceId}/prenotazioni/{applistaId}/attestato-di-presenza` - Retrieves the attendance certificate
-
-```java
-/**
- * The attendance certificate is generated only if the following conditions are met: the appeal's configuration includes certificate generation (TIPI_GEST_APP.GESTIONE_ATT_PRESENZA), the outcome is published with an active publication status, and there are no SQL conditions preventing certificate generation.
- *
- * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
- * @param adsceId              integer (path, required)            - ID of the booklet row
- * @param applistaId           integer (path, required)            - Unique ID of a student's reservation
- * @return file on success,
- *         DettaglioErrore on failure
- */
-GET /libretti/{matId}/righe/{adsceId}/prenotazioni/{applistaId}/attestato-di-presenza
-```
-
-**Auth:** `STUDENTE` required · Supported: `Basic`, `JWT`
-
-**Cache:** highRefreshRateUserIndependent
-
-**Content-Type:** `applicatrion/octet-stream`
-
-#### Response
-
-**`200 OK`**
-
-**`422 Unprocessable Entity` - Error during PDF generation**
-
-```json
-{
-  "statusCode": 200, // Http Status Code
-  "retCode": -1, // Error code
-  "retErrMsg": "Parametri non corretti", // Error description
-  "errDetails": [
-    {
-      "errorType": "stackTrace", // Descrizione del tipo di errore aggiuntivo
-      "value": "SocketTimeoutException....", // Error description
-      "rawValue": "SocketTimeoutException...." // Error description
-    }
-  ] // ErrDetails
-}
-```
-
-<br>
-
----
-
-<br>
-
-### `GET /libretti/{matId}/righe/{adsceId}/prenotazioni/{applistaId}/statino-prenotazione` - Retrieves the reservation slip
-
-```java
-/**
- * The reservation slip is always retrievable via REST services, unlike ESSE3 WEB. To replicate the web behavior, printing must be blocked after the appeal date has passed.
- *
- * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
- * @param adsceId              integer (path, required)            - ID of the booklet row
- * @param applistaId           integer (path, required)            - Unique ID of a student's reservation
- * @return file on success,
- *         DettaglioErrore on failure
- */
-GET /libretti/{matId}/righe/{adsceId}/prenotazioni/{applistaId}/statino-prenotazione
-```
-
-**Auth:** `STUDENTE` required · Supported: `Basic`, `JWT`
-
-**Cache:** none
-
-**Content-Type:** `applicatrion/octet-stream`
-
-#### Response
-
-**`200 OK`**
-
-**`422 Unprocessable Entity` - Error during PDF generation**
-
-```json
-{
-  "statusCode": 200, // Http Status Code
-  "retCode": -1, // Error code
-  "retErrMsg": "Parametri non corretti", // Error description
-  "errDetails": [
-    {
-      "errorType": "stackTrace", // Descrizione del tipo di errore aggiuntivo
-      "value": "SocketTimeoutException....", // Error description
-      "rawValue": "SocketTimeoutException...." // Error description
-    }
-  ] // ErrDetails
-}
-```
-
-<br>
-
----
-
-<br>
-
-## Endpoints - Libretto
+## Endpoints - Transcript (Libretto)
 
 ### `GET /libretti/{matId}/medie` - All averages of the booklet
 
@@ -1389,20 +315,20 @@ GET /libretti/{matId}/righe/
     "stato": "S", // State of the educational activity (code) (required)
     "statoDes": "Superata", // Descrizione dello stato dell\'attività didattica (required)
     "chiaveADContestualizzata": {
-      "cdsId": 1, // Chiave del corso di studio di erogazione dell'attività didattica (required)
-      "cdsCod": "CDS_AD_1", // Codice del corso di studio di erogazione dell'attività didattica
-      "cdsDes": "Esempio di CDS AD", // Descrizione del corso di erogazione dell'attività didattica
-      "aaOrdId": 2016, // Anno di ordinamento del corso di studio di erogazione dell'attività didattica (required)
+      "cdsId": 1, // Key to the course of study for the provision of teaching activities (required)
+      "cdsCod": "CDS_AD_1", // Course code for the provision of teaching activities
+      "cdsDes": "Esempio di CDS AD", // Description of the course of teaching activity delivery
+      "aaOrdId": 2016, // Year of the course of study in which the teaching activity is provided (required)
       "aaOrdCod": "CDS_AD_1", // Code of the regulation providing the educational activity
       "aaOrdDes": "Esempio di CDS AD", // Description of the regulation providing the educational activity
-      "pdsId": 1, // Chiave del percorso di studio di erogazione dell'attività didattica (required)
-      "pdsCod": "PDS_AD_1", // Codice del percorso di erogazione dell'attività didattica
-      "pdsDes": "Esempio di PDS AD", // Descrizione del percorso di erogazione dell'attività didattica
-      "aaOffId": 1, // Anno di offerta di erogazione dell'attività didattica (required)
-      "adId": 1, // Chiave dell'attività didattica (required)
-      "adCod": "PDS_AD_1", // Codice dell''attività didattica
-      "adDes": "Esempio di PDS AD", // Descrizione dell''attività didattica
-      "afId": 1 // Id della afId proveniente da U-Gov Didattica
+      "pdsId": 1, // Key to the study path for the provision of teaching activities (required)
+      "pdsCod": "PDS_AD_1", // Course code for the provision of teaching activities
+      "pdsDes": "Esempio di PDS AD", // Description of the teaching activity delivery path
+      "aaOffId": 1, // Year of provision of teaching activity (required)
+      "adId": 1, // Key to teaching activity (required)
+      "adCod": "PDS_AD_1", // Teaching Activity Code
+      "adDes": "Esempio di PDS AD", // Description of teaching activity
+      "afId": 1 // ID of the afId from U-Gov Didattica
     }, // ChiaveADContestualizzata
     "tipoEsaCod": "O", // Code of the exam type expected for the educational activity
     "tipoEsaDes": "Orale", // Description of the exam type expected for the educational activity
@@ -1602,7 +528,7 @@ POST /libretti/{matId}/righe/
   "retErrMsg": "Parametri non corretti", // Error description
   "errDetails": [
     {
-      "errorType": "stackTrace", // Descrizione del tipo di errore aggiuntivo
+      "errorType": "stackTrace", // Additional error type description
       "value": "SocketTimeoutException....", // Error description
       "rawValue": "SocketTimeoutException...." // Error description
     }
@@ -1655,20 +581,20 @@ GET /libretti/{matId}/righe/{adsceId}
   "stato": "S", // State of the educational activity (code) (required)
   "statoDes": "Superata", // Descrizione dello stato dell\'attività didattica (required)
   "chiaveADContestualizzata": {
-    "cdsId": 1, // Chiave del corso di studio di erogazione dell'attività didattica (required)
-    "cdsCod": "CDS_AD_1", // Codice del corso di studio di erogazione dell'attività didattica
-    "cdsDes": "Esempio di CDS AD", // Descrizione del corso di erogazione dell'attività didattica
-    "aaOrdId": 2016, // Anno di ordinamento del corso di studio di erogazione dell'attività didattica (required)
+    "cdsId": 1, // Key to the course of study for the provision of teaching activities (required)
+    "cdsCod": "CDS_AD_1", // Course code for the provision of teaching activities
+    "cdsDes": "Esempio di CDS AD", // Description of the course of teaching activity delivery
+    "aaOrdId": 2016, // Year of the course of study in which the teaching activity is provided (required)
     "aaOrdCod": "CDS_AD_1", // Code of the regulation providing the educational activity
     "aaOrdDes": "Esempio di CDS AD", // Description of the regulation providing the educational activity
-    "pdsId": 1, // Chiave del percorso di studio di erogazione dell'attività didattica (required)
-    "pdsCod": "PDS_AD_1", // Codice del percorso di erogazione dell'attività didattica
-    "pdsDes": "Esempio di PDS AD", // Descrizione del percorso di erogazione dell'attività didattica
-    "aaOffId": 1, // Anno di offerta di erogazione dell'attività didattica (required)
-    "adId": 1, // Chiave dell'attività didattica (required)
-    "adCod": "PDS_AD_1", // Codice dell''attività didattica
-    "adDes": "Esempio di PDS AD", // Descrizione dell''attività didattica
-    "afId": 1 // Id della afId proveniente da U-Gov Didattica
+    "pdsId": 1, // Key to the study path for the provision of teaching activities (required)
+    "pdsCod": "PDS_AD_1", // Course code for the provision of teaching activities
+    "pdsDes": "Esempio di PDS AD", // Description of the teaching activity delivery path
+    "aaOffId": 1, // Year of provision of teaching activity (required)
+    "adId": 1, // Key to teaching activity (required)
+    "adCod": "PDS_AD_1", // Teaching Activity Code
+    "adDes": "Esempio di PDS AD", // Description of teaching activity
+    "afId": 1 // ID of the afId from U-Gov Didattica
   }, // ChiaveADContestualizzata
   "tipoEsaCod": "O", // Code of the exam type expected for the educational activity
   "tipoEsaDes": "Orale", // Description of the exam type expected for the educational activity
@@ -1841,20 +767,20 @@ PATCH /libretti/{matId}/righe/{adsceId}
   "stato": "S", // State of the educational activity (code) (required)
   "statoDes": "Superata", // Descrizione dello stato dell\'attività didattica (required)
   "chiaveADContestualizzata": {
-    "cdsId": 1, // Chiave del corso di studio di erogazione dell'attività didattica (required)
-    "cdsCod": "CDS_AD_1", // Codice del corso di studio di erogazione dell'attività didattica
-    "cdsDes": "Esempio di CDS AD", // Descrizione del corso di erogazione dell'attività didattica
-    "aaOrdId": 2016, // Anno di ordinamento del corso di studio di erogazione dell'attività didattica (required)
+    "cdsId": 1, // Key to the course of study for the provision of teaching activities (required)
+    "cdsCod": "CDS_AD_1", // Course code for the provision of teaching activities
+    "cdsDes": "Esempio di CDS AD", // Description of the course of teaching activity delivery
+    "aaOrdId": 2016, // Year of the course of study in which the teaching activity is provided (required)
     "aaOrdCod": "CDS_AD_1", // Code of the regulation providing the educational activity
     "aaOrdDes": "Esempio di CDS AD", // Description of the regulation providing the educational activity
-    "pdsId": 1, // Chiave del percorso di studio di erogazione dell'attività didattica (required)
-    "pdsCod": "PDS_AD_1", // Codice del percorso di erogazione dell'attività didattica
-    "pdsDes": "Esempio di PDS AD", // Descrizione del percorso di erogazione dell'attività didattica
-    "aaOffId": 1, // Anno di offerta di erogazione dell'attività didattica (required)
-    "adId": 1, // Chiave dell'attività didattica (required)
-    "adCod": "PDS_AD_1", // Codice dell''attività didattica
-    "adDes": "Esempio di PDS AD", // Descrizione dell''attività didattica
-    "afId": 1 // Id della afId proveniente da U-Gov Didattica
+    "pdsId": 1, // Key to the study path for the provision of teaching activities (required)
+    "pdsCod": "PDS_AD_1", // Course code for the provision of teaching activities
+    "pdsDes": "Esempio di PDS AD", // Description of the teaching activity delivery path
+    "aaOffId": 1, // Year of provision of teaching activity (required)
+    "adId": 1, // Key to teaching activity (required)
+    "adCod": "PDS_AD_1", // Teaching Activity Code
+    "adDes": "Esempio di PDS AD", // Description of teaching activity
+    "afId": 1 // ID of the afId from U-Gov Didattica
   }, // ChiaveADContestualizzata
   "tipoEsaCod": "O", // Code of the exam type expected for the educational activity
   "tipoEsaDes": "Orale", // Description of the exam type expected for the educational activity
@@ -1981,7 +907,7 @@ PATCH /libretti/{matId}/righe/{adsceId}
   "retErrMsg": "Parametri non corretti", // Error description
   "errDetails": [
     {
-      "errorType": "stackTrace", // Descrizione del tipo di errore aggiuntivo
+      "errorType": "stackTrace", // Additional error type description
       "value": "SocketTimeoutException....", // Error description
       "rawValue": "SocketTimeoutException...." // Error description
     }
@@ -2026,7 +952,7 @@ DELETE /libretti/{matId}/righe/{adsceId}
   "retErrMsg": "Parametri non corretti", // Error description
   "errDetails": [
     {
-      "errorType": "stackTrace", // Descrizione del tipo di errore aggiuntivo
+      "errorType": "stackTrace", // Additional error type description
       "value": "SocketTimeoutException....", // Error description
       "rawValue": "SocketTimeoutException...." // Error description
     }
@@ -2087,20 +1013,20 @@ PUT /libretti/{matId}/righe/{adsceId}/freq
   "stato": "S", // State of the educational activity (code) (required)
   "statoDes": "Superata", // Descrizione dello stato dell\'attività didattica (required)
   "chiaveADContestualizzata": {
-    "cdsId": 1, // Chiave del corso di studio di erogazione dell'attività didattica (required)
-    "cdsCod": "CDS_AD_1", // Codice del corso di studio di erogazione dell'attività didattica
-    "cdsDes": "Esempio di CDS AD", // Descrizione del corso di erogazione dell'attività didattica
-    "aaOrdId": 2016, // Anno di ordinamento del corso di studio di erogazione dell'attività didattica (required)
+    "cdsId": 1, // Key to the course of study for the provision of teaching activities (required)
+    "cdsCod": "CDS_AD_1", // Course code for the provision of teaching activities
+    "cdsDes": "Esempio di CDS AD", // Description of the course of teaching activity delivery
+    "aaOrdId": 2016, // Year of the course of study in which the teaching activity is provided (required)
     "aaOrdCod": "CDS_AD_1", // Code of the regulation providing the educational activity
     "aaOrdDes": "Esempio di CDS AD", // Description of the regulation providing the educational activity
-    "pdsId": 1, // Chiave del percorso di studio di erogazione dell'attività didattica (required)
-    "pdsCod": "PDS_AD_1", // Codice del percorso di erogazione dell'attività didattica
-    "pdsDes": "Esempio di PDS AD", // Descrizione del percorso di erogazione dell'attività didattica
-    "aaOffId": 1, // Anno di offerta di erogazione dell'attività didattica (required)
-    "adId": 1, // Chiave dell'attività didattica (required)
-    "adCod": "PDS_AD_1", // Codice dell''attività didattica
-    "adDes": "Esempio di PDS AD", // Descrizione dell''attività didattica
-    "afId": 1 // Id della afId proveniente da U-Gov Didattica
+    "pdsId": 1, // Key to the study path for the provision of teaching activities (required)
+    "pdsCod": "PDS_AD_1", // Course code for the provision of teaching activities
+    "pdsDes": "Esempio di PDS AD", // Description of the teaching activity delivery path
+    "aaOffId": 1, // Year of provision of teaching activity (required)
+    "adId": 1, // Key to teaching activity (required)
+    "adCod": "PDS_AD_1", // Teaching Activity Code
+    "adDes": "Esempio di PDS AD", // Description of teaching activity
+    "afId": 1 // ID of the afId from U-Gov Didattica
   }, // ChiaveADContestualizzata
   "tipoEsaCod": "O", // Code of the exam type expected for the educational activity
   "tipoEsaDes": "Orale", // Description of the exam type expected for the educational activity
@@ -2227,7 +1153,7 @@ PUT /libretti/{matId}/righe/{adsceId}/freq
   "retErrMsg": "Parametri non corretti", // Error description
   "errDetails": [
     {
-      "errorType": "stackTrace", // Descrizione del tipo di errore aggiuntivo
+      "errorType": "stackTrace", // Additional error type description
       "value": "SocketTimeoutException....", // Error description
       "rawValue": "SocketTimeoutException...." // Error description
     }
@@ -2279,7 +1205,7 @@ GET /libretti/{matId}/righe/{adsceId}/prop
   "retErrMsg": "Parametri non corretti", // Error description
   "errDetails": [
     {
-      "errorType": "stackTrace", // Descrizione del tipo di errore aggiuntivo
+      "errorType": "stackTrace", // Additional error type description
       "value": "SocketTimeoutException....", // Error description
       "rawValue": "SocketTimeoutException...." // Error description
     }
@@ -2340,20 +1266,20 @@ PUT /libretti/{matId}/righe/{adsceId}/riconoscimento
   "stato": "S", // State of the educational activity (code) (required)
   "statoDes": "Superata", // Descrizione dello stato dell\'attività didattica (required)
   "chiaveADContestualizzata": {
-    "cdsId": 1, // Chiave del corso di studio di erogazione dell'attività didattica (required)
-    "cdsCod": "CDS_AD_1", // Codice del corso di studio di erogazione dell'attività didattica
-    "cdsDes": "Esempio di CDS AD", // Descrizione del corso di erogazione dell'attività didattica
-    "aaOrdId": 2016, // Anno di ordinamento del corso di studio di erogazione dell'attività didattica (required)
+    "cdsId": 1, // Key to the course of study for the provision of teaching activities (required)
+    "cdsCod": "CDS_AD_1", // Course code for the provision of teaching activities
+    "cdsDes": "Esempio di CDS AD", // Description of the course of teaching activity delivery
+    "aaOrdId": 2016, // Year of the course of study in which the teaching activity is provided (required)
     "aaOrdCod": "CDS_AD_1", // Code of the regulation providing the educational activity
     "aaOrdDes": "Esempio di CDS AD", // Description of the regulation providing the educational activity
-    "pdsId": 1, // Chiave del percorso di studio di erogazione dell'attività didattica (required)
-    "pdsCod": "PDS_AD_1", // Codice del percorso di erogazione dell'attività didattica
-    "pdsDes": "Esempio di PDS AD", // Descrizione del percorso di erogazione dell'attività didattica
-    "aaOffId": 1, // Anno di offerta di erogazione dell'attività didattica (required)
-    "adId": 1, // Chiave dell'attività didattica (required)
-    "adCod": "PDS_AD_1", // Codice dell''attività didattica
-    "adDes": "Esempio di PDS AD", // Descrizione dell''attività didattica
-    "afId": 1 // Id della afId proveniente da U-Gov Didattica
+    "pdsId": 1, // Key to the study path for the provision of teaching activities (required)
+    "pdsCod": "PDS_AD_1", // Course code for the provision of teaching activities
+    "pdsDes": "Esempio di PDS AD", // Description of the teaching activity delivery path
+    "aaOffId": 1, // Year of provision of teaching activity (required)
+    "adId": 1, // Key to teaching activity (required)
+    "adCod": "PDS_AD_1", // Teaching Activity Code
+    "adDes": "Esempio di PDS AD", // Description of teaching activity
+    "afId": 1 // ID of the afId from U-Gov Didattica
   }, // ChiaveADContestualizzata
   "tipoEsaCod": "O", // Code of the exam type expected for the educational activity
   "tipoEsaDes": "Orale", // Description of the exam type expected for the educational activity
@@ -2480,7 +1406,7 @@ PUT /libretti/{matId}/righe/{adsceId}/riconoscimento
   "retErrMsg": "Parametri non corretti", // Error description
   "errDetails": [
     {
-      "errorType": "stackTrace", // Descrizione del tipo di errore aggiuntivo
+      "errorType": "stackTrace", // Additional error type description
       "value": "SocketTimeoutException....", // Error description
       "rawValue": "SocketTimeoutException...." // Error description
     }
@@ -2533,20 +1459,20 @@ DELETE /libretti/{matId}/righe/{adsceId}/riconoscimento
   "stato": "S", // State of the educational activity (code) (required)
   "statoDes": "Superata", // Descrizione dello stato dell\'attività didattica (required)
   "chiaveADContestualizzata": {
-    "cdsId": 1, // Chiave del corso di studio di erogazione dell'attività didattica (required)
-    "cdsCod": "CDS_AD_1", // Codice del corso di studio di erogazione dell'attività didattica
-    "cdsDes": "Esempio di CDS AD", // Descrizione del corso di erogazione dell'attività didattica
-    "aaOrdId": 2016, // Anno di ordinamento del corso di studio di erogazione dell'attività didattica (required)
+    "cdsId": 1, // Key to the course of study for the provision of teaching activities (required)
+    "cdsCod": "CDS_AD_1", // Course code for the provision of teaching activities
+    "cdsDes": "Esempio di CDS AD", // Description of the course of teaching activity delivery
+    "aaOrdId": 2016, // Year of the course of study in which the teaching activity is provided (required)
     "aaOrdCod": "CDS_AD_1", // Code of the regulation providing the educational activity
     "aaOrdDes": "Esempio di CDS AD", // Description of the regulation providing the educational activity
-    "pdsId": 1, // Chiave del percorso di studio di erogazione dell'attività didattica (required)
-    "pdsCod": "PDS_AD_1", // Codice del percorso di erogazione dell'attività didattica
-    "pdsDes": "Esempio di PDS AD", // Descrizione del percorso di erogazione dell'attività didattica
-    "aaOffId": 1, // Anno di offerta di erogazione dell'attività didattica (required)
-    "adId": 1, // Chiave dell'attività didattica (required)
-    "adCod": "PDS_AD_1", // Codice dell''attività didattica
-    "adDes": "Esempio di PDS AD", // Descrizione dell''attività didattica
-    "afId": 1 // Id della afId proveniente da U-Gov Didattica
+    "pdsId": 1, // Key to the study path for the provision of teaching activities (required)
+    "pdsCod": "PDS_AD_1", // Course code for the provision of teaching activities
+    "pdsDes": "Esempio di PDS AD", // Description of the teaching activity delivery path
+    "aaOffId": 1, // Year of provision of teaching activity (required)
+    "adId": 1, // Key to teaching activity (required)
+    "adCod": "PDS_AD_1", // Teaching Activity Code
+    "adDes": "Esempio di PDS AD", // Description of teaching activity
+    "afId": 1 // ID of the afId from U-Gov Didattica
   }, // ChiaveADContestualizzata
   "tipoEsaCod": "O", // Code of the exam type expected for the educational activity
   "tipoEsaDes": "Orale", // Description of the exam type expected for the educational activity
@@ -2673,7 +1599,7 @@ DELETE /libretti/{matId}/righe/{adsceId}/riconoscimento
   "retErrMsg": "Parametri non corretti", // Error description
   "errDetails": [
     {
-      "errorType": "stackTrace", // Descrizione del tipo di errore aggiuntivo
+      "errorType": "stackTrace", // Additional error type description
       "value": "SocketTimeoutException....", // Error description
       "rawValue": "SocketTimeoutException...." // Error description
     }
@@ -2759,7 +1685,7 @@ GET /libretti/{matId}/stats
   "retErrMsg": "Parametri non corretti", // Error description
   "errDetails": [
     {
-      "errorType": "stackTrace", // Descrizione del tipo di errore aggiuntivo
+      "errorType": "stackTrace", // Additional error type description
       "value": "SocketTimeoutException....", // Error description
       "rawValue": "SocketTimeoutException...." // Error description
     }
@@ -2773,7 +1699,7 @@ GET /libretti/{matId}/stats
 
 <br>
 
-## Endpoints - Partizione
+## Endpoints - Partition (Partizione)
 
 ### `GET /libretti/{matId}/partizioni` - All partitions of the educational activities of a booklet
 
@@ -2806,20 +1732,20 @@ GET /libretti/{matId}/partizioni
     "adsceId": 1, // Unique ID identifying a student's booklet row (required)
     "matId": 1, // Id univoco che consente di individuare il libretto dello studente (required)
     "chiaveAdContestualizzata": {
-      "cdsId": 1, // Chiave del corso di studio di erogazione dell'attività didattica (required)
-      "cdsCod": "CDS_AD_1", // Codice del corso di studio di erogazione dell'attività didattica
-      "cdsDes": "Esempio di CDS AD", // Descrizione del corso di erogazione dell'attività didattica
-      "aaOrdId": 2016, // Anno di ordinamento del corso di studio di erogazione dell'attività didattica (required)
+      "cdsId": 1, // Key to the course of study for the provision of teaching activities (required)
+      "cdsCod": "CDS_AD_1", // Course code for the provision of teaching activities
+      "cdsDes": "Esempio di CDS AD", // Description of the course of teaching activity delivery
+      "aaOrdId": 2016, // Year of the course of study in which the teaching activity is provided (required)
       "aaOrdCod": "CDS_AD_1", // Code of the regulation providing the educational activity
       "aaOrdDes": "Esempio di CDS AD", // Description of the regulation providing the educational activity
-      "pdsId": 1, // Chiave del percorso di studio di erogazione dell'attività didattica (required)
-      "pdsCod": "PDS_AD_1", // Codice del percorso di erogazione dell'attività didattica
-      "pdsDes": "Esempio di PDS AD", // Descrizione del percorso di erogazione dell'attività didattica
-      "aaOffId": 1, // Anno di offerta di erogazione dell'attività didattica (required)
-      "adId": 1, // Chiave dell'attività didattica (required)
-      "adCod": "PDS_AD_1", // Codice dell''attività didattica
-      "adDes": "Esempio di PDS AD", // Descrizione dell''attività didattica
-      "afId": 1 // Id della afId proveniente da U-Gov Didattica
+      "pdsId": 1, // Key to the study path for the provision of teaching activities (required)
+      "pdsCod": "PDS_AD_1", // Course code for the provision of teaching activities
+      "pdsDes": "Esempio di PDS AD", // Description of the teaching activity delivery path
+      "aaOffId": 1, // Year of provision of teaching activity (required)
+      "adId": 1, // Key to teaching activity (required)
+      "adCod": "PDS_AD_1", // Teaching Activity Code
+      "adDes": "Esempio di PDS AD", // Description of teaching activity
+      "afId": 1 // ID of the afId from U-Gov Didattica
     }, // ChiaveAdContestualizzata
     "chiavePartizione": {
       "aaOffId": 1, // Anno di erogazione della partizione (required)
@@ -2884,20 +1810,20 @@ GET /libretti/{matId}/righe/{adsceId}/partizioni
     "adsceId": 1, // Unique ID identifying a student's booklet row (required)
     "matId": 1, // Id univoco che consente di individuare il libretto dello studente (required)
     "chiaveAdContestualizzata": {
-      "cdsId": 1, // Chiave del corso di studio di erogazione dell'attività didattica (required)
-      "cdsCod": "CDS_AD_1", // Codice del corso di studio di erogazione dell'attività didattica
-      "cdsDes": "Esempio di CDS AD", // Descrizione del corso di erogazione dell'attività didattica
-      "aaOrdId": 2016, // Anno di ordinamento del corso di studio di erogazione dell'attività didattica (required)
+      "cdsId": 1, // Key to the course of study for the provision of teaching activities (required)
+      "cdsCod": "CDS_AD_1", // Course code for the provision of teaching activities
+      "cdsDes": "Esempio di CDS AD", // Description of the course of teaching activity delivery
+      "aaOrdId": 2016, // Year of the course of study in which the teaching activity is provided (required)
       "aaOrdCod": "CDS_AD_1", // Code of the regulation providing the educational activity
       "aaOrdDes": "Esempio di CDS AD", // Description of the regulation providing the educational activity
-      "pdsId": 1, // Chiave del percorso di studio di erogazione dell'attività didattica (required)
-      "pdsCod": "PDS_AD_1", // Codice del percorso di erogazione dell'attività didattica
-      "pdsDes": "Esempio di PDS AD", // Descrizione del percorso di erogazione dell'attività didattica
-      "aaOffId": 1, // Anno di offerta di erogazione dell'attività didattica (required)
-      "adId": 1, // Chiave dell'attività didattica (required)
-      "adCod": "PDS_AD_1", // Codice dell''attività didattica
-      "adDes": "Esempio di PDS AD", // Descrizione dell''attività didattica
-      "afId": 1 // Id della afId proveniente da U-Gov Didattica
+      "pdsId": 1, // Key to the study path for the provision of teaching activities (required)
+      "pdsCod": "PDS_AD_1", // Course code for the provision of teaching activities
+      "pdsDes": "Esempio di PDS AD", // Description of the teaching activity delivery path
+      "aaOffId": 1, // Year of provision of teaching activity (required)
+      "adId": 1, // Key to teaching activity (required)
+      "adCod": "PDS_AD_1", // Teaching Activity Code
+      "adDes": "Esempio di PDS AD", // Description of teaching activity
+      "afId": 1 // ID of the afId from U-Gov Didattica
     }, // ChiaveAdContestualizzata
     "chiavePartizione": {
       "aaOffId": 1, // Anno di erogazione della partizione (required)
@@ -2960,20 +1886,20 @@ GET /libretti/{matId}/righe/{adsceId}/partizioni/{adpartId}
   "adsceId": 1, // Unique ID identifying a student's booklet row (required)
   "matId": 1, // Id univoco che consente di individuare il libretto dello studente (required)
   "chiaveAdContestualizzata": {
-    "cdsId": 1, // Chiave del corso di studio di erogazione dell'attività didattica (required)
-    "cdsCod": "CDS_AD_1", // Codice del corso di studio di erogazione dell'attività didattica
-    "cdsDes": "Esempio di CDS AD", // Descrizione del corso di erogazione dell'attività didattica
-    "aaOrdId": 2016, // Anno di ordinamento del corso di studio di erogazione dell'attività didattica (required)
+    "cdsId": 1, // Key to the course of study for the provision of teaching activities (required)
+    "cdsCod": "CDS_AD_1", // Course code for the provision of teaching activities
+    "cdsDes": "Esempio di CDS AD", // Description of the course of teaching activity delivery
+    "aaOrdId": 2016, // Year of the course of study in which the teaching activity is provided (required)
     "aaOrdCod": "CDS_AD_1", // Code of the regulation providing the educational activity
     "aaOrdDes": "Esempio di CDS AD", // Description of the regulation providing the educational activity
-    "pdsId": 1, // Chiave del percorso di studio di erogazione dell'attività didattica (required)
-    "pdsCod": "PDS_AD_1", // Codice del percorso di erogazione dell'attività didattica
-    "pdsDes": "Esempio di PDS AD", // Descrizione del percorso di erogazione dell'attività didattica
-    "aaOffId": 1, // Anno di offerta di erogazione dell'attività didattica (required)
-    "adId": 1, // Chiave dell'attività didattica (required)
-    "adCod": "PDS_AD_1", // Codice dell''attività didattica
-    "adDes": "Esempio di PDS AD", // Descrizione dell''attività didattica
-    "afId": 1 // Id della afId proveniente da U-Gov Didattica
+    "pdsId": 1, // Key to the study path for the provision of teaching activities (required)
+    "pdsCod": "PDS_AD_1", // Course code for the provision of teaching activities
+    "pdsDes": "Esempio di PDS AD", // Description of the teaching activity delivery path
+    "aaOffId": 1, // Year of provision of teaching activity (required)
+    "adId": 1, // Key to teaching activity (required)
+    "adCod": "PDS_AD_1", // Teaching Activity Code
+    "adDes": "Esempio di PDS AD", // Description of teaching activity
+    "afId": 1 // ID of the afId from U-Gov Didattica
   }, // ChiaveAdContestualizzata
   "chiavePartizione": {
     "aaOffId": 1, // Anno di erogazione della partizione (required)
@@ -3007,7 +1933,279 @@ GET /libretti/{matId}/righe/{adsceId}/partizioni/{adpartId}
 
 <br>
 
-## Endpoints - Prova
+## Endpoints - Syllabus (Syllabus)
+
+### `GET /libretti/{matId}/righe/{adsceId}/syllabus/AD` - Syllabus of the educational activity connected to the booklet row
+
+```java
+/**
+ * Syllabus of the educational activity connected to the booklet row
+ *
+ * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
+ * @param adsceId              integer (path, required)            - ID of the booklet row
+ * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
+ * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
+ * @return List<SyllabusADLibretto> on success
+ */
+GET /libretti/{matId}/righe/{adsceId}/syllabus/AD
+```
+
+**Auth:** `STUDENTE`, `DOCENTE_APP`, `DOCENTE_PIANI`, `UTENTE_TECNICO` required · Supported: `Basic`, `JWT`
+
+**Cache:** midRefreshRateUserIndependent
+
+#### Response
+
+**`200 OK`**
+
+```json
+[
+  {
+    "matId": 1, // Unique ID identifying the student's career segment and its linked booklet (required)
+    "adsceId": 1, // Unique ID identifying a student's booklet row (required)
+    "chiavePartizione": {
+      "aaOffId": 1, // Anno di erogazione della partizione (required)
+      "fatPartCod": "ALF", // Partition factor code (required)
+      "fatPartDes": "Alfabetico", // Partition factor description
+      "fatPartDesEng": "Alphabetic", // Partition factor description in English
+      "domPartCod": "PARI", // Partition domain code (required)
+      "domPartDes": "PARI", // Partition domain description
+      "domPartDesEng": "ODD", // Partition domain description in English
+      "partCod": "S1", // Academic year partition code (required)
+      "partDes": "Primo semestre", // Academic year partition description
+      "partDesEng": "First Semester", // Academic year partition description in English
+      "adLogId": 1 // Logistics grouping ID (required)
+    }, // ChiavePartizione (required)
+    "chiaveADContestualizzata": {
+      "cdsId": 1, // Key to the course of study for the provision of teaching activities (required)
+      "cdsCod": "CDS_AD_1", // Course code for the provision of teaching activities
+      "cdsDes": "Esempio di CDS AD", // Description of the course of teaching activity delivery
+      "aaOrdId": 2016, // Year of the course of study in which the teaching activity is provided (required)
+      "aaOrdCod": "CDS_AD_1", // Code of the regulation providing the educational activity
+      "aaOrdDes": "Esempio di CDS AD", // Description of the regulation providing the educational activity
+      "pdsId": 1, // Key to the study path for the provision of teaching activities (required)
+      "pdsCod": "PDS_AD_1", // Course code for the provision of teaching activities
+      "pdsDes": "Esempio di PDS AD", // Description of the teaching activity delivery path
+      "aaOffId": 1, // Year of provision of teaching activity (required)
+      "adId": 1, // Key to teaching activity (required)
+      "adCod": "PDS_AD_1", // Teaching Activity Code
+      "adDes": "Esempio di PDS AD", // Description of teaching activity
+      "afId": 1 // ID of the afId from U-Gov Didattica
+    }, // ChiaveADContestualizzata (required)
+    "desAdPubblFlg": 0, // Flag indicating if the descriptions of the educational activities are publishable (required)
+    "contenuti": "contenuti del corso", // Course contents
+    "obiettiviFormativi": "obiettivi formativi", // Educational objectives
+    "prerequisiti": "prerequisiti", // Prerequisites
+    "metodiDidattici": "metodi didattici", // Teaching methods
+    "modalitaVerificaApprendimento": "Assessment methods", // Aa
+    "altreInfo": "altre informazioni", // Other information
+    "testiRiferimento": "Reference texts" // Aa
+  }
+]
+```
+
+<br>
+
+---
+
+<br>
+
+### `GET /libretti/{matId}/righe/{adsceId}/syllabus/UD` - Syllabus of the teaching units connected to the booklet row
+
+```java
+/**
+ * Syllabus of the teaching units connected to the booklet row
+ *
+ * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
+ * @param adsceId              integer (path, required)            - ID of the booklet row
+ * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
+ * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
+ * @return List<SyllabusUDLibretto> on success
+ */
+GET /libretti/{matId}/righe/{adsceId}/syllabus/UD
+```
+
+**Auth:** `STUDENTE`, `DOCENTE_APP`, `DOCENTE_PIANI`, `UTENTE_TECNICO`, `UTENTE_PTA`, `UTENTE_PTA_ADMIN` required · Supported: `Basic`, `JWT`
+
+**Cache:** midRefreshRateUserIndependent
+
+#### Response
+
+**`200 OK`**
+
+```json
+[
+  {
+    "matId": 1, // Unique ID identifying the student's career segment and its linked booklet (required)
+    "adsceId": 1, // Unique ID identifying a student's booklet row (required)
+    "chiavePartizione": {
+      "aaOffId": 1, // Anno di erogazione della partizione (required)
+      "fatPartCod": "ALF", // Partition factor code (required)
+      "fatPartDes": "Alfabetico", // Partition factor description
+      "fatPartDesEng": "Alphabetic", // Partition factor description in English
+      "domPartCod": "PARI", // Partition domain code (required)
+      "domPartDes": "PARI", // Partition domain description
+      "domPartDesEng": "ODD", // Partition domain description in English
+      "partCod": "S1", // Academic year partition code (required)
+      "partDes": "Primo semestre", // Academic year partition description
+      "partDesEng": "First Semester", // Academic year partition description in English
+      "adLogId": 1 // Logistics grouping ID (required)
+    }, // ChiavePartizione (required)
+    "chiaveAdContestualizzata": {
+      "cdsId": 1, // Key to the course of study for the provision of teaching activities (required)
+      "cdsCod": "CDS_AD_1", // Course code for the provision of teaching activities
+      "cdsDes": "Esempio di CDS AD", // Description of the course of teaching activity delivery
+      "aaOrdId": 2016, // Year of the course of study in which the teaching activity is provided (required)
+      "aaOrdCod": "CDS_AD_1", // Code of the regulation providing the educational activity
+      "aaOrdDes": "Esempio di CDS AD", // Description of the regulation providing the educational activity
+      "pdsId": 1, // Key to the study path for the provision of teaching activities (required)
+      "pdsCod": "PDS_AD_1", // Course code for the provision of teaching activities
+      "pdsDes": "Esempio di PDS AD", // Description of the teaching activity delivery path
+      "aaOffId": 1, // Year of provision of teaching activity (required)
+      "adId": 1, // Key to teaching activity (required)
+      "adCod": "PDS_AD_1", // Teaching Activity Code
+      "adDes": "Esempio di PDS AD", // Description of teaching activity
+      "afId": 1 // ID of the afId from U-Gov Didattica
+    }, // ChiaveAdContestualizzata (required)
+    "udLogId": 1, // ID that allows identifying the partition linked to the UD (required)
+    "udCod": "UD_COD", // Teaching unit code
+    "udDes": "UD_DES", // Teaching unit description
+    "desUdPubblFlg": 0, // Flag indicating if the description of the teaching unit is publishable (required)
+    "obiettiviFormativi": "obiettivi formativi", // Educational objectives
+    "prerequisiti": "prerequisiti", // Prerequisites
+    "testiRiferimento": "Reference texts" // Aa
+  }
+]
+```
+
+<br>
+
+---
+
+<br>
+
+## Endpoints - Academic Segment (Segmento)
+
+### `GET /libretti/{matId}/righe/{adsceId}/segmenti` - All segments of the selected educational activity
+
+```java
+/**
+ * All segments of the selected educational activity
+ *
+ * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
+ * @param adsceId              integer (path, required)            - ID of the booklet row
+ * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
+ * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
+ * @return List<SegmentoLibretto> on success
+ */
+GET /libretti/{matId}/righe/{adsceId}/segmenti
+```
+
+**Auth:** `STUDENTE`, `DOCENTE_APP`, `DOCENTE_PIANI`, `UTENTE_TECNICO`, `UTENTE_PTA`, `UTENTE_PTA_ADMIN` required · Supported: `Basic`, `JWT`
+
+**Cache:** midRefreshRateUserIndependent
+
+#### Response
+
+**`200 OK`**
+
+```json
+[
+  {
+    "segsceId": 1, // Unique ID of the segment identifying the characteristics of the educational activity (required)
+    "adsceId": 1, // Unique ID identifying a student's booklet row (required)
+    "matId": 1, // Id univoco che consente di individuare il libretto dello studente (required)
+    "attributi": {}
+  }
+]
+```
+
+<br>
+
+---
+
+<br>
+
+### `GET /libretti/{matId}/righe/{adsceId}/segmenti/{segsceId}` - Requested segment of the selected educational activity
+
+```java
+/**
+ * Requested segment of the selected educational activity
+ *
+ * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
+ * @param adsceId              integer (path, required)            - ID of the booklet row
+ * @param segsceId             integer (path, required)            - ID of the segment connected to the booklet row
+ * @return SegmentoLibretto on success
+ */
+GET /libretti/{matId}/righe/{adsceId}/segmenti/{segsceId}
+```
+
+**Auth:** `STUDENTE`, `DOCENTE_APP`, `DOCENTE_PIANI`, `UTENTE_TECNICO`, `UTENTE_PTA`, `UTENTE_PTA_ADMIN` required · Supported: `Basic`, `JWT`
+
+**Cache:** midRefreshRateUserIndependent
+
+#### Response
+
+**`200 OK`**
+
+```json
+{
+  "segsceId": 1, // Unique ID of the segment identifying the characteristics of the educational activity (required)
+  "adsceId": 1, // Unique ID identifying a student's booklet row (required)
+  "matId": 1, // Id univoco che consente di individuare il libretto dello studente (required)
+  "attributi": {}
+}
+```
+
+<br>
+
+---
+
+<br>
+
+### `GET /libretti/{matId}/segmenti` - All segments of the educational activities of a booklet
+
+```java
+/**
+ * All segments of the educational activities of a booklet
+ *
+ * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
+ * @param adNonCancellabili    integer (query, optional)           - If 1, retrieves non-cancellable educational activities of the booklet. Defaults to 0
+ * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
+ * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
+ * @param start                integer (query, optional)           - utilizzato insieme a `limit` per indicare la paginazione sui record
+ * @param limit                integer (query, optional)           - utilizzato insieme a `start` per indicare la paginazione sui record, `limit` indica il numero di ...
+ * @return List<SegmentoLibretto> on success
+ */
+GET /libretti/{matId}/segmenti
+```
+
+**Auth:** `STUDENTE`, `DOCENTE_APP`, `DOCENTE_PIANI`, `UTENTE_TECNICO`, `UTENTE_PTA`, `UTENTE_PTA_ADMIN` required · Supported: `Basic`, `JWT`
+
+**Cache:** midRefreshRateUserIndependent
+
+#### Response
+
+**`200 OK`**
+
+```json
+[
+  {
+    "segsceId": 1, // Unique ID of the segment identifying the characteristics of the educational activity (required)
+    "adsceId": 1, // Unique ID identifying a student's booklet row (required)
+    "matId": 1, // Id univoco che consente di individuare il libretto dello studente (required)
+    "attributi": {}
+  }
+]
+```
+
+<br>
+
+---
+
+<br>
+
+## Endpoints - Exam Result (Prova)
 
 ### `GET /libretti/{matId}/prove` - All exams of the educational activities of a booklet
 
@@ -3183,7 +2381,1069 @@ GET /libretti/{matId}/righe/{adsceId}/prove/{adregId}
 
 <br>
 
-## Endpoints - Prove
+## Endpoints - Bulk (Massivo)
+
+### `GET /libretti/classe-studenti` - Retrieves students connected to an offered Activity
+
+```java
+/**
+ * WARNING this method could retrieve part of a wider logistics
+ * sharing since only one offered AD among those comprising the partition is selected.
+ * If the partition is composed of a single AD, then the two methods coincide.
+ * Otherwise, the restrictions described in the endpoint '/libretti/classe-studenti/{adLogId}' apply.
+ *
+ * @param logAaOffId           integer (query, required)           - ID of the offering year of the logistics sharing
+ * @param logAdCod             string (query, required)            - Educational activity code of the logistics sharing
+ * @param logCdsCod            string (query, required)            - Code of the course providing the educational activity in the logistics sharing
+ * @param logAaOrdId           integer (query, required)           - ID of the regulation year of the course providing the logistics sharing
+ * @param logPdsCod            string (query, required)            - Code of the path providing the educational activity in the logistics sharing
+ * @param libUdCod             string (query, optional)            - Code of the teaching unit (UD) present in the student's booklet
+ * @param staStuCod            string (query, optional)            - Career state code
+ * @param staMatCod            string (query, optional)            - Matriculation state code
+ * @param supFlg               boolean (query, optional)           - If 1 indicates passed activities, otherwise not passed ones
+ * @param domPartCod           string (query, optional)            - Student's class
+ * @param allAdLog             boolean (query, optional)           - Allows retrieving the entire logistics sharing; if not specified, it's false
+ * @param stuId                integer (query, optional)           - Unique identifier of the student
+ * @param start                integer (query, optional)           - utilizzato insieme a `limit` per indicare la paginazione sui record
+ * @param limit                integer (query, optional)           - utilizzato insieme a `start` per indicare la paginazione sui record, `limit` indica il numero di ...
+ * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
+ * @param optionalFields       string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
+ * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
+ * @return List<RigaLibrettoPerAdLog> on success
+ */
+GET /libretti/classe-studenti
+```
+
+**Auth:** `DOCENTE_ADLOG`, `UTENTE_TECNICO` required · Supported: `Basic`, `JWT`
+
+**Cache:** midRefreshRateUserIndependent
+
+#### Response
+
+**`200 OK`**
+
+```json
+[
+  {
+    "persId": 1, // Unique ID of the person
+    "codFis": "MRRSSSS55D12F2323G", // Fiscal code of the person
+    "userId": "m.rossi", // User code
+    "cognome": "rossi", // Student's surname
+    "nome": "mario", // Student's name
+    "email": "m.rossi@gmail.com", // Student's personal email (optional)
+    "emailAte": "m.rossi@cineca.it", // Student's university email (optional)
+    "stuId": 1, // Unique identifier of the Student
+    "matId": 1, // Unique ID identifying the student's career segment and its linked booklet
+    "matricola": "AK12343", // Student matriculation
+    "adsceId": 1, // Unique ID of the booklet row linked to the logistics sharing
+    "adPartId": 1, // Unique ID of the booklet partition linked to the logistics sharing
+    "adLogId": 1, // Unique ID of the logistics sharing
+    "logPartCod": "S1", // Semester code linked to the logistics sharing
+    "logFatPartCod": "ALF", // Expected partitioning type for the logistics sharing
+    "logDomPartCod": "A-K", // Partition domain of the single partition
+    "logAaOffId": 2019, // Offering year of the logistics sharing
+    "annoCorso": 1, // Course year of the booklet activity
+    "staSceCod": "S", // State of the educational activity (code)
+    "ricId": 0, // Presence of a recognition or validation. 0 = No Recognition 1 = RF (Attendance Recognition) 2 = RA (Activity Recognition) 3 = CF (Attendance Validation) 4 = CA (Activity Validation)
+    "peso": 10.0, // Weight of the educational activity, calculated as the sum of segment weights; weight allows two optional decimals
+    "durata": 50.0, // Duration in hours of the educational activity
+    "oreMinFreq": 50.0, // Minimum attendance hours required to acquire attendance for the educational activity
+    "freqFlg": 1, // Flag indicating whether the activity has mandatory attendance
+    "aaFreqId": 2016, // Attendance year, valued if the activity state is F or S
+    "dataFreq": "15/10/2015", // Date of attendance acquisition; if valued, indicates the reference date from which attendance is acquired; the required format is DD/MM/YYYY
+    "chiaveAdContestualizzata": {
+      "cdsId": 1, // Key to the course of study for the provision of teaching activities (required)
+      "cdsCod": "CDS_AD_1", // Course code for the provision of teaching activities
+      "cdsDes": "Esempio di CDS AD", // Description of the course of teaching activity delivery
+      "aaOrdId": 2016, // Year of the course of study in which the teaching activity is provided (required)
+      "aaOrdCod": "CDS_AD_1", // Code of the regulation providing the educational activity
+      "aaOrdDes": "Esempio di CDS AD", // Description of the regulation providing the educational activity
+      "pdsId": 1, // Key to the study path for the provision of teaching activities (required)
+      "pdsCod": "PDS_AD_1", // Course code for the provision of teaching activities
+      "pdsDes": "Esempio di PDS AD", // Description of the teaching activity delivery path
+      "aaOffId": 1, // Year of provision of teaching activity (required)
+      "adId": 1, // Key to teaching activity (required)
+      "adCod": "PDS_AD_1", // Teaching Activity Code
+      "adDes": "Esempio di PDS AD", // Description of teaching activity
+      "afId": 1 // ID of the afId from U-Gov Didattica
+    }, // ChiaveAdContestualizzata
+    "esito": {
+      "modValCod": "V", // Type of evaluation mode for the exam. Can assume values V, G, N; if the value is V, then upon passing the vote field is populated; otherwise, if the value is G, the tipo_giud_cod field is populated (required)
+      "supEsaFlg": 1, // Flag indicating whether the outcome is positive (required)
+      "voto": 1, // Vote, valued if modValCod is V. Final exam outcomes (those involving booklet row loading) are INTEGERS; partial exam outcomes can have 2 decimal digits
+      "lodeFlg": 1, // Flag indicating honors (cum laude), set to 1 only if modValCod is V and honors must be set
+      "tipoGiudCod": "IDO", // Code indicating the type of judgment used, valued only if modValCod is G
+      "tipoGiudDes": "Idoneo", // Description indicating the type of judgment used, valued only if modValCod is G
+      "dataEsa": "15/10/2015", // Date of the exam; the required format is DD/MM/YYYY
+      "aaSupId": 2016 // Year of passing the exam
+    }, // Esito
+    "segmenti": [{}] // Segmenti (optional)
+  }
+]
+```
+
+<br>
+
+---
+
+<br>
+
+### `GET /libretti/classe-studenti/{adLogId}` - Retrieves the class of students connected to a logistics sharing
+
+```java
+/**
+ * Retrieves students who have, within their booklet's partition, one of the offered activities (Contextualized AD) present in the selected logistics sharing. In the case of partitioning type ALF and MATR, even if this is not present for various reasons, the system automatically calculates on the fly the correct contextualization for the offered activity linked to the booklet key. To summarize, this service retrieves students who satisfy all indicated points: are ATTENDING (those whose offered educational activity key in the booklet matches one of the ADs of the logistics sharing) have a valid calculated partition (Active state) or students who do not have a valid partition but for whom the expected partitioning is FAT_PART.TIPO_FATT in (ALF,MATR).
+ *
+ * @param adLogId              integer (path, required)            - Unique ID of the logistics sharing
+ * @param adCod                string (query, optional)            - Activity code of the booklet row to search
+ * @param cdsStuCod            string (query, optional)            - Code of the student's study course
+ * @param staStuCod            string (query, optional)            - Career state code
+ * @param staMatCod            string (query, optional)            - Matriculation state code
+ * @param supFlg               boolean (query, optional)           - If 1 indicates passed activities, otherwise not passed ones
+ * @param domPartCod           string (query, optional)            - Student's class
+ * @param stuId                integer (query, optional)           - Unique identifier of the student
+ * @param start                integer (query, optional)           - utilizzato insieme a `limit` per indicare la paginazione sui record
+ * @param limit                integer (query, optional)           - utilizzato insieme a `start` per indicare la paginazione sui record, `limit` indica il numero di ...
+ * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
+ * @param optionalFields       string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
+ * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
+ * @return List<RigaLibrettoPerAdLog> on success
+ */
+GET /libretti/classe-studenti/{adLogId}
+```
+
+**Auth:** `DOCENTE_ADLOG`, `UTENTE_TECNICO` required · Supported: `Basic`, `JWT`
+
+**Cache:** midRefreshRateUserIndependent
+
+#### Response
+
+**`200 OK`**
+
+```json
+[
+  {
+    "persId": 1, // Unique ID of the person
+    "codFis": "MRRSSSS55D12F2323G", // Fiscal code of the person
+    "userId": "m.rossi", // User code
+    "cognome": "rossi", // Student's surname
+    "nome": "mario", // Student's name
+    "email": "m.rossi@gmail.com", // Student's personal email (optional)
+    "emailAte": "m.rossi@cineca.it", // Student's university email (optional)
+    "stuId": 1, // Unique identifier of the Student
+    "matId": 1, // Unique ID identifying the student's career segment and its linked booklet
+    "matricola": "AK12343", // Student matriculation
+    "adsceId": 1, // Unique ID of the booklet row linked to the logistics sharing
+    "adPartId": 1, // Unique ID of the booklet partition linked to the logistics sharing
+    "adLogId": 1, // Unique ID of the logistics sharing
+    "logPartCod": "S1", // Semester code linked to the logistics sharing
+    "logFatPartCod": "ALF", // Expected partitioning type for the logistics sharing
+    "logDomPartCod": "A-K", // Partition domain of the single partition
+    "logAaOffId": 2019, // Offering year of the logistics sharing
+    "annoCorso": 1, // Course year of the booklet activity
+    "staSceCod": "S", // State of the educational activity (code)
+    "ricId": 0, // Presence of a recognition or validation. 0 = No Recognition 1 = RF (Attendance Recognition) 2 = RA (Activity Recognition) 3 = CF (Attendance Validation) 4 = CA (Activity Validation)
+    "peso": 10.0, // Weight of the educational activity, calculated as the sum of segment weights; weight allows two optional decimals
+    "durata": 50.0, // Duration in hours of the educational activity
+    "oreMinFreq": 50.0, // Minimum attendance hours required to acquire attendance for the educational activity
+    "freqFlg": 1, // Flag indicating whether the activity has mandatory attendance
+    "aaFreqId": 2016, // Attendance year, valued if the activity state is F or S
+    "dataFreq": "15/10/2015", // Date of attendance acquisition; if valued, indicates the reference date from which attendance is acquired; the required format is DD/MM/YYYY
+    "chiaveAdContestualizzata": {
+      "cdsId": 1, // Key to the course of study for the provision of teaching activities (required)
+      "cdsCod": "CDS_AD_1", // Course code for the provision of teaching activities
+      "cdsDes": "Esempio di CDS AD", // Description of the course of teaching activity delivery
+      "aaOrdId": 2016, // Year of the course of study in which the teaching activity is provided (required)
+      "aaOrdCod": "CDS_AD_1", // Code of the regulation providing the educational activity
+      "aaOrdDes": "Esempio di CDS AD", // Description of the regulation providing the educational activity
+      "pdsId": 1, // Key to the study path for the provision of teaching activities (required)
+      "pdsCod": "PDS_AD_1", // Course code for the provision of teaching activities
+      "pdsDes": "Esempio di PDS AD", // Description of the teaching activity delivery path
+      "aaOffId": 1, // Year of provision of teaching activity (required)
+      "adId": 1, // Key to teaching activity (required)
+      "adCod": "PDS_AD_1", // Teaching Activity Code
+      "adDes": "Esempio di PDS AD", // Description of teaching activity
+      "afId": 1 // ID of the afId from U-Gov Didattica
+    }, // ChiaveAdContestualizzata
+    "esito": {
+      "modValCod": "V", // Type of evaluation mode for the exam. Can assume values V, G, N; if the value is V, then upon passing the vote field is populated; otherwise, if the value is G, the tipo_giud_cod field is populated (required)
+      "supEsaFlg": 1, // Flag indicating whether the outcome is positive (required)
+      "voto": 1, // Vote, valued if modValCod is V. Final exam outcomes (those involving booklet row loading) are INTEGERS; partial exam outcomes can have 2 decimal digits
+      "lodeFlg": 1, // Flag indicating honors (cum laude), set to 1 only if modValCod is V and honors must be set
+      "tipoGiudCod": "IDO", // Code indicating the type of judgment used, valued only if modValCod is G
+      "tipoGiudDes": "Idoneo", // Description indicating the type of judgment used, valued only if modValCod is G
+      "dataEsa": "15/10/2015", // Date of the exam; the required format is DD/MM/YYYY
+      "aaSupId": 2016 // Year of passing the exam
+    }, // Esito
+    "segmenti": [{}] // Segmenti (optional)
+  }
+]
+```
+
+<br>
+
+---
+
+<br>
+
+### `PUT /libretti/freq` - Sets or removes attendance for a list of students
+
+```java
+/**
+ * Allows massively assigning attendance to multiple students. It is possible to also indicate the detail of lesson detections. If passed, the detection details overwrite (by detection year) the present detections.
+ *
+ * @param body                 ParametriFreqMassiva (body, required) - Object containing the students to assign attendance to
+ * @return ResultFreqMassiva on success,
+ *         DettaglioErrore on failure
+ */
+PUT /libretti/freq
+```
+
+**Auth:** `DOCENTE`, `UTENTE_TECNICO` required · Supported: `Basic`, `JWT`
+
+**Cache:** midRefreshRateUserIndependent
+
+#### Request body
+
+```json
+{
+  "codFisDocenteRilevazione": "MRRRSS70G55H4444T", // Fiscal code of the teacher who carried out the detection
+  "codFisDocenteControllo": "MRRRSS70G55H4444T", // Fiscal code of the teacher for whom to check consistency between activities and assigned ownership (AD code only). To skip the check, pass an empty string
+  "aaRilevazioneId": 2020, // Year of attendance detection; if not valued, DR_CARR is taken
+  "adCod": "AD01", // Educational activity code where to assign attendance (required)
+  "cdsCod": "CDS01", // Study course code where to assign attendance; if not passed, any study course is considered valid
+  "aaOrdId": 2018, // Regulation year of the study course where to assign attendance; if not passed, any regulation year is considered valid
+  "pdsCod": "CDS01", // Study path code where to assign attendance; if not passed, any study path is considered valid
+  "aaOffId": 2020, // Offering year of the activity for which to assign attendance; if not passed, any offering year is considered valid
+  "fatPartCod": "AK-LZ", // Partition factor of the logistics partition; if not passed, any logistics sharing is considered valid
+  "domPartCod": "AK", // Partition domain of the logistics partition; if not passed, any logistics sharing is considered valid
+  "partCod": "S1", // Semester of the logistics partition; if not passed, any logistics sharing is considered valid
+  "adLogId": 12444, // ID of the logistics sharing; if not passed, any logistics sharing is considered valid
+  "totaleRilevazioni": 1, // Total detections
+  "totaleOreRilevazioni": 1, // Total hours of detections
+  "studenti": [{}] // Studenti
+}
+```
+
+#### Response
+
+**`200 OK`**
+
+```json
+{
+  "retCode": 1, // Return code of the massive attendance loading function
+  "errMsg": "alcune rilevazioni non sono state caricate", // Error message in case errors occurred
+  "scarti": [{}] // Discards
+}
+```
+
+**`422 Unprocessable Entity` - Insertion failed**
+
+```json
+{
+  "statusCode": 200, // Http Status Code
+  "retCode": -1, // Error code
+  "retErrMsg": "Parametri non corretti", // Error description
+  "errDetails": [
+    {
+      "errorType": "stackTrace", // Additional error type description
+      "value": "SocketTimeoutException....", // Error description
+      "rawValue": "SocketTimeoutException...." // Error description
+    }
+  ] // ErrDetails
+}
+```
+
+<br>
+
+---
+
+<br>
+
+### `PUT /libretti/rilevazioni-freq/` - Management of attendance detections
+
+```java
+/**
+ * Allows managing attendance detections. It is also possible to pass attendance detections on the massive attendance assignment method libretti/freq or the punctual one /libretti/{matId}/righe/{adsceId}/freq. Those methods assign attendance and also save the detection detail information.
+ *
+ * @param body                 ParametriRilPresMassiva (body, required) - Object containing the students to assign attendance to
+ * @return ResultFreqMassiva on success,
+ *         DettaglioErrore on failure
+ */
+PUT /libretti/rilevazioni-freq/
+```
+
+**Auth:** `DOCENTE`, `UTENTE_TECNICO` required · Supported: `Basic`, `JWT`
+
+**Cache:** midRefreshRateUserIndependent
+
+#### Request body
+
+```json
+{
+  "operazione": "CALCOLA_STATS_E_ALLINEA_FREQ", // Type of operation to perform (required)
+  "codFisDocenteRilevazione": "MRRRSS70G55H4444T", // Fiscal code of the teacher who carried out the detection (required)
+  "codFisDocenteControllo": "MRRRSS70G55H4444T", // Fiscal code of the teacher for whom to check consistency between activities and assigned ownership (AD code only). To skip the check, pass an empty string (required)
+  "aaRilevazioneId": 2020, // Year of attendance detection; if not valued, DR_CARR is taken
+  "adCod": "AD01", // Educational activity code where to assign attendance (required)
+  "cdsCod": "CDS01", // Study course code where to assign attendance; if not passed, any study course is considered valid (required)
+  "aaOrdId": 2018, // Regulation year of the study course where to assign attendance; if not passed, any regulation year is considered valid (required)
+  "pdsCod": "CDS01", // Study path code where to assign attendance; if not passed, any study path is considered valid (required)
+  "aaOffId": 2020, // Offering year of the activity for which to assign attendance; if not passed, any offering year is considered valid (required)
+  "fatPartCod": "AK-LZ", // Partition factor of the logistics partition; if not passed, any logistics sharing is considered valid (required)
+  "domPartCod": "AK", // Partition domain of the logistics partition; if not passed, any logistics sharing is considered valid (required)
+  "partCod": "S1", // Semester of the logistics partition; if not passed, any logistics sharing is considered valid (required)
+  "adLogId": 12444, // ID of the logistics sharing; if not passed, any logistics sharing is considered valid
+  "percMinOre": 50, // Minimum percentage of hours for attendance assignment
+  "percMinORil": 50, // Minimum percentage of detections for attendance assignment
+  "assegnaDataFreq": 1, // Flag for assigning the attendance date
+  "studenti": [
+    {
+      "matricola": "AD01", // Student matriculation code, retrieves the active segment of the active student career; in case of ambiguity, the matId field can be used
+      "matId": 1111, // ID of the career segment where to assign attendance; if valued, consistency with the matriculation field is checked
+      "adsceId": 1111, // ID of the booklet row, used if the indicated activity is repeatable
+      "aaFreqId": 2020, // Attendance year to assign to the student; if null, it is calculated with the current year
+      "dataFreq": "10/10/2020", // Date of assignment of student attendance, valid only if aaFreqId is valued
+      "rilevazioni": [
+        {
+          "idRilevazione": "1234", // Unique ID of the detection (required)
+          "dataLezione": "10/10/2020 10:00:00", // Date of the lesson
+          "durata": 1, // Duration in hours of the lesson
+          "codFisDocente": "MRRRSS55HG22G5555K", // Fiscal code of the teacher if different from the logged-in user
+          "statoPresenza": "P", // Student presence state (P present, A absent)
+          "minutiAssenza": 25 // Minutes of absence at a lesson; the data is valid only if the detection state is P - presence
+        }
+      ] // Rilevazioni
+    }
+  ] // Studenti
+}
+```
+
+#### Response
+
+**`200 OK`**
+
+```json
+{
+  "retCode": 1, // Return code of the massive attendance loading function
+  "errMsg": "alcune rilevazioni non sono state caricate", // Error message in case errors occurred
+  "scarti": [{}] // Discards
+}
+```
+
+**`422 Unprocessable Entity` - Insertion failed**
+
+```json
+{
+  "statusCode": 200, // Http Status Code
+  "retCode": -1, // Error code
+  "retErrMsg": "Parametri non corretti", // Error description
+  "errDetails": [
+    {
+      "errorType": "stackTrace", // Additional error type description
+      "value": "SocketTimeoutException....", // Error description
+      "rawValue": "SocketTimeoutException...." // Error description
+    }
+  ] // ErrDetails
+}
+```
+
+<br>
+
+---
+
+<br>
+
+## Endpoints - Exam Session (Appello)
+
+### `GET /libretti/{matId}/appelli` - List of appeals connected to the booklet
+
+```java
+/**
+ * The attoreCod query string filter is used in association with the optional config field to retrieve the appeal configuration. Currently, only values required by specific applications are retrieved. For the list of all values, the ConfCalesa API can be used.
+ *
+ * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
+ * @param attoreCod            string (query, optional)            - Type of actor required for data extraction (STU,DOC,SEG), used to filter the configuration...
+ * @param q                    string (query, optional)            - The parameter allows filtering fields with specific predefined conditions, consult...
+ * @param filter               string (query, optional)            - il parametro consente di applicare dei filtri alla classe di modello utilizzando il linguaggio RS...
+ * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
+ * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
+ * @param optionalFields       string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
+ * @return List<AppelloLibretto> on success
+ */
+GET /libretti/{matId}/appelli
+```
+
+**Auth:** `STUDENTE`, `DOCENTE_APP`, `DOCENTE_PIANI`, `UTENTE_TECNICO`, `UTENTE_PTA`, `UTENTE_PTA_ADMIN` required · Supported: `Basic`, `JWT`
+
+**Cache:** midRefreshRateUserIndependent
+
+#### Response
+
+**`200 OK`**
+
+```json
+[{}]
+```
+
+<br>
+
+---
+
+<br>
+
+### `GET /libretti/{matId}/prenotazioni` - Retrieves information on reservations connected by a career segment
+
+```java
+/**
+ * Retrieves information on reservations connected by a career segment
+ *
+ * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
+ * @param attoreCod            string (query, optional)            - Type of actor required for data extraction (STU,DOC,SEG), used to filter the configuration...
+ * @param dataMinPren          string (query, optional)            - Minimum reservation date
+ * @param q                    string (query, optional)            - The parameter allows filtering fields with specific predefined conditions, consult...
+ * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
+ * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
+ * @param optionalFields       string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
+ * @param filter               string (query, optional)            - il parametro consente di applicare dei filtri alla classe di modello utilizzando il linguaggio RS...
+ * @return List<IscrizioneAppello> on success,
+ *         DettaglioErrore on failure
+ */
+GET /libretti/{matId}/prenotazioni
+```
+
+**Auth:** `STUDENTE`, `UTENTE_TECNICO`, `UTENTE_PTA`, `UTENTE_PTA_ADMIN` required · Supported: `Basic`, `JWT`
+
+**Cache:** highRefreshRateUserIndependent
+
+#### Response
+
+**`200 OK`**
+
+```json
+[
+  {
+    "applistaId": 102220, // Unique identifier of the reservation
+    "cdsId": 102344, // ID of the study course providing the appeal
+    "adId": 1022, // ID of the educational activity providing the appeal
+    "appId": 1, // Progressive ID of the appeal with respect to the pair (cds_id, ad_id)
+    "appLogId": 1, // Progressive ID of the turn with respect to the triad (cds_id, ad_id, app_id)
+    "stuId": 12, // ID of the career of the student who made the reservation
+    "adregId": 112, // ID of the exam linked to the reservation
+    "adsceId": 112, // ID of the booklet row linked to the reservation
+    "matId": 112, // ID of the matriculation linked to the reservation (optional)
+    "adStuCod": "AD1", // Code of the activity reserved by the student
+    "adStuDes": "Attività di esempio", // Description of the activity reserved by the student (optional)
+    "cdsAdStuCod": "CDS1", // Code of the study course reserved by the student
+    "cdsAdStuDes": "Corso di studio di esempio", // Description of the study course reserved by the student (optional)
+    "cdsAdIdStu": 102344, // ID of the study course reserved by the student (optional)
+    "desAppello": "descrizione appello", // Description of the appeal (optional)
+    "desTurno": "descrizione turno", // Description of the turn to which the student is enrolled (optional)
+    "aulaCod": "codice aula", // Code of the classroom to which the student is enrolled (optional)
+    "aulaDes": "descizione aula", // Description of the classroom to which the student is enrolled (optional)
+    "edificioCod": "codice edificio", // Code of the building to which the student is enrolled (optional)
+    "edificioDes": "descizione edificio", // Description of the building to which the student is enrolled (optional)
+    "sedeId": 123, // ID of the location of the appeal (optional)
+    "sedeDes": "descizione sede", // Description of the location of the appeal (optional)
+    "dataOraTurno": "10/10/2016 12:00:00", // Date/time of the turn to which the student is enrolled (optional)
+    "aaFreqId": 2020, // Attendance year of the activity (optional)
+    "statoAdsce": "S", // Stato dell'attività didattica (codice)
+    "pesoAd": 10.0, // Weight of the educational activity, the weight includes two optional decimals
+    "userId": "m.rossi", // Active UserId of the student
+    "matricola": "124AA-12", // Student matriculation code
+    "nomeStudente": "Mario", // Student's name
+    "nomeAlias": "Giulia", // Student alias name
+    "cognomeStudente": "Rossi", // Student's surname
+    "codFisStudente": "XXXYYY99A12K123H", // Student's fiscal code
+    "dataNascitaStudente": "10/10/1985", // Student birth date (DD/MM/YYYY)
+    "sessoStudente": "M", // Student gender (optional)
+    "comuNascCodIstat": "M200", // ISTAT code of the student's birth municipality (optional)
+    "cittStraNasc": "ENG", // Foreign citizenship code at birth of the student (optional)
+    "cittCod": "ENG", // Student's citizenship code (optional)
+    "cdsStuCod": "CDS1", // Codice corso di studio di iscrizione dello studente
+    "cdsStuDes": "Corso di studio di esempio", // Description of the student's enrolled study course (optional)
+    "cdsIdStu": 102344, // ID of the student's enrolled study course (optional)
+    "aaOrdStuId": 2010, // Regulation year of the student's enrollment (optional)
+    "pdsStuCod": "PDS1", // Code of the student's enrolled study path (optional)
+    "pdsStuDes": "Percorso di studio di esempio", // Description of the student's enrolled study path (optional)
+    "pdsIdStu": 9999, // ID of the student's enrolled study path (optional)
+    "pubblId": 11234, // ID of the outcome publication
+    "presaVisione": "N", // State of acknowledgment of the outcome
+    "userIdPresaVisione": "m.rossi", // User who performed the last state change of the acknowledgment (optional)
+    "userGrpPresaVisione": 7, // Group of the user who performed the last state change of the acknowledgment (optional)
+    "dataRifEsito": "10/12/2017", // Date of last refusal applied to the teacher (DD/MM/YYYY) (optional)
+    "dataRifEsitoStu": "10/12/2017", // Date of last refusal applied to the student (DD/MM/YYYY)
+    "notaPubbl": "nota di pubblicazione", // Note inserted by the teacher during publication
+    "gruppoVotoCod": "30L", // Code of the grading scale of the student's booklet
+    "gruppoVotoMaxPunti": 30, // Maximum grade available for the grading scale
+    "esito": {
+      "modValCod": "V", // Evaluation mode of the exam, must correspond to the entered outcome type. Absent and withdrawn flags are mutually exclusive with the grade
+      "superatoFlg": 1, // Indicates whether the grade/judgment is positive
+      "votoEsa": 22, // Numerical grade of the exam
+      "tipoGiudCod": "IDO", // Judgment grade of the exam
+      "tipoGiudizioDes": "Idoneo", // Description of the judgment grade of the exam
+      "assenteFlg": 1, // Flag indicating absence from the exam
+      "ritiratoFlg": 1 // Flag indicating withdrawal from the exam
+    }, // Esito
+    "manualeFlg": 1, // Flag indicating who made the reservation (e.g., actors SEG, DOC manuale_flg=1; actor STU manuale_flg=0)
+    "dataEsa": "10/10/2016", // Date of taking the exam (DD/MM/YYYY); if not valued, the turn date applies
+    "domandeEsame": "prima domanda esame; seconda domanda esame", // Exam questions asked during the test
+    "notaStudente": "vecchio ordinamento; Studente Lavoratore; Studente fuoricorso etc.", // Note inserted by the student during appeal reservation
+    "tipoSvolgimentoEsameCod": "P", // Code of the exam execution type for the student
+    "tipoSvolgimentoEsameDes": "Presenza", // Description of the exam execution type for the student
+    "tipoSvolgimentoEsameRichiestaFlg": "1", // Indicates whether the exam execution type is a user request, meaning it must be converted into a definitive value (optional)
+    "tagCod": "GRP1", // Tag selected by the student during reservation (optional)
+    "autoTagCod": "99", // Reservation class associated with the student during reservation (optional)
+    "livUscitaCod": "B1", // Language output level if the appeal includes languages, to be valued along with linguaUscitaCod (optional)
+    "linguaUscitaCod": "eng", // ISO6392 code of the language to which the output level refers, to be valued along with livUscitaCod (optional)
+    "dataIns": "10/10/2016", // Reservation date (DD/MM/YYYY HH24:MI:SS)
+    "tipoDefAppCod": "STD", // Code identifying the tipoDefApp of the appeal linked to the reservation (optional)
+    "tipoGestPrenCod": "STD", // Code identifying the tipoGestPren of the appeal linked to the reservation (optional)
+    "tipoGestAppCod": "STD", // Code identifying the tipoGestApp of the appeal linked to the reservation (optional)
+    "tipoAppCod": "PP", // Appeal type (PF=Final Exam, PP=Partial Exam) (optional)
+    "posiz": 12, // Reservation progressive number within the enrolled list (optional)
+    "posizApp": 12, // Reservation progressive number within the enrolled list ordered by data_ins
+    "dataInizioIscr": "10/10/2016", // Enrollment start date (DD/MM/YYYY) (optional)
+    "dataFineIscr": "16/10/2016", // Enrollment end date (DD/MM/YYYY) (optional)
+    "tipoIscrCod": "S", // Enrollment mode defined in the appeal; possible values are (Written=S, Oral=O, Written and Oral=SO) (optional)
+    "tipoEsaCod": "S", // Enrollment mode defined in the appeal; possible values are (Written=S, Oral=O, Written and Oral Separated=SOS, Written and Oral Conjoined=SOC) (optional)
+    "aaCalId": 2020, // Calendar year of the appeal (optional)
+    "aaSesId": 2020, // Year of the session (optional)
+    "sesDes": "Sessione Invernale", // Description of the session (optional)
+    "misureCompensative": [
+      {
+        "applistaId": 102220, // Unique identifier of the reservation
+        "cdsId": 102344, // ID of the study course providing the appeal (optional)
+        "adId": 1022, // ID of the educational activity providing the appeal (optional)
+        "appId": 1, // Progressive ID of the appeal with respect to the pair (cds_id, ad_id) (optional)
+        "appLogId": 1, // Progressive ID of the turn with respect to the triad (cds_id, ad_id, app_id) (optional)
+        "stuId": 12, // ID of the career of the student who made the reservation (optional)
+        "misuraCompensativaCod": "TASSE_W", // Code of the compensatory measure
+        "desLiberaFlg": 1, // Indicates whether the compensatory measure has a free description
+        "visWebFlg": 1, // Indicates whether the compensatory measure is visible from the web
+        "des": "Necessario più tempo", // Description of the compensatory measure
+        "statoMisComp": "A, X, V", // State of the compensatory measure
+        "statoMisCompDes": "CONFERMATA, VERIFICATA, ANNULLATA" // Description of the state of the compensatory measure
+      }
+    ], // MisureCompensative (optional)
+    "warnings": [
+      {
+        "applistaId": 102220, // Unique identifier of the reservation
+        "cdsId": 102344, // ID of the study course providing the appeal (optional)
+        "adId": 1022, // ID of the educational activity providing the appeal (optional)
+        "appId": 1, // Progressive ID of the appeal with respect to the pair (cds_id, ad_id) (optional)
+        "appLogId": 1, // Progressive ID of the turn with respect to the triad (cds_id, ad_id, app_id) (optional)
+        "stuId": 12, // ID of the career of the student who made the reservation (optional)
+        "tipoErrore": "TASSE_W", // Error type
+        "des": "Studente non in regola con le tasse" // Error description
+      }
+    ] // Warnings (optional)
+  }
+]
+```
+
+**`422 Unprocessable Entity` - Update failed**
+
+```json
+{
+  "statusCode": 200, // Http Status Code
+  "retCode": -1, // Error code
+  "retErrMsg": "Parametri non corretti", // Error description
+  "errDetails": [
+    {
+      "errorType": "stackTrace", // Additional error type description
+      "value": "SocketTimeoutException....", // Error description
+      "rawValue": "SocketTimeoutException...." // Error description
+    }
+  ] // ErrDetails
+}
+```
+
+<br>
+
+---
+
+<br>
+
+### `GET /libretti/{matId}/righe/{adsceId}/appelli` - List of appeals connected to the booklet row
+
+```java
+/**
+ * The attoreCod query string filter is used in association with the optional config field to retrieve the appeal configuration. Currently, only values required by specific applications are retrieved. For the list of all values, the ConfCalesa API can be used.
+ *
+ * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
+ * @param adsceId              integer (path, required)            - ID of the booklet row
+ * @param attoreCod            string (query, optional)            - Type of actor required for data extraction (STU,DOC,SEG), used to filter the configuration...
+ * @param q                    string (query, optional)            - The parameter allows filtering fields with specific predefined conditions, consult...
+ * @param filter               string (query, optional)            - il parametro consente di applicare dei filtri alla classe di modello utilizzando il linguaggio RS...
+ * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
+ * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
+ * @param optionalFields       string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
+ * @return List<AppelloLibretto> on success
+ */
+GET /libretti/{matId}/righe/{adsceId}/appelli
+```
+
+**Auth:** `STUDENTE`, `DOCENTE_APP`, `DOCENTE_PIANI`, `UTENTE_TECNICO`, `UTENTE_PTA`, `UTENTE_PTA_ADMIN` required · Supported: `Basic`, `JWT`
+
+**Cache:** midRefreshRateUserIndependent
+
+#### Response
+
+**`200 OK`**
+
+```json
+[{}]
+```
+
+<br>
+
+---
+
+<br>
+
+### `GET /libretti/{matId}/righe/{adsceId}/prenotazioni` - Retrieves information on reservations connected by a career segment
+
+```java
+/**
+ * Retrieves information on reservations connected by a career segment
+ *
+ * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
+ * @param adsceId              integer (path, required)            - ID of the booklet row
+ * @param attoreCod            string (query, optional)            - Type of actor required for data extraction (STU,DOC,SEG), used to filter the configuration...
+ * @param q                    string (query, optional)            - The parameter allows filtering fields with specific predefined conditions, consult...
+ * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
+ * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
+ * @param optionalFields       string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
+ * @param filter               string (query, optional)            - il parametro consente di applicare dei filtri alla classe di modello utilizzando il linguaggio RS...
+ * @return List<IscrizioneAppello> on success,
+ *         DettaglioErrore on failure
+ */
+GET /libretti/{matId}/righe/{adsceId}/prenotazioni
+```
+
+**Auth:** `STUDENTE`, `UTENTE_TECNICO`, `UTENTE_PTA`, `UTENTE_PTA_ADMIN` required · Supported: `Basic`, `JWT`
+
+**Cache:** highRefreshRateUserIndependent
+
+#### Response
+
+**`200 OK`**
+
+```json
+[
+  {
+    "applistaId": 102220, // Unique identifier of the reservation
+    "cdsId": 102344, // ID of the study course providing the appeal
+    "adId": 1022, // ID of the educational activity providing the appeal
+    "appId": 1, // Progressive ID of the appeal with respect to the pair (cds_id, ad_id)
+    "appLogId": 1, // Progressive ID of the turn with respect to the triad (cds_id, ad_id, app_id)
+    "stuId": 12, // ID of the career of the student who made the reservation
+    "adregId": 112, // ID of the exam linked to the reservation
+    "adsceId": 112, // ID of the booklet row linked to the reservation
+    "matId": 112, // ID of the matriculation linked to the reservation (optional)
+    "adStuCod": "AD1", // Code of the activity reserved by the student
+    "adStuDes": "Attività di esempio", // Description of the activity reserved by the student (optional)
+    "cdsAdStuCod": "CDS1", // Code of the study course reserved by the student
+    "cdsAdStuDes": "Corso di studio di esempio", // Description of the study course reserved by the student (optional)
+    "cdsAdIdStu": 102344, // ID of the study course reserved by the student (optional)
+    "desAppello": "descrizione appello", // Description of the appeal (optional)
+    "desTurno": "descrizione turno", // Description of the turn to which the student is enrolled (optional)
+    "aulaCod": "codice aula", // Code of the classroom to which the student is enrolled (optional)
+    "aulaDes": "descizione aula", // Description of the classroom to which the student is enrolled (optional)
+    "edificioCod": "codice edificio", // Code of the building to which the student is enrolled (optional)
+    "edificioDes": "descizione edificio", // Description of the building to which the student is enrolled (optional)
+    "sedeId": 123, // ID of the location of the appeal (optional)
+    "sedeDes": "descizione sede", // Description of the location of the appeal (optional)
+    "dataOraTurno": "10/10/2016 12:00:00", // Date/time of the turn to which the student is enrolled (optional)
+    "aaFreqId": 2020, // Attendance year of the activity (optional)
+    "statoAdsce": "S", // Stato dell'attività didattica (codice)
+    "pesoAd": 10.0, // Weight of the educational activity, the weight includes two optional decimals
+    "userId": "m.rossi", // Active UserId of the student
+    "matricola": "124AA-12", // Student matriculation code
+    "nomeStudente": "Mario", // Student's name
+    "nomeAlias": "Giulia", // Student alias name
+    "cognomeStudente": "Rossi", // Student's surname
+    "codFisStudente": "XXXYYY99A12K123H", // Student's fiscal code
+    "dataNascitaStudente": "10/10/1985", // Student birth date (DD/MM/YYYY)
+    "sessoStudente": "M", // Student gender (optional)
+    "comuNascCodIstat": "M200", // ISTAT code of the student's birth municipality (optional)
+    "cittStraNasc": "ENG", // Foreign citizenship code at birth of the student (optional)
+    "cittCod": "ENG", // Student's citizenship code (optional)
+    "cdsStuCod": "CDS1", // Codice corso di studio di iscrizione dello studente
+    "cdsStuDes": "Corso di studio di esempio", // Description of the student's enrolled study course (optional)
+    "cdsIdStu": 102344, // ID of the student's enrolled study course (optional)
+    "aaOrdStuId": 2010, // Regulation year of the student's enrollment (optional)
+    "pdsStuCod": "PDS1", // Code of the student's enrolled study path (optional)
+    "pdsStuDes": "Percorso di studio di esempio", // Description of the student's enrolled study path (optional)
+    "pdsIdStu": 9999, // ID of the student's enrolled study path (optional)
+    "pubblId": 11234, // ID of the outcome publication
+    "presaVisione": "N", // State of acknowledgment of the outcome
+    "userIdPresaVisione": "m.rossi", // User who performed the last state change of the acknowledgment (optional)
+    "userGrpPresaVisione": 7, // Group of the user who performed the last state change of the acknowledgment (optional)
+    "dataRifEsito": "10/12/2017", // Date of last refusal applied to the teacher (DD/MM/YYYY) (optional)
+    "dataRifEsitoStu": "10/12/2017", // Date of last refusal applied to the student (DD/MM/YYYY)
+    "notaPubbl": "nota di pubblicazione", // Note inserted by the teacher during publication
+    "gruppoVotoCod": "30L", // Code of the grading scale of the student's booklet
+    "gruppoVotoMaxPunti": 30, // Maximum grade available for the grading scale
+    "esito": {
+      "modValCod": "V", // Evaluation mode of the exam, must correspond to the entered outcome type. Absent and withdrawn flags are mutually exclusive with the grade
+      "superatoFlg": 1, // Indicates whether the grade/judgment is positive
+      "votoEsa": 22, // Numerical grade of the exam
+      "tipoGiudCod": "IDO", // Judgment grade of the exam
+      "tipoGiudizioDes": "Idoneo", // Description of the judgment grade of the exam
+      "assenteFlg": 1, // Flag indicating absence from the exam
+      "ritiratoFlg": 1 // Flag indicating withdrawal from the exam
+    }, // Esito
+    "manualeFlg": 1, // Flag indicating who made the reservation (e.g., actors SEG, DOC manuale_flg=1; actor STU manuale_flg=0)
+    "dataEsa": "10/10/2016", // Date of taking the exam (DD/MM/YYYY); if not valued, the turn date applies
+    "domandeEsame": "prima domanda esame; seconda domanda esame", // Exam questions asked during the test
+    "notaStudente": "vecchio ordinamento; Studente Lavoratore; Studente fuoricorso etc.", // Note inserted by the student during appeal reservation
+    "tipoSvolgimentoEsameCod": "P", // Code of the exam execution type for the student
+    "tipoSvolgimentoEsameDes": "Presenza", // Description of the exam execution type for the student
+    "tipoSvolgimentoEsameRichiestaFlg": "1", // Indicates whether the exam execution type is a user request, meaning it must be converted into a definitive value (optional)
+    "tagCod": "GRP1", // Tag selected by the student during reservation (optional)
+    "autoTagCod": "99", // Reservation class associated with the student during reservation (optional)
+    "livUscitaCod": "B1", // Language output level if the appeal includes languages, to be valued along with linguaUscitaCod (optional)
+    "linguaUscitaCod": "eng", // ISO6392 code of the language to which the output level refers, to be valued along with livUscitaCod (optional)
+    "dataIns": "10/10/2016", // Reservation date (DD/MM/YYYY HH24:MI:SS)
+    "tipoDefAppCod": "STD", // Code identifying the tipoDefApp of the appeal linked to the reservation (optional)
+    "tipoGestPrenCod": "STD", // Code identifying the tipoGestPren of the appeal linked to the reservation (optional)
+    "tipoGestAppCod": "STD", // Code identifying the tipoGestApp of the appeal linked to the reservation (optional)
+    "tipoAppCod": "PP", // Appeal type (PF=Final Exam, PP=Partial Exam) (optional)
+    "posiz": 12, // Reservation progressive number within the enrolled list (optional)
+    "posizApp": 12, // Reservation progressive number within the enrolled list ordered by data_ins
+    "dataInizioIscr": "10/10/2016", // Enrollment start date (DD/MM/YYYY) (optional)
+    "dataFineIscr": "16/10/2016", // Enrollment end date (DD/MM/YYYY) (optional)
+    "tipoIscrCod": "S", // Enrollment mode defined in the appeal; possible values are (Written=S, Oral=O, Written and Oral=SO) (optional)
+    "tipoEsaCod": "S", // Enrollment mode defined in the appeal; possible values are (Written=S, Oral=O, Written and Oral Separated=SOS, Written and Oral Conjoined=SOC) (optional)
+    "aaCalId": 2020, // Calendar year of the appeal (optional)
+    "aaSesId": 2020, // Year of the session (optional)
+    "sesDes": "Sessione Invernale", // Description of the session (optional)
+    "misureCompensative": [
+      {
+        "applistaId": 102220, // Unique identifier of the reservation
+        "cdsId": 102344, // ID of the study course providing the appeal (optional)
+        "adId": 1022, // ID of the educational activity providing the appeal (optional)
+        "appId": 1, // Progressive ID of the appeal with respect to the pair (cds_id, ad_id) (optional)
+        "appLogId": 1, // Progressive ID of the turn with respect to the triad (cds_id, ad_id, app_id) (optional)
+        "stuId": 12, // ID of the career of the student who made the reservation (optional)
+        "misuraCompensativaCod": "TASSE_W", // Code of the compensatory measure
+        "desLiberaFlg": 1, // Indicates whether the compensatory measure has a free description
+        "visWebFlg": 1, // Indicates whether the compensatory measure is visible from the web
+        "des": "Necessario più tempo", // Description of the compensatory measure
+        "statoMisComp": "A, X, V", // State of the compensatory measure
+        "statoMisCompDes": "CONFERMATA, VERIFICATA, ANNULLATA" // Description of the state of the compensatory measure
+      }
+    ], // MisureCompensative (optional)
+    "warnings": [
+      {
+        "applistaId": 102220, // Unique identifier of the reservation
+        "cdsId": 102344, // ID of the study course providing the appeal (optional)
+        "adId": 1022, // ID of the educational activity providing the appeal (optional)
+        "appId": 1, // Progressive ID of the appeal with respect to the pair (cds_id, ad_id) (optional)
+        "appLogId": 1, // Progressive ID of the turn with respect to the triad (cds_id, ad_id, app_id) (optional)
+        "stuId": 12, // ID of the career of the student who made the reservation (optional)
+        "tipoErrore": "TASSE_W", // Error type
+        "des": "Studente non in regola con le tasse" // Error description
+      }
+    ] // Warnings (optional)
+  }
+]
+```
+
+**`422 Unprocessable Entity` - Update failed**
+
+```json
+{
+  "statusCode": 200, // Http Status Code
+  "retCode": -1, // Error code
+  "retErrMsg": "Parametri non corretti", // Error description
+  "errDetails": [
+    {
+      "errorType": "stackTrace", // Additional error type description
+      "value": "SocketTimeoutException....", // Error description
+      "rawValue": "SocketTimeoutException...." // Error description
+    }
+  ] // ErrDetails
+}
+```
+
+<br>
+
+---
+
+<br>
+
+### `GET /libretti/{matId}/righe/{adsceId}/prenotazioni/{applistaId}` - Retrieves information on reservations connected by a career segment
+
+```java
+/**
+ * Retrieves information on reservations connected by a career segment
+ *
+ * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
+ * @param adsceId              integer (path, required)            - ID of the booklet row
+ * @param applistaId           integer (path, required)            - Unique ID of a student's reservation
+ * @param attoreCod            string (query, optional)            - Type of actor required for data extraction (STU,DOC,SEG), used to filter the configuration...
+ * @param q                    string (query, optional)            - The parameter allows filtering fields with specific predefined conditions, consult...
+ * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
+ * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
+ * @param optionalFields       string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
+ * @param filter               string (query, optional)            - il parametro consente di applicare dei filtri alla classe di modello utilizzando il linguaggio RS...
+ * @return IscrizioneAppello on success,
+ *         DettaglioErrore on failure
+ */
+GET /libretti/{matId}/righe/{adsceId}/prenotazioni/{applistaId}
+```
+
+**Auth:** `STUDENTE`, `UTENTE_TECNICO`, `UTENTE_PTA`, `UTENTE_PTA_ADMIN` required · Supported: `Basic`, `JWT`
+
+**Cache:** highRefreshRateUserIndependent
+
+#### Response
+
+**`200 OK`**
+
+```json
+{
+  "applistaId": 102220, // Unique identifier of the reservation
+  "cdsId": 102344, // ID of the study course providing the appeal
+  "adId": 1022, // ID of the educational activity providing the appeal
+  "appId": 1, // Progressive ID of the appeal with respect to the pair (cds_id, ad_id)
+  "appLogId": 1, // Progressive ID of the turn with respect to the triad (cds_id, ad_id, app_id)
+  "stuId": 12, // ID of the career of the student who made the reservation
+  "adregId": 112, // ID of the exam linked to the reservation
+  "adsceId": 112, // ID of the booklet row linked to the reservation
+  "matId": 112, // ID of the matriculation linked to the reservation (optional)
+  "adStuCod": "AD1", // Code of the activity reserved by the student
+  "adStuDes": "Attività di esempio", // Description of the activity reserved by the student (optional)
+  "cdsAdStuCod": "CDS1", // Code of the study course reserved by the student
+  "cdsAdStuDes": "Corso di studio di esempio", // Description of the study course reserved by the student (optional)
+  "cdsAdIdStu": 102344, // ID of the study course reserved by the student (optional)
+  "desAppello": "descrizione appello", // Description of the appeal (optional)
+  "desTurno": "descrizione turno", // Description of the turn to which the student is enrolled (optional)
+  "aulaCod": "codice aula", // Code of the classroom to which the student is enrolled (optional)
+  "aulaDes": "descizione aula", // Description of the classroom to which the student is enrolled (optional)
+  "edificioCod": "codice edificio", // Code of the building to which the student is enrolled (optional)
+  "edificioDes": "descizione edificio", // Description of the building to which the student is enrolled (optional)
+  "sedeId": 123, // ID of the location of the appeal (optional)
+  "sedeDes": "descizione sede", // Description of the location of the appeal (optional)
+  "dataOraTurno": "10/10/2016 12:00:00", // Date/time of the turn to which the student is enrolled (optional)
+  "aaFreqId": 2020, // Attendance year of the activity (optional)
+  "statoAdsce": "S", // Stato dell'attività didattica (codice)
+  "pesoAd": 10.0, // Weight of the educational activity, the weight includes two optional decimals
+  "userId": "m.rossi", // Active UserId of the student
+  "matricola": "124AA-12", // Student matriculation code
+  "nomeStudente": "Mario", // Student's name
+  "nomeAlias": "Giulia", // Student alias name
+  "cognomeStudente": "Rossi", // Student's surname
+  "codFisStudente": "XXXYYY99A12K123H", // Student's fiscal code
+  "dataNascitaStudente": "10/10/1985", // Student birth date (DD/MM/YYYY)
+  "sessoStudente": "M", // Student gender (optional)
+  "comuNascCodIstat": "M200", // ISTAT code of the student's birth municipality (optional)
+  "cittStraNasc": "ENG", // Foreign citizenship code at birth of the student (optional)
+  "cittCod": "ENG", // Student's citizenship code (optional)
+  "cdsStuCod": "CDS1", // Codice corso di studio di iscrizione dello studente
+  "cdsStuDes": "Corso di studio di esempio", // Description of the student's enrolled study course (optional)
+  "cdsIdStu": 102344, // ID of the student's enrolled study course (optional)
+  "aaOrdStuId": 2010, // Regulation year of the student's enrollment (optional)
+  "pdsStuCod": "PDS1", // Code of the student's enrolled study path (optional)
+  "pdsStuDes": "Percorso di studio di esempio", // Description of the student's enrolled study path (optional)
+  "pdsIdStu": 9999, // ID of the student's enrolled study path (optional)
+  "pubblId": 11234, // ID of the outcome publication
+  "presaVisione": "N", // State of acknowledgment of the outcome
+  "userIdPresaVisione": "m.rossi", // User who performed the last state change of the acknowledgment (optional)
+  "userGrpPresaVisione": 7, // Group of the user who performed the last state change of the acknowledgment (optional)
+  "dataRifEsito": "10/12/2017", // Date of last refusal applied to the teacher (DD/MM/YYYY) (optional)
+  "dataRifEsitoStu": "10/12/2017", // Date of last refusal applied to the student (DD/MM/YYYY)
+  "notaPubbl": "nota di pubblicazione", // Note inserted by the teacher during publication
+  "gruppoVotoCod": "30L", // Code of the grading scale of the student's booklet
+  "gruppoVotoMaxPunti": 30, // Maximum grade available for the grading scale
+  "esito": {
+    "modValCod": "V", // Evaluation mode of the exam, must correspond to the entered outcome type. Absent and withdrawn flags are mutually exclusive with the grade
+    "superatoFlg": 1, // Indicates whether the grade/judgment is positive
+    "votoEsa": 22, // Numerical grade of the exam
+    "tipoGiudCod": "IDO", // Judgment grade of the exam
+    "tipoGiudizioDes": "Idoneo", // Description of the judgment grade of the exam
+    "assenteFlg": 1, // Flag indicating absence from the exam
+    "ritiratoFlg": 1 // Flag indicating withdrawal from the exam
+  }, // Esito
+  "manualeFlg": 1, // Flag indicating who made the reservation (e.g., actors SEG, DOC manuale_flg=1; actor STU manuale_flg=0)
+  "dataEsa": "10/10/2016", // Date of taking the exam (DD/MM/YYYY); if not valued, the turn date applies
+  "domandeEsame": "prima domanda esame; seconda domanda esame", // Exam questions asked during the test
+  "notaStudente": "vecchio ordinamento; Studente Lavoratore; Studente fuoricorso etc.", // Note inserted by the student during appeal reservation
+  "tipoSvolgimentoEsameCod": "P", // Code of the exam execution type for the student
+  "tipoSvolgimentoEsameDes": "Presenza", // Description of the exam execution type for the student
+  "tipoSvolgimentoEsameRichiestaFlg": "1", // Indicates whether the exam execution type is a user request, meaning it must be converted into a definitive value (optional)
+  "tagCod": "GRP1", // Tag selected by the student during reservation (optional)
+  "autoTagCod": "99", // Reservation class associated with the student during reservation (optional)
+  "livUscitaCod": "B1", // Language output level if the appeal includes languages, to be valued along with linguaUscitaCod (optional)
+  "linguaUscitaCod": "eng", // ISO6392 code of the language to which the output level refers, to be valued along with livUscitaCod (optional)
+  "dataIns": "10/10/2016", // Reservation date (DD/MM/YYYY HH24:MI:SS)
+  "tipoDefAppCod": "STD", // Code identifying the tipoDefApp of the appeal linked to the reservation (optional)
+  "tipoGestPrenCod": "STD", // Code identifying the tipoGestPren of the appeal linked to the reservation (optional)
+  "tipoGestAppCod": "STD", // Code identifying the tipoGestApp of the appeal linked to the reservation (optional)
+  "tipoAppCod": "PP", // Appeal type (PF=Final Exam, PP=Partial Exam) (optional)
+  "posiz": 12, // Reservation progressive number within the enrolled list (optional)
+  "posizApp": 12, // Reservation progressive number within the enrolled list ordered by data_ins
+  "dataInizioIscr": "10/10/2016", // Enrollment start date (DD/MM/YYYY) (optional)
+  "dataFineIscr": "16/10/2016", // Enrollment end date (DD/MM/YYYY) (optional)
+  "tipoIscrCod": "S", // Enrollment mode defined in the appeal; possible values are (Written=S, Oral=O, Written and Oral=SO) (optional)
+  "tipoEsaCod": "S", // Enrollment mode defined in the appeal; possible values are (Written=S, Oral=O, Written and Oral Separated=SOS, Written and Oral Conjoined=SOC) (optional)
+  "aaCalId": 2020, // Calendar year of the appeal (optional)
+  "aaSesId": 2020, // Year of the session (optional)
+  "sesDes": "Sessione Invernale", // Description of the session (optional)
+  "misureCompensative": [
+    {
+      "applistaId": 102220, // Unique identifier of the reservation
+      "cdsId": 102344, // ID of the study course providing the appeal (optional)
+      "adId": 1022, // ID of the educational activity providing the appeal (optional)
+      "appId": 1, // Progressive ID of the appeal with respect to the pair (cds_id, ad_id) (optional)
+      "appLogId": 1, // Progressive ID of the turn with respect to the triad (cds_id, ad_id, app_id) (optional)
+      "stuId": 12, // ID of the career of the student who made the reservation (optional)
+      "misuraCompensativaCod": "TASSE_W", // Code of the compensatory measure
+      "desLiberaFlg": 1, // Indicates whether the compensatory measure has a free description
+      "visWebFlg": 1, // Indicates whether the compensatory measure is visible from the web
+      "des": "Necessario più tempo", // Description of the compensatory measure
+      "statoMisComp": "A, X, V", // State of the compensatory measure
+      "statoMisCompDes": "CONFERMATA, VERIFICATA, ANNULLATA" // Description of the state of the compensatory measure
+    }
+  ], // MisureCompensative (optional)
+  "warnings": [
+    {
+      "applistaId": 102220, // Unique identifier of the reservation
+      "cdsId": 102344, // ID of the study course providing the appeal (optional)
+      "adId": 1022, // ID of the educational activity providing the appeal (optional)
+      "appId": 1, // Progressive ID of the appeal with respect to the pair (cds_id, ad_id) (optional)
+      "appLogId": 1, // Progressive ID of the turn with respect to the triad (cds_id, ad_id, app_id) (optional)
+      "stuId": 12, // ID of the career of the student who made the reservation (optional)
+      "tipoErrore": "TASSE_W", // Error type
+      "des": "Studente non in regola con le tasse" // Error description
+    }
+  ] // Warnings (optional)
+}
+```
+
+**`422 Unprocessable Entity` - Update failed**
+
+```json
+{
+  "statusCode": 200, // Http Status Code
+  "retCode": -1, // Error code
+  "retErrMsg": "Parametri non corretti", // Error description
+  "errDetails": [
+    {
+      "errorType": "stackTrace", // Additional error type description
+      "value": "SocketTimeoutException....", // Error description
+      "rawValue": "SocketTimeoutException...." // Error description
+    }
+  ] // ErrDetails
+}
+```
+
+<br>
+
+---
+
+<br>
+
+### `GET /libretti/{matId}/righe/{adsceId}/prenotazioni/{applistaId}/attestato-di-presenza` - Retrieves the attendance certificate
+
+```java
+/**
+ * The attendance certificate is generated only if the following conditions are met: the appeal's configuration includes certificate generation (TIPI_GEST_APP.GESTIONE_ATT_PRESENZA), the outcome is published with an active publication status, and there are no SQL conditions preventing certificate generation.
+ *
+ * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
+ * @param adsceId              integer (path, required)            - ID of the booklet row
+ * @param applistaId           integer (path, required)            - Unique ID of a student's reservation
+ * @return file on success,
+ *         DettaglioErrore on failure
+ */
+GET /libretti/{matId}/righe/{adsceId}/prenotazioni/{applistaId}/attestato-di-presenza
+```
+
+**Auth:** `STUDENTE` required · Supported: `Basic`, `JWT`
+
+**Cache:** highRefreshRateUserIndependent
+
+**Content-Type:** `applicatrion/octet-stream`
+
+#### Response
+
+**`200 OK`**
+
+**`422 Unprocessable Entity` - Error during PDF generation**
+
+```json
+{
+  "statusCode": 200, // Http Status Code
+  "retCode": -1, // Error code
+  "retErrMsg": "Parametri non corretti", // Error description
+  "errDetails": [
+    {
+      "errorType": "stackTrace", // Additional error type description
+      "value": "SocketTimeoutException....", // Error description
+      "rawValue": "SocketTimeoutException...." // Error description
+    }
+  ] // ErrDetails
+}
+```
+
+<br>
+
+---
+
+<br>
+
+### `GET /libretti/{matId}/righe/{adsceId}/prenotazioni/{applistaId}/statino-prenotazione` - Retrieves the reservation slip
+
+```java
+/**
+ * The reservation slip is always retrievable via REST services, unlike ESSE3 WEB. To replicate the web behavior, printing must be blocked after the appeal date has passed.
+ *
+ * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
+ * @param adsceId              integer (path, required)            - ID of the booklet row
+ * @param applistaId           integer (path, required)            - Unique ID of a student's reservation
+ * @return file on success,
+ *         DettaglioErrore on failure
+ */
+GET /libretti/{matId}/righe/{adsceId}/prenotazioni/{applistaId}/statino-prenotazione
+```
+
+**Auth:** `STUDENTE` required · Supported: `Basic`, `JWT`
+
+**Cache:** none
+
+**Content-Type:** `applicatrion/octet-stream`
+
+#### Response
+
+**`200 OK`**
+
+**`422 Unprocessable Entity` - Error during PDF generation**
+
+```json
+{
+  "statusCode": 200, // Http Status Code
+  "retCode": -1, // Error code
+  "retErrMsg": "Parametri non corretti", // Error description
+  "errDetails": [
+    {
+      "errorType": "stackTrace", // Additional error type description
+      "value": "SocketTimeoutException....", // Error description
+      "rawValue": "SocketTimeoutException...." // Error description
+    }
+  ] // ErrDetails
+}
+```
+
+<br>
+
+---
+
+<br>
+
+## Endpoints - Exam Results (Prove)
 
 ### `GET /libretti/{matId}/righe/{adsceId}/prove` - All exams of the selected educational activity
 
@@ -3273,7 +3533,7 @@ GET /libretti/{matId}/righe/{adsceId}/prove
 
 <br>
 
-## Endpoints - Rilevazioni In Aula
+## Endpoints - Classroom Attendance (Rilevazioni in Aula)
 
 ### `GET /libretti/{matId}/righe/{adsceId}/rilevazioni-in-aula/{adsceRilId}/eventi` - Retrieves detection details
 
@@ -3324,280 +3584,6 @@ GET /libretti/{matId}/righe/{adsceId}/rilevazioni-in-aula/{adsceRilId}/eventi
 ---
 
 <br>
-
-## Endpoints - Segmento
-
-### `GET /libretti/{matId}/righe/{adsceId}/segmenti` - All segments of the selected educational activity
-
-```java
-/**
- * All segments of the selected educational activity
- *
- * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
- * @param adsceId              integer (path, required)            - ID of the booklet row
- * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
- * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
- * @return List<SegmentoLibretto> on success
- */
-GET /libretti/{matId}/righe/{adsceId}/segmenti
-```
-
-**Auth:** `STUDENTE`, `DOCENTE_APP`, `DOCENTE_PIANI`, `UTENTE_TECNICO`, `UTENTE_PTA`, `UTENTE_PTA_ADMIN` required · Supported: `Basic`, `JWT`
-
-**Cache:** midRefreshRateUserIndependent
-
-#### Response
-
-**`200 OK`**
-
-```json
-[
-  {
-    "segsceId": 1, // Unique ID of the segment identifying the characteristics of the educational activity (required)
-    "adsceId": 1, // Unique ID identifying a student's booklet row (required)
-    "matId": 1, // Id univoco che consente di individuare il libretto dello studente (required)
-    "attributi": {}
-  }
-]
-```
-
-<br>
-
----
-
-<br>
-
-### `GET /libretti/{matId}/righe/{adsceId}/segmenti/{segsceId}` - Requested segment of the selected educational activity
-
-```java
-/**
- * Requested segment of the selected educational activity
- *
- * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
- * @param adsceId              integer (path, required)            - ID of the booklet row
- * @param segsceId             integer (path, required)            - ID of the segment connected to the booklet row
- * @return SegmentoLibretto on success
- */
-GET /libretti/{matId}/righe/{adsceId}/segmenti/{segsceId}
-```
-
-**Auth:** `STUDENTE`, `DOCENTE_APP`, `DOCENTE_PIANI`, `UTENTE_TECNICO`, `UTENTE_PTA`, `UTENTE_PTA_ADMIN` required · Supported: `Basic`, `JWT`
-
-**Cache:** midRefreshRateUserIndependent
-
-#### Response
-
-**`200 OK`**
-
-```json
-{
-  "segsceId": 1, // Unique ID of the segment identifying the characteristics of the educational activity (required)
-  "adsceId": 1, // Unique ID identifying a student's booklet row (required)
-  "matId": 1, // Id univoco che consente di individuare il libretto dello studente (required)
-  "attributi": {}
-}
-```
-
-<br>
-
----
-
-<br>
-
-### `GET /libretti/{matId}/segmenti` - All segments of the educational activities of a booklet
-
-```java
-/**
- * All segments of the educational activities of a booklet
- *
- * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
- * @param adNonCancellabili    integer (query, optional)           - If 1, retrieves non-cancellable educational activities of the booklet. Defaults to 0
- * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
- * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
- * @param start                integer (query, optional)           - utilizzato insieme a `limit` per indicare la paginazione sui record
- * @param limit                integer (query, optional)           - utilizzato insieme a `start` per indicare la paginazione sui record, `limit` indica il numero di ...
- * @return List<SegmentoLibretto> on success
- */
-GET /libretti/{matId}/segmenti
-```
-
-**Auth:** `STUDENTE`, `DOCENTE_APP`, `DOCENTE_PIANI`, `UTENTE_TECNICO`, `UTENTE_PTA`, `UTENTE_PTA_ADMIN` required · Supported: `Basic`, `JWT`
-
-**Cache:** midRefreshRateUserIndependent
-
-#### Response
-
-**`200 OK`**
-
-```json
-[
-  {
-    "segsceId": 1, // Unique ID of the segment identifying the characteristics of the educational activity (required)
-    "adsceId": 1, // Unique ID identifying a student's booklet row (required)
-    "matId": 1, // Id univoco che consente di individuare il libretto dello studente (required)
-    "attributi": {}
-  }
-]
-```
-
-<br>
-
----
-
-<br>
-
-## Endpoints - Syllabus
-
-### `GET /libretti/{matId}/righe/{adsceId}/syllabus/AD` - Syllabus of the educational activity connected to the booklet row
-
-```java
-/**
- * Syllabus of the educational activity connected to the booklet row
- *
- * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
- * @param adsceId              integer (path, required)            - ID of the booklet row
- * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
- * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
- * @return List<SyllabusADLibretto> on success
- */
-GET /libretti/{matId}/righe/{adsceId}/syllabus/AD
-```
-
-**Auth:** `STUDENTE`, `DOCENTE_APP`, `DOCENTE_PIANI`, `UTENTE_TECNICO` required · Supported: `Basic`, `JWT`
-
-**Cache:** midRefreshRateUserIndependent
-
-#### Response
-
-**`200 OK`**
-
-```json
-[
-  {
-    "matId": 1, // Unique ID identifying the student's career segment and its linked booklet (required)
-    "adsceId": 1, // Unique ID identifying a student's booklet row (required)
-    "chiavePartizione": {
-      "aaOffId": 1, // Anno di erogazione della partizione (required)
-      "fatPartCod": "ALF", // Partition factor code (required)
-      "fatPartDes": "Alfabetico", // Partition factor description
-      "fatPartDesEng": "Alphabetic", // Partition factor description in English
-      "domPartCod": "PARI", // Partition domain code (required)
-      "domPartDes": "PARI", // Partition domain description
-      "domPartDesEng": "ODD", // Partition domain description in English
-      "partCod": "S1", // Academic year partition code (required)
-      "partDes": "Primo semestre", // Academic year partition description
-      "partDesEng": "First Semester", // Academic year partition description in English
-      "adLogId": 1 // Logistics grouping ID (required)
-    }, // ChiavePartizione (required)
-    "chiaveADContestualizzata": {
-      "cdsId": 1, // Chiave del corso di studio di erogazione dell'attività didattica (required)
-      "cdsCod": "CDS_AD_1", // Codice del corso di studio di erogazione dell'attività didattica
-      "cdsDes": "Esempio di CDS AD", // Descrizione del corso di erogazione dell'attività didattica
-      "aaOrdId": 2016, // Anno di ordinamento del corso di studio di erogazione dell'attività didattica (required)
-      "aaOrdCod": "CDS_AD_1", // Code of the regulation providing the educational activity
-      "aaOrdDes": "Esempio di CDS AD", // Description of the regulation providing the educational activity
-      "pdsId": 1, // Chiave del percorso di studio di erogazione dell'attività didattica (required)
-      "pdsCod": "PDS_AD_1", // Codice del percorso di erogazione dell'attività didattica
-      "pdsDes": "Esempio di PDS AD", // Descrizione del percorso di erogazione dell'attività didattica
-      "aaOffId": 1, // Anno di offerta di erogazione dell'attività didattica (required)
-      "adId": 1, // Chiave dell'attività didattica (required)
-      "adCod": "PDS_AD_1", // Codice dell''attività didattica
-      "adDes": "Esempio di PDS AD", // Descrizione dell''attività didattica
-      "afId": 1 // Id della afId proveniente da U-Gov Didattica
-    }, // ChiaveADContestualizzata (required)
-    "desAdPubblFlg": 0, // Flag indicating if the descriptions of the educational activities are publishable (required)
-    "contenuti": "contenuti del corso", // Course contents
-    "obiettiviFormativi": "obiettivi formativi", // Educational objectives
-    "prerequisiti": "prerequisiti", // Prerequisites
-    "metodiDidattici": "metodi didattici", // Teaching methods
-    "modalitaVerificaApprendimento": "Assessment methods", // Aa
-    "altreInfo": "altre informazioni", // Other information
-    "testiRiferimento": "Reference texts" // Aa
-  }
-]
-```
-
-<br>
-
----
-
-<br>
-
-### `GET /libretti/{matId}/righe/{adsceId}/syllabus/UD` - Syllabus of the teaching units connected to the booklet row
-
-```java
-/**
- * Syllabus of the teaching units connected to the booklet row
- *
- * @param matId                integer (path, required)            - ID of the career segment to retrieve the booklet for
- * @param adsceId              integer (path, required)            - ID of the booklet row
- * @param fields               string (query, optional)            - Specifies the list of optional fields (which are not retrieved by default)
- * @param order                string (query, optional)            - consente di specificare un ordine per il recupero dei record. La sintassi è la seguente * +/- : s...
- * @return List<SyllabusUDLibretto> on success
- */
-GET /libretti/{matId}/righe/{adsceId}/syllabus/UD
-```
-
-**Auth:** `STUDENTE`, `DOCENTE_APP`, `DOCENTE_PIANI`, `UTENTE_TECNICO`, `UTENTE_PTA`, `UTENTE_PTA_ADMIN` required · Supported: `Basic`, `JWT`
-
-**Cache:** midRefreshRateUserIndependent
-
-#### Response
-
-**`200 OK`**
-
-```json
-[
-  {
-    "matId": 1, // Unique ID identifying the student's career segment and its linked booklet (required)
-    "adsceId": 1, // Unique ID identifying a student's booklet row (required)
-    "chiavePartizione": {
-      "aaOffId": 1, // Anno di erogazione della partizione (required)
-      "fatPartCod": "ALF", // Partition factor code (required)
-      "fatPartDes": "Alfabetico", // Partition factor description
-      "fatPartDesEng": "Alphabetic", // Partition factor description in English
-      "domPartCod": "PARI", // Partition domain code (required)
-      "domPartDes": "PARI", // Partition domain description
-      "domPartDesEng": "ODD", // Partition domain description in English
-      "partCod": "S1", // Academic year partition code (required)
-      "partDes": "Primo semestre", // Academic year partition description
-      "partDesEng": "First Semester", // Academic year partition description in English
-      "adLogId": 1 // Logistics grouping ID (required)
-    }, // ChiavePartizione (required)
-    "chiaveAdContestualizzata": {
-      "cdsId": 1, // Chiave del corso di studio di erogazione dell'attività didattica (required)
-      "cdsCod": "CDS_AD_1", // Codice del corso di studio di erogazione dell'attività didattica
-      "cdsDes": "Esempio di CDS AD", // Descrizione del corso di erogazione dell'attività didattica
-      "aaOrdId": 2016, // Anno di ordinamento del corso di studio di erogazione dell'attività didattica (required)
-      "aaOrdCod": "CDS_AD_1", // Code of the regulation providing the educational activity
-      "aaOrdDes": "Esempio di CDS AD", // Description of the regulation providing the educational activity
-      "pdsId": 1, // Chiave del percorso di studio di erogazione dell'attività didattica (required)
-      "pdsCod": "PDS_AD_1", // Codice del percorso di erogazione dell'attività didattica
-      "pdsDes": "Esempio di PDS AD", // Descrizione del percorso di erogazione dell'attività didattica
-      "aaOffId": 1, // Anno di offerta di erogazione dell'attività didattica (required)
-      "adId": 1, // Chiave dell'attività didattica (required)
-      "adCod": "PDS_AD_1", // Codice dell''attività didattica
-      "adDes": "Esempio di PDS AD", // Descrizione dell''attività didattica
-      "afId": 1 // Id della afId proveniente da U-Gov Didattica
-    }, // ChiaveAdContestualizzata (required)
-    "udLogId": 1, // ID that allows identifying the partition linked to the UD (required)
-    "udCod": "UD_COD", // Teaching unit code
-    "udDes": "UD_DES", // Teaching unit description
-    "desUdPubblFlg": 0, // Flag indicating if the description of the teaching unit is publishable (required)
-    "obiettiviFormativi": "obiettivi formativi", // Educational objectives
-    "prerequisiti": "prerequisiti", // Prerequisites
-    "testiRiferimento": "Reference texts" // Aa
-  }
-]
-```
-
-<br>
-
----
-
-<br>
-
----
 
 ## References
 

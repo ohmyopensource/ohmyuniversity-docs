@@ -24,15 +24,15 @@ head:
 
 # OhMyUniversity! - Unimol: Carriere API V1
 
-**ENG:** `Careers`
+**ENG:** `Student Careers`
 
 **Version:** `1.0.0` · **Base URL:** `/carriere-service-v1`
 
-ESSE3 REST API that provides access to student career information, including enrollments, annual subscriptions, career notes, and graduation data.
+Service for accessing student career information in ESSE3. Covers career records, enrolments, and matriculation data across the full student lifecycle.
 
 ---
 
-## Endpoints - Careers (Carriere)
+## Endpoints - Student Careers (Carriere)
 
 ### `GET /carriere` - Get student careers
 
@@ -1637,7 +1637,7 @@ GET /carriere/{stuId}/noteCarriera
 
 <br>
 
-## Endpoints - Enrollments (Immatricolazioni)
+## Endpoints - Matriculations (Immatricolazioni)
 
 ### `GET /immatricolazioni/informazioni` - Get enrollment status for a given Department or study course group
 
@@ -1749,7 +1749,7 @@ GET /immatricolazioni/informazioni/dettaglio
 
 <br>
 
-## Endpoints - Annual Subscriptions (Iscrizioni)
+## Endpoints - Enrolments (Iscrizioni)
 
 ### `GET /iscrizioni/{aaIscrId}` - Get student careers by academic year
 

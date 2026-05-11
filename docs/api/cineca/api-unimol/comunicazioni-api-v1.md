@@ -28,7 +28,7 @@ head:
 
 **Version:** `1.1.0` · **Base URL:** `/comunicazioni-service-v1`
 
-ESSE3 REST API for communications management.
+Service for managing internal communications in ESSE3. Allows retrieval of communications and their recipients. All endpoints require `UTENTE_TECNICO`.
 
 ---
 

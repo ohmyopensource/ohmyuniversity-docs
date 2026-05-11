@@ -10,7 +10,7 @@ head:
       content: REST API documentation for the Importbadge service (importbadge-service-v1) - CINECA ESSE3.
   - - meta
     - property: og:url
-      content: https://docs.university.ohmyopensource.org/api/cineca/api-unimol/importbadge-api-v1
+      content: https://docs.university.ohmyopensource.org/api/cineca/api-unimol/import-badge-api-v1
   - - meta
     - name: keywords
       content: importbadge v1 api, esse3 rest api, cineca api, ohmyuniversity api, importbadge-service-v1
@@ -22,129 +22,17 @@ head:
       content: REST API documentation for the Importbadge service (importbadge-service-v1) - CINECA ESSE3.
 ---
 
-# OhMyUniversity! - Unimol: Importbadge API V1
+# OhMyUniversity! - Unimol: Import Badge API V1
 
-**ENG:** `Import Badge`
+**ENG:** `Open Badge Import`
 
 **Version:** `1.1.0` · **Base URL:** `/importbadge-service-v1`
 
-ESSE3 REST API for importing data relating to Open Badges issued on external platforms.
+Service for importing Open Badge data issued on external platforms into ESSE3. Covers badge class definitions, issuances, and award records. All endpoints require `UTENTE_TECNICO`.
 
 ---
 
-## Endpoints - Importaward (Importaward)
-
-### `POST /importAward` - Allows importing one or more badges (Award)
-
-```java
-/**
- * Imports the data of one or more badges (Award): in Esse3 they are inserted as
- * University qualifications, detailed by level (Badge Class)
- *
- * @param body                 object (body, required)             - Object containing the JSON with the data to insert
- * @return RitornoAward on success,
- *         DettaglioErrore on failure
- */
-POST /importAward
-```
-
-**Auth:** `UTENTE_TECNICO` required · Supported: `Basic`, `JWT`
-
-**Cache:** lowRefreshRateUserIndependent
-
-#### Request body
-
-```json
-[
-  {
-    "awardedUser": 1, // Internal numeric ID of the user to whom the award was given
-    "earnedBadge": 1, // Internal numeric ID of the Badge referenced (required)
-    "awardedEmail": "m.rossi@amail.com", // Email of the user to whom the badge was issued (required)
-    "createdAt": "10/10/2007", // Creation date of the award (required)
-    "customData": [
-      {
-        "externalKey": "codice", // External attribute code (required)
-        "externalValue": "identificativo" // External attribute identifier (required)
-      }
-    ] // CustomData
-  }
-]
-```
-
-#### Response
-
-**`201 Created` - Returns processing header ID if import is successful**
-
-```json
-{
-  "tstId": 1, // Numeric identifier of the header (required)
-  "dataCreazione": "10/10/2007", // Creation date of the header
-  "statoCod": "published", // Status of the list
-  "nota": "una nota", // Note
-  "idBadgeClass": 1, // Numeric identifier
-  "identificativoBadge": "http://bk.bestr.it/public/systems/bestr/issuers/Fondazione-Golinelli/badges/99795abac91", // Badge class code
-  "awardInfo": [
-    {
-      "id": 1, // Identifier (required)
-      "statoCod": "E", // Status code
-      "awardedUser": 1, // Internal numeric ID of the user to whom the award was given
-      "earnedBadge": 1, // Internal numeric ID of the Badge referenced (required)
-      "awardedEmail": "m.rossi@amail.com", // Email of the user to whom the badge was issued (required)
-      "createdAt": "10/10/2007", // Creation date (required)
-      "nota": "una nota", // Note
-      "persId": 1, // Person identifier
-      "aaConsegTitolo": 2017, // Qualification attainment year
-      "dataConseguimentoTitolo": "10/10/2007", // Qualification attainment date
-      "tipoTititCod": "TSS", // Qualification type
-      "tititCod": "2.0E24", // Qualification detail code
-      "tipoDepositoCod": "AUT", // Indicates in which form the original qualification was deposited, photocopy, self-certification.
-      "stessoAteneoFlg": 0, // Flag indicating if the qualification was obtained in the same university.
-      "staTitItCod": "C", // Qualification status
-      "dataScadenza": "10/10/2007" // Expiration date
-    }
-  ], // AwardInfo
-  "awardErrorDett": [
-    {
-      "id": 1, // Detail identifier (required)
-      "statoCod": "E", // Status code (required)
-      "awardedUser": 1, // Internal numeric ID of the user to whom the award was given
-      "earnedBadge": 1, // Internal numeric ID of the Badge referenced
-      "awardedEmail": "m.rossi@amail.com", // Email of the user to whom the badge was issued (required)
-      "createdAt": "10/10/2007", // Creation date (required)
-      "nota": "una nota", // Note
-      "usrInsId": "Administrator", // Inserting user.
-      "dataIns": "01/07/2022", // Insertion date.
-      "usrModId": "Administrator", // Last modifying user.
-      "dataMod": "01/07/2022" // Last modification date.
-    }
-  ] // AwardErrorDett
-}
-```
-
-**`422 Unprocessable Entity` - Insert failed**
-
-```json
-{
-  "statusCode": 200, // Http Status Code
-  "retCode": -1, // Error code
-  "retErrMsg": "Parametri non corretti", // Error description
-  "errDetails": [
-    {
-      "errorType": "stackTrace", // Additional error type description
-      "value": "SocketTimeoutException....", // Error description
-      "rawValue": "SocketTimeoutException...." // Error description
-    }
-  ] // ErrDetails
-}
-```
-
-<br>
-
----
-
-<br>
-
-## Endpoints - Importbadgeclass (Importbadgeclass)
+## Endpoints - Badge Class Import (ImportBadgeClass - Importazione Tipologie Badge)
 
 ### `POST /importBadgeClass` - Allows importing one or more badge types (Badge Class)
 
@@ -281,7 +169,119 @@ POST /importBadgeClass
 
 <br>
 
-## Endpoints - Importbadgeissuing (Importbadgeissuing)
+## Endpoints - Award Import (ImportAward - Importazione Conferimenti / Badge)
+
+### `POST /importAward` - Allows importing one or more badges (Award)
+
+```java
+/**
+ * Imports the data of one or more badges (Award): in Esse3 they are inserted as
+ * University qualifications, detailed by level (Badge Class)
+ *
+ * @param body                 object (body, required)             - Object containing the JSON with the data to insert
+ * @return RitornoAward on success,
+ *         DettaglioErrore on failure
+ */
+POST /importAward
+```
+
+**Auth:** `UTENTE_TECNICO` required · Supported: `Basic`, `JWT`
+
+**Cache:** lowRefreshRateUserIndependent
+
+#### Request body
+
+```json
+[
+  {
+    "awardedUser": 1, // Internal numeric ID of the user to whom the award was given
+    "earnedBadge": 1, // Internal numeric ID of the Badge referenced (required)
+    "awardedEmail": "m.rossi@amail.com", // Email of the user to whom the badge was issued (required)
+    "createdAt": "10/10/2007", // Creation date of the award (required)
+    "customData": [
+      {
+        "externalKey": "codice", // External attribute code (required)
+        "externalValue": "identificativo" // External attribute identifier (required)
+      }
+    ] // CustomData
+  }
+]
+```
+
+#### Response
+
+**`201 Created` - Returns processing header ID if import is successful**
+
+```json
+{
+  "tstId": 1, // Numeric identifier of the header (required)
+  "dataCreazione": "10/10/2007", // Creation date of the header
+  "statoCod": "published", // Status of the list
+  "nota": "una nota", // Note
+  "idBadgeClass": 1, // Numeric identifier
+  "identificativoBadge": "http://bk.bestr.it/public/systems/bestr/issuers/Fondazione-Golinelli/badges/99795abac91", // Badge class code
+  "awardInfo": [
+    {
+      "id": 1, // Identifier (required)
+      "statoCod": "E", // Status code
+      "awardedUser": 1, // Internal numeric ID of the user to whom the award was given
+      "earnedBadge": 1, // Internal numeric ID of the Badge referenced (required)
+      "awardedEmail": "m.rossi@amail.com", // Email of the user to whom the badge was issued (required)
+      "createdAt": "10/10/2007", // Creation date (required)
+      "nota": "una nota", // Note
+      "persId": 1, // Person identifier
+      "aaConsegTitolo": 2017, // Qualification attainment year
+      "dataConseguimentoTitolo": "10/10/2007", // Qualification attainment date
+      "tipoTititCod": "TSS", // Qualification type
+      "tititCod": "2.0E24", // Qualification detail code
+      "tipoDepositoCod": "AUT", // Indicates in which form the original qualification was deposited, photocopy, self-certification.
+      "stessoAteneoFlg": 0, // Flag indicating if the qualification was obtained in the same university.
+      "staTitItCod": "C", // Qualification status
+      "dataScadenza": "10/10/2007" // Expiration date
+    }
+  ], // AwardInfo
+  "awardErrorDett": [
+    {
+      "id": 1, // Detail identifier (required)
+      "statoCod": "E", // Status code (required)
+      "awardedUser": 1, // Internal numeric ID of the user to whom the award was given
+      "earnedBadge": 1, // Internal numeric ID of the Badge referenced
+      "awardedEmail": "m.rossi@amail.com", // Email of the user to whom the badge was issued (required)
+      "createdAt": "10/10/2007", // Creation date (required)
+      "nota": "una nota", // Note
+      "usrInsId": "Administrator", // Inserting user.
+      "dataIns": "01/07/2022", // Insertion date.
+      "usrModId": "Administrator", // Last modifying user.
+      "dataMod": "01/07/2022" // Last modification date.
+    }
+  ] // AwardErrorDett
+}
+```
+
+**`422 Unprocessable Entity` - Insert failed**
+
+```json
+{
+  "statusCode": 200, // Http Status Code
+  "retCode": -1, // Error code
+  "retErrMsg": "Parametri non corretti", // Error description
+  "errDetails": [
+    {
+      "errorType": "stackTrace", // Additional error type description
+      "value": "SocketTimeoutException....", // Error description
+      "rawValue": "SocketTimeoutException...." // Error description
+    }
+  ] // ErrDetails
+}
+```
+
+<br>
+
+---
+
+<br>
+
+## Endpoints - Badge Issuance Import (ImportBadgeIssuing - Importazione Emissione Badge)
 
 ### `PUT /importBadgeIssuing` - Allows importing the issuance data of a badge
 
@@ -344,13 +344,10 @@ PUT /importBadgeIssuing
 
 ## References
 
-- **Swagger UI:** [Importbadge Api V1 - ESSE3 REST Docs](https://unimol.esse3.cineca.it/e3rest/docs/?urls.primaryName=Import%20Badge%20Api%20V1%20(https%3A%2F%2Funimol.esse3.cineca.it%2Fe3rest%2Fapi%2Fimportbadge-service-v1))
-- **Spec YAML:** [frk-importbadgeApiV1.yaml](https://unimol.esse3.cineca.it/e3rest/docs/?urls.primaryName=Import%20Badge%20Api%20V1%20(https%3A%2F%2Funimol.esse3.cineca.it%2Fe3rest%2Fapi%2Fimportbadge-service-v1))
+- **Swagger UI:** [Importbadge Api V1 - ESSE3 REST Docs](<https://unimol.esse3.cineca.it/e3rest/docs/?urls.primaryName=Import%20Badge%20Api%20V1%20(https%3A%2F%2Funimol.esse3.cineca.it%2Fe3rest%2Fapi%2Fimportbadge-service-v1)>)
+- **Spec YAML:** [frk-importbadgeApiV1.yaml](<https://unimol.esse3.cineca.it/e3rest/docs/?urls.primaryName=Import%20Badge%20Api%20V1%20(https%3A%2F%2Funimol.esse3.cineca.it%2Fe3rest%2Fapi%2Fimportbadge-service-v1)>)
 - **ESSE3 REST API General Documentation:** [wiki.u-gov.it](https://wiki.u-gov.it/confluence/display/ESSE3/Servizi+REST+su+ESSE3)
+
 ```
 
-<br>
-
----
-
-<br>
+```

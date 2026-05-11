@@ -22,24 +22,21 @@ head:
       content: REST API documentation for the Concorsi service (concorsi-service-v2) - CINECA ESSE3.
 ---
 
-# OhMyUniversity! - Unimol: Concorsi API V1
+# OhMyUniversity! - Unimol: Concorsi API V2
 
-**ENG:** `Competitions`
+**ENG:** `Admission Contests`
 
 **Version:** `1.0.0` · **Base URL:** `/concorsi-service-v2`
 
-ESSE3 REST API to access competition structures. The services allow retrieving competition configurations, retrieving enrollments, rankings, classifications, and performing their insertions.
-Documentation is available at https://wiki.u-gov.it/confluence/display/ESSE3/WS+ESSE3+Area+Concorsi
+Service for accessing admission contest structures in ESSE3. Covers contest configuration, applicant registrations, rankings, and merit lists, with both read and write operations available.
 
-## ChangeLog
-
-| Version | ESSE3 Release Version | Interventions                                        |
-| ------- | --------------------- | ---------------------------------------------------- |
-| 1.0.0   | 21.10.00.00           | added API to retrieve competition configuration data |
+::: info
+Extended documentation for this service is available at [wiki.u-gov.it – WS ESSE3 Area Concorsi](https://wiki.u-gov.it/confluence/display/ESSE3/WS+ESSE3+Area+Concorsi).
+:::
 
 ---
 
-## Endpoints - Competitions (Concorsi)
+## Endpoints - Admission Contests (Concorsi)
 
 ### `GET /concorsi` - Competitions Configuration
 
@@ -244,7 +241,7 @@ GET /concorsi/{aaId}/{testId}/proveConcorso
 
 <br>
 
-## Endpoints - Rankings (Graduatorie)
+## Endpoints - Merit Lists (Graduatorie)
 
 ### `GET /concorsi/graduatoria/{aaId}/{testId}` - Competition Ranking
 
@@ -683,7 +680,7 @@ PUT /concorsi/{aaId}/{testId}/graduatorie/{dettTestId}/file
 
 <br>
 
-## Endpoints - Classifications (Classifiche)
+## Endpoints - Rankings (Classifiche)
 
 ### `PUT /concorsi/{aaId}/{testId}/classifica/{proveConcId}` - Import competition classification via JSON
 
@@ -1020,7 +1017,7 @@ GET /concorsi/{persId}/{posId}/classifica
 
 <br>
 
-## Endpoints - Competition Enrollments (Iscrizione Concorsi)
+## Endpoints - Contest Registration (Iscrizione concorsi)
 
 ### `GET /concorsi/{aaId}/{testId}/iscrizioni` - Competition Enrollments
 
@@ -1384,12 +1381,6 @@ GET /concorsi/{persId}/{posId}/dettaglioIscritto
   ] // ErrDetails
 }
 ```
-
-<br>
-
----
-
-<br>
 
 ---
 

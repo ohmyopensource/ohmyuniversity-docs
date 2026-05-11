@@ -24,13 +24,19 @@ head:
 
 # OhMyUniversity! - Unimol: Logistica API V1
 
+**ENG:** `Logistics`
+
 **Version:** `1.0.0` · **Base URL:** `/logistica-service-v1`
 
-API REST di ESSE3 per l'accesso alla parte logistica dell'offerta didattica
+Service for accessing the logistical layer of the teaching offer. Covers logistical sharing records for teaching activities (AD) and teaching units (UD), course syllabi, rooms, and buildings. Most read endpoints are public; write and bulk operations require `UTENTE_TECNICO` or `DOCENTE`.
+
+::: warning
+Two endpoints under `/easystaff/` are reserved for the integration with the **EasyStaff** scheduling system and are not intended for general use. Their response schema may change without notice and without backward compatibility guarantees.
+:::
 
 ---
 
-## Endpoints - Easystaff
+## Endpoints - EasyStaff Integration (Easystaff)
 
 ### `GET /easystaff/logistica/{aaOffId}` - Logistics information for easystaff.
 
@@ -57,9 +63,7 @@ GET /easystaff/logistica/{aaOffId}
 **`200 OK`**
 
 ```json
-[
-  {}
-]
+[{}]
 ```
 
 **`422 Unprocessable Entity` - error**
@@ -68,12 +72,12 @@ GET /easystaff/logistica/{aaOffId}
 {
   "statusCode": 200, // Http Status Code
   "retCode": -1, // Error code
-  "retErrMsg": "Parametri non corretti", // Description dell'errore
+  "retErrMsg": "Parametri non corretti", // Error description
   "errDetails": [
     {
-      "errorType": "stackTrace", // Description del tipo di errore aggiuntivo
-      "value": "SocketTimeoutException....", // Description dell'errore
-      "rawValue": "SocketTimeoutException...." // Description dell'errore
+      "errorType": "stackTrace", // Additional error type description
+      "value": "SocketTimeoutException....", // Error description
+      "rawValue": "SocketTimeoutException...." // Error description
     }
   ] // ErrDetails
 }
@@ -110,9 +114,7 @@ GET /easystaff/struttura/{aaOffId}
 **`200 OK`**
 
 ```json
-[
-  {}
-]
+[{}]
 ```
 
 **`422 Unprocessable Entity` - error**
@@ -121,12 +123,12 @@ GET /easystaff/struttura/{aaOffId}
 {
   "statusCode": 200, // Http Status Code
   "retCode": -1, // Error code
-  "retErrMsg": "Parametri non corretti", // Description dell'errore
+  "retErrMsg": "Parametri non corretti", // Error description
   "errDetails": [
     {
-      "errorType": "stackTrace", // Description del tipo di errore aggiuntivo
-      "value": "SocketTimeoutException....", // Description dell'errore
-      "rawValue": "SocketTimeoutException...." // Description dell'errore
+      "errorType": "stackTrace", // Additional error type description
+      "value": "SocketTimeoutException....", // Error description
+      "rawValue": "SocketTimeoutException...." // Error description
     }
   ] // ErrDetails
 }
@@ -138,7 +140,7 @@ GET /easystaff/struttura/{aaOffId}
 
 <br>
 
-## Endpoints - Logistica
+## Endpoints - Logistics (Logistica)
 
 ### `GET /logistica` - Retrieves the list of records from the P09_AD_LOG header table, filtered by optional parameters. Parameters only work on the physical AD of the sharing.
 
@@ -287,12 +289,12 @@ GET /logistica/copertura/cancellabile
 {
   "statusCode": 200, // Http Status Code
   "retCode": -1, // Error code
-  "retErrMsg": "Parametri non corretti", // Description dell'errore
+  "retErrMsg": "Parametri non corretti", // Error description
   "errDetails": [
     {
-      "errorType": "stackTrace", // Description del tipo di errore aggiuntivo
-      "value": "SocketTimeoutException....", // Description dell'errore
-      "rawValue": "SocketTimeoutException...." // Description dell'errore
+      "errorType": "stackTrace", // Additional error type description
+      "value": "SocketTimeoutException....", // Error description
+      "rawValue": "SocketTimeoutException...." // Error description
     }
   ] // ErrDetails
 }
@@ -372,12 +374,12 @@ PUT /logistica/syllabusAD
 {
   "statusCode": 200, // Http Status Code
   "retCode": -1, // Error code
-  "retErrMsg": "Parametri non corretti", // Description dell'errore
+  "retErrMsg": "Parametri non corretti", // Error description
   "errDetails": [
     {
-      "errorType": "stackTrace", // Description del tipo di errore aggiuntivo
-      "value": "SocketTimeoutException....", // Description dell'errore
-      "rawValue": "SocketTimeoutException...." // Description dell'errore
+      "errorType": "stackTrace", // Additional error type description
+      "value": "SocketTimeoutException....", // Error description
+      "rawValue": "SocketTimeoutException...." // Error description
     }
   ] // ErrDetails
 }
@@ -1463,12 +1465,12 @@ GET /logisticaPerAdFull/{aaOffId}
 {
   "statusCode": 200, // Http Status Code
   "retCode": -1, // Error code
-  "retErrMsg": "Parametri non corretti", // Description dell'errore
+  "retErrMsg": "Parametri non corretti", // Error description
   "errDetails": [
     {
-      "errorType": "stackTrace", // Description del tipo di errore aggiuntivo
-      "value": "SocketTimeoutException....", // Description dell'errore
-      "rawValue": "SocketTimeoutException...." // Description dell'errore
+      "errorType": "stackTrace", // Additional error type description
+      "value": "SocketTimeoutException....", // Error description
+      "rawValue": "SocketTimeoutException...." // Error description
     }
   ] // ErrDetails
 }
@@ -2214,7 +2216,7 @@ GET /logisticaPerOdFull/{aaOffId}/{cdsOffId}/
 
 <br>
 
-## Endpoints - Struttura
+## Endpoints - Structure (Struttura)
 
 ### `GET /logisticheEliminate` - Retrieves deleted logistics.
 
@@ -2254,7 +2256,7 @@ Retrieves deleted logistics.
 
 <br>
 
-## Endpoints - Risfisse
+## Endpoints - Rooms and Buildings (Risfisse - Risorse Fisse)
 
 ### `GET /risFisse/aule` - List of buildings
 
@@ -2310,12 +2312,12 @@ GET /risFisse/aule
 {
   "statusCode": 200, // Http Status Code
   "retCode": -1, // Error code
-  "retErrMsg": "Parametri non corretti", // Description dell'errore
+  "retErrMsg": "Parametri non corretti", // Error description
   "errDetails": [
     {
-      "errorType": "stackTrace", // Description del tipo di errore aggiuntivo
-      "value": "SocketTimeoutException....", // Description dell'errore
-      "rawValue": "SocketTimeoutException...." // Description dell'errore
+      "errorType": "stackTrace", // Additional error type description
+      "value": "SocketTimeoutException....", // Error description
+      "rawValue": "SocketTimeoutException...." // Error description
     }
   ] // ErrDetails
 }
@@ -2551,7 +2553,7 @@ PUT /risFisse/syncConSistLog
 ```json
 {
   "sistLog": "UP_1", // External logistics system
-  "ret": 1, // Codice di ritorno
+  "ret": 1, // Return Code
   "errMsg": "Esecuzione corretta", // Error message
   "logs": [
     {
@@ -2561,12 +2563,6 @@ PUT /risFisse/syncConSistLog
   ] // Logs
 }
 ```
-
-<br>
-
----
-
-<br>
 
 ---
 

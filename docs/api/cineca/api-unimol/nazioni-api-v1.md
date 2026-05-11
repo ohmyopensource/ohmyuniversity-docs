@@ -24,11 +24,11 @@ head:
 
 # OhMyUniversity! - Unimol: Nazioni API V1
 
-**ENG:** `Countries`
+**ENG:** `Nations`
 
 **Version:** `1.0.0` · **Base URL:** `/nazioni-service-v1`
 
-ESSE3 REST API to access information about countries, regions, municipalities, provinces, and postal codes.
+Read-only service for accessing geographic registry data: countries, regions, municipalities, provinces, and postal codes. All endpoints are publicly accessible — no authentication is required.
 
 ---
 

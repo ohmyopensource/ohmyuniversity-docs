@@ -28,34 +28,7 @@ head:
 
 **Version:** `1.0.0` · **Base URL:** `/questionari-service-v1`
 
-REST API for accessing ESSE3 surveys, covering the full compilation lifecycle for teaching evaluation questionnaires, student booklet integration, result statistics, and visibility management.
-
----
-
-## Covered entities
-
-| Entity                | Description                                                              | Tag                        |
-| --------------------- | ------------------------------------------------------------------------ | -------------------------- |
-| `PaginaQuestionario`  | A single page of a questionnaire with paragraphs, questions, and answers | `Compilazione questionari` |
-| `QuestSummary`        | Summary of a completed questionnaire session                             | `Compilazione questionari` |
-| `LibrettoQuestionari` | Questionnaire availability linked to student booklet entries             | `Libretto`                 |
-| `StatisticheQuest`    | Aggregated statistics on questionnaire results                           | `Statistiche`              |
-
----
-
-## Compilation flow
-
-Questionnaire compilation follows a stateful multi-step flow. The session is tracked via `questCompId` (compilation ID) and `userCompId` (user session ID), both generated at start.
-
-1. **Start** - `PUT /questionari/compilazione/{stuId}/{adsceId}/quest/{questionarioId}/start` - creates a new compilation session and returns the first page
-2. **Navigate** - `GET .../pagina/{pageId}`, `.../next`, `.../prev` - move between pages
-3. **Save** - `PUT .../quest/{questionarioId}/{questCompId}/save/{pageId}` - save answers for a page
-4. **Review** - `GET .../summary` - review all answers before confirming
-5. **Confirm** - `PUT .../conferma` - finalize and submit the questionnaire
-
-::: warning
-Each step requires both `questCompId` and `userCompId` to be passed. These are returned by the start endpoint and must be preserved throughout the session. Confirming without saving all pages may result in a `400` error.
-:::
+Service for accessing and managing surveys in ESSE3. Covers survey configuration and structure, survey completion by students, and transcript-linked survey data.
 
 ---
 
@@ -861,7 +834,7 @@ GET /questionari/compilazione/{stuId}/{adsceId}/quest/{questionarioId}/{questCom
 
 <br>
 
-## Endpoints - Questionnaires (Questionari)
+## Endpoints - Surveys (Questionari)
 
 ### `GET /questionari/eventoAvaDoc/datiAccesso/{questionarioId}/{aaId}/` - Get teaching evaluation access data
 
@@ -1751,7 +1724,7 @@ POST /questionari/visibility/{userId}/{questCompId}/{visKind}/{visValue}
 
 <br>
 
-## Endpoints - Booklet (Libretto)
+## Endpoints - Transcript (Libretto)
 
 ### `GET /questionari/libretto/{adsceId}/unitadidattiche` - Get teaching units with questionnaire status
 

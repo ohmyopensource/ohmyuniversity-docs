@@ -24,17 +24,15 @@ head:
 
 # OhMyUniversity! - Unimol: Offerta API V1
 
-**ENG:** `Offer`
+**ENG:** `Teaching Offer`
 
 **Version:** `1.2.0` · **Base URL:** `/offerta-service-v1`
 
-ESSE3 REST API for accessing the academic offer
-## ChangeLog
-Version        | ESSE3 Release Version         | Interventions 
- -             | -                             | -
-    1.1.0      | 19.03.03.00                   | added method /offerte/{aaOffId}/{cdsOffId}/attivita/cancellabile 
-    1.1.0      | 19.03.03.00                   | added method /offerte/{aaOffId}/{cdsOffId}/moduli/cancellabili 
-    1.2.0      | 19.04.01.00                   | deprecated methods /docenti and /docentiFull use the analogs on anagrafica-service-v2
+Service for accessing the teaching offer in ESSE3. Covers offer years, degree courses, teaching activities, modules, and groupings. Most endpoints are public; write and deletion-check operations require `UTENTE_TECNICO`.
+
+::: warning
+The endpoints `/docenti` and `/docentiFull` are deprecated as of version 1.2.0. Use the equivalent endpoints on `anagrafica-service-v2` instead.
+:::
 
 ---
 
@@ -123,7 +121,7 @@ GET /ad-raggruppate
 
 <br>
 
-## Endpoints - Offer (Offerta)
+## Endpoints - Teaching Offer (Offerta)
 
 ### `GET /attivitaGeneriche` - Retrieve information about generic academic activities
 
@@ -1205,12 +1203,6 @@ GET /offerteFull/{aaOffId}/{cdsOffId}/
 ```json
 {}
 ```
-
-<br>
-
----
-
-<br>
 
 ---
 

@@ -28,11 +28,13 @@ head:
 
 **Version:** `1.0.0` · **Base URL:** `/logging-service-v1`
 
-ESSE3 REST API for procedure logging.
+Service for reading and managing ESSE3 procedure logs. Exposes access to log sessions, transactions, and raw log text. All endpoints require authentication — no public access. Unlike most other ESSE3 services, the minimum required role here is any authenticated user, not specifically `UTENTE_TECNICO`.
 
 ---
 
-## Endpoints - Tlog (Tlog)
+## Endpoints - Logging (TLOG)
+
+> _TLOG_ — ESSE3's internal name for the transaction logging system (_Transaction Log_).
 
 ### `GET /tlog/sessions` - Retrieve overridden sessions
 
@@ -275,6 +277,6 @@ GET /tlog/transactions
 
 ## References
 
-- **Swagger UI:** [Logging Api V1 - ESSE3 REST Docs](https://unimol.esse3.cineca.it/e3rest/docs/?urls.primaryName=Logging%20Api%20V1%20(https%3A%2F%2Funimol.esse3.cineca.it%2Fe3rest%2Fapi%2Flogging-service-v1))
-- **Spec YAML:** [frk-loggingApiV1.yaml](https://unimol.esse3.cineca.it/e3rest/docs/?urls.primaryName=Logging%20Api%20V1%20(https%3A%2F%2Funimol.esse3.cineca.it%2Fe3rest%2Fapi%2Flogging-service-v1))
+- **Swagger UI:** [Logging Api V1 - ESSE3 REST Docs](<https://unimol.esse3.cineca.it/e3rest/docs/?urls.primaryName=Logging%20Api%20V1%20(https%3A%2F%2Funimol.esse3.cineca.it%2Fe3rest%2Fapi%2Flogging-service-v1)>)
+- **Spec YAML:** [frk-loggingApiV1.yaml](<https://unimol.esse3.cineca.it/e3rest/docs/?urls.primaryName=Logging%20Api%20V1%20(https%3A%2F%2Funimol.esse3.cineca.it%2Fe3rest%2Fapi%2Flogging-service-v1)>)
 - **ESSE3 REST API General Documentation:** [wiki.u-gov.it](https://wiki.u-gov.it/confluence/display/ESSE3/Servizi+REST+su+ESSE3)
