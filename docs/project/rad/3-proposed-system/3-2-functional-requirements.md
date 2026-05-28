@@ -57,40 +57,40 @@ The functional requirements of **OhMyUniversity!** are organized into logical mo
 
 ### Module 3: Organization and Logistics
 
-| ID       | Requirement                     | Description                                                                                                           |
-| -------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| FR-1.3.1 | Educational Material Management | The system must allow the visualization and download of slides and PDF files uploaded by teachers.                    |
-| FR-1.3.2 | Classroom Capacity and Booking  | The system must allow authorized users to view classroom capacity, check availability, and proceed with booking.      |
-| FR-1.3.3 | Class Timetable                 | The system must allow the visualization of PDFs related to classroom occupation timetables.                           |
-| FR-1.3.4 | Integrated Calendar             | The system must manage a calendar for displaying commitments, academic events, and deadlines.                         |
-| FR-1.3.5 | Attendance Monitoring           | The system must show registered attendances and allow the monitoring of attendance for educational activities.        |
-| FR-1.3.6 | Maps and Transport              | The system must integrate maps for locating university sites and provide information on connected means of transport. |
-| FR-1.3.7 | University Canteen Menu Display | The system must daily show users the menu planned at the university canteen.                                          |
-| FR-1.3.8 | University Canteen Meal Selection |The system must allow students to select meal items from the daily canteen menu and submit their meal choice to the canteen service.                                |
+| ID       | Requirement                       | Description                                                                                                                                                                                                                                                                                                          |
+| -------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| FR-1.3.1 | Educational Material Management   | The system must allow the visualization and download of slides and PDF files uploaded by teachers.                                                                                                                                                                                                                   |
+| FR-1.3.2 | Classroom Capacity and Booking    | The system must allow authorized users to view classroom capacity, check availability, and proceed with booking. The system must enforce mutual exclusion (no overbooking): if two users attempt to book the same space simultaneously, only one booking succeeds and the second user is notified of unavailability. |
+| FR-1.3.3 | Class Timetable                   | The system must allow the visualization of PDFs related to classroom occupation timetables.                                                                                                                                                                                                                          |
+| FR-1.3.4 | Integrated Calendar               | The system must manage a calendar for displaying commitments, academic events, and deadlines.                                                                                                                                                                                                                        |
+| FR-1.3.5 | Attendance Monitoring             | The system must show registered attendances and allow the monitoring of attendance for educational activities.                                                                                                                                                                                                       |
+| FR-1.3.6 | Maps and Transport                | The system must integrate maps for locating university sites and provide information on connected means of transport.                                                                                                                                                                                                |
+| FR-1.3.7 | University Canteen Menu Display   | The system must daily show users the menu planned at the university canteen.                                                                                                                                                                                                                                         |
+| FR-1.3.8 | University Canteen Meal Selection | The system must allow students to select meal items from the daily canteen menu and submit their meal choice to the canteen service.                                                                                                                                                                                 |
 
 ---
 
 ### Module 4: Orientation and Future Planning
 
-| ID       | Requirement           | Description                                                                                                                                     |
-| -------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| FR-1.4.1 | Master's Requirements | The system must allow students to view the available Master’s degree programmes and consult their admission requirements in a clear and readable format.. |
-| FR-1.4.2 | Requirement Consultation   | The system must present the admission requirements of the selected Master’s degree programme without performing automatic eligibility verification.                        |
-| FR-1.4.3 | Enrollment Guide      | The system must provide support and guides on enrollment procedures and the university's course catalog.                                        |
+| ID       | Requirement              | Description                                                                                                                                               |
+| -------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| FR-1.4.1 | Master's Requirements    | The system must allow students to view the available Master’s degree programmes and consult their admission requirements in a clear and readable format.. |
+| FR-1.4.2 | Requirement Consultation | The system must present the admission requirements of the selected Master’s degree programme without performing automatic eligibility verification.       |
+| FR-1.4.3 | Enrollment Guide         | The system must provide support and guides on enrollment procedures and the university's course catalog.                                                  |
 
 ---
 
 ### Module 5: Information and Extra Services
 
-| ID       | Requirement         | Description                                                                                       |
-| -------- | ------------------- | ------------------------------------------------------------------------------------------------- |
-| FR-1.5.1 | News Board          | The system must display official news and notices published by the university.                    |
-| FR-1.5.2 | Quick Access        | The system must allow the configuration of quick links to the most used services and sections.    |
-| FR-1.5.3 | Chat System         | The system must allow textual communication between application users.                            |
+| ID       | Requirement  | Description                                                                                    |
+| -------- | ------------ | ---------------------------------------------------------------------------------------------- |
+| FR-1.5.1 | News Board   | The system must display official news and notices published by the university.                 |
+| FR-1.5.2 | Quick Access | The system must allow the configuration of quick links to the most used services and sections. |
+| FR-1.5.3 | Chat System  | The system must allow textual communication between application users.                         |
 
 ### Module 6: Agreements, Jobs and Partner Services
 
-| ID       | Requirement         | Description                                                                                       |
-| -------- | ------------------- | ------------------------------------------------------------------------------------------------- |
-| FR-1.6.1 | Agreements and Jobs          | The system must show job advertisements, agreements, discounts and events dedicated to students.                    |
-| FR-1.6.2 | Partner Organization Registration         | The system must allow external partner organizations to submit a registration request to participate in the partnership area, subject to validation before publication or activation.    |
+| ID       | Requirement                               | Description                                                                                                                                                                                                                                                                                                                                                                                       |
+| -------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| FR-1.6.1 | Agreements and Jobs                       | The system must show job advertisements, agreements, discounts and events dedicated to students.                                                                                                                                                                                                                                                                                                  |
+| FR-1.6.2 | Partner Organization Registration Request | Partner organizations can submit a registration request (self-registration) to participate in the partnership area. Requests are held in **pending status** and require **administrative validation and provisioning** before the partner account is activated and published. Partners cannot self-register and immediately access the system; account creation occurs only after admin approval. |
