@@ -383,7 +383,24 @@ export const projectSidebar: DefaultTheme.SidebarMulti = {
           text: '3. Class Interfaces',
           link: `${PROJECT_DOCS.BASE_URL}/odd/3-class-interfaces/3-class-interfaces`,
         },
+        {
+          text: '3.1 Controller',
+          link: `${PROJECT_DOCS.BASE_URL}/odd/3-class-interfaces/3-1-controller`,
+        },
+        {
+          text: '3.2 Service',
+          link: `${PROJECT_DOCS.BASE_URL}/odd/3-class-interfaces/3-2-service`,
+        },
+        {
+          text: '3.3 DTO',
+          link: `${PROJECT_DOCS.BASE_URL}/odd/3-class-interfaces/3-3-dto`,
+        },
+        {
+          text: '3.4 Cineca',
+          link: `${PROJECT_DOCS.BASE_URL}/odd/3-class-interfaces/3-4-cineca`,
+        }
       ],
+      
     },
     {
       text: '4. Glossary',
